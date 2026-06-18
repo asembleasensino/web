@@ -29,6 +29,7 @@ const {
     {canonical && <meta property="og:url" content={canonical} />}
     <meta name="theme-color" content="#252321" />
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <script is:inline>document.documentElement.classList.add("js");</script>
     <title>{title}</title>
   </head>
   <body>
@@ -87,6 +88,23 @@ const {
         button.setAttribute("aria-expanded", String(!open));
         menu?.classList.toggle("hidden", open);
       });
+
+      const revealItems = document.querySelectorAll<HTMLElement>("[data-reveal]");
+      if (revealItems.length) {
+        const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+        if (reducedMotion || !("IntersectionObserver" in window)) {
+          revealItems.forEach((item) => item.dataset.visible = "true");
+        } else {
+          const observer = new IntersectionObserver((entries) => {
+            entries.forEach((entry) => {
+              if (!entry.isIntersecting) return;
+              (entry.target as HTMLElement).dataset.visible = "true";
+              observer.unobserve(entry.target);
+            });
+          }, { rootMargin: "0px 0px -8% 0px", threshold: .08 });
+          revealItems.forEach((item) => observer.observe(item));
+        }
+      }
     </script>
   </body>
 </html>

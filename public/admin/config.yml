@@ -114,7 +114,6 @@ collections:
           - { label: Título sobre a organización, name: organizationTitle, widget: string }
           - { label: Texto sobre a organización, name: organizationText, widget: text }
           - { label: Texto da ligazón, name: organizationLinkLabel, widget: string }
-          - { label: Imaxe, name: organizationImage, widget: image }
           - label: Niveis da organización
             name: levels
             widget: list

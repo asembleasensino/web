@@ -10,9 +10,9 @@ const centrosJson = JSON.stringify(centrosDisponibles).replace(/</g, "\\u003c");
 <section id="participa" class="bg-red text-paper">
   <div class="mx-auto grid max-w-[1500px] gap-10 px-4 py-16 md:grid-cols-12 md:px-8 md:py-24">
     <div class="md:col-span-6">
-      <h2 class="display max-w-2xl text-6xl sm:text-8xl">Activa o teu centro.</h2>
+      <h2 class="display max-w-2xl text-6xl sm:text-8xl">Tendes unha asemblea?</h2>
       <p class="mt-8 max-w-lg text-lg leading-relaxed text-paper/80">
-        Non precisas ter todo resolto. Déixanos os datos básicos e unha persoa da rede poñerase en contacto contigo.
+        Non precisades ter todo resolto. Deixádenos os datos básicos e unha persoa da rede poñerase en contacto convosco.
       </p>
     </div>
     <form id="activation-form" data-contact-email={site.email} class="grid gap-5 self-start bg-paper p-5 text-ink sm:p-8 md:col-span-6" method="post" action="/api/solicitudes">
