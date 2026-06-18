@@ -14,6 +14,8 @@ Data da revisión: 18 de xuño de 2026.
 ## Segredos que deben vivir en Cloudflare
 
 - `RESEND_API_KEY`
+- `GITHUB_CLIENT_SECRET`
+- `GITHUB_CLIENT_ID`
 - `GOOGLE_APPS_SCRIPT_SECRET`
 - `GOOGLE_APPS_SCRIPT_URL`
 - `ADMIN_EMAILS`
@@ -21,6 +23,8 @@ Data da revisión: 18 de xuño de 2026.
 - `SOLICITUDES_TO_EMAIL`
 
 Os bindings `SOLICITUDES` e `MARTES_MEDIA` configúranse no proxecto Cloudflare. Non se gardan credenciais no código.
+
+`SOLICITUDES` é obrigatorio: a API devolve `503` se non pode garantir o gardado. O envío de fotografías tamén devolve erro se non hai Drive nin R2 configurados, e só confirma a recepción cando polo menos un destino conservou a imaxe.
 
 ## GitHub e Decap CMS
 
@@ -32,6 +36,14 @@ Os bindings `SOLICITUDES` e `MARTES_MEDIA` configúranse no proxecto Cloudflare.
 - tokens de despregamento.
 
 Un OAuth client ID pode ser público, pero o seu client secret debe quedar no provedor OAuth ou nun segredo de Cloudflare.
+
+As Functions OAuth usan unha cookie `HttpOnly`, `Secure` e `SameSite=Lax` para validar o parámetro `state`. Os tokens de GitHub entréganse directamente á ventá de Decap e non se gardan no servidor.
+
+O backend GitHub clásico de Decap precisa alcance `repo`. Isto dá ao token acceso aos repositorios aos que xa teña acceso cada persoa editora, non só a este proxecto. Deben empregarse contas de organización con mínimos permisos, protexer `/admin/*` con Cloudflare Access e revogar inmediatamente o OAuth dunha persoa que deixe o equipo.
+
+Os formularios públicos precisan rate limiting en Cloudflare. A protección anti-spam avanzada con Turnstile queda como decisión previa ao lanzamento segundo o nivel de exposición.
+
+KV non aplica por si só unha política de conservación. A organización debe aprobar un prazo para arquivar ou eliminar solicitudes con datos persoais e executar revisións periódicas.
 
 ## Google Drive e Apps Script
 

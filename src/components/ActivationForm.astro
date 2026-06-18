@@ -1,5 +1,6 @@
 ---
 import { centros } from "../data/centros";
+import { site } from "../config/site";
 const centrosDisponibles = centros
   .filter((centro) => centro.estado === "sen_asemblea")
   .map(({ codigo, nome, concello, tipo }) => ({ codigo, nome, concello, tipo }));
@@ -14,7 +15,7 @@ const centrosJson = JSON.stringify(centrosDisponibles).replace(/</g, "\\u003c");
         Non precisas ter todo resolto. Déixanos os datos básicos e unha persoa da rede poñerase en contacto contigo.
       </p>
     </div>
-    <form id="activation-form" class="grid gap-5 self-start bg-paper p-5 text-ink sm:p-8 md:col-span-6" method="post" action="/api/solicitudes">
+    <form id="activation-form" data-contact-email={site.email} class="grid gap-5 self-start bg-paper p-5 text-ink sm:p-8 md:col-span-6" method="post" action="/api/solicitudes">
       <div>
         <label class="mb-2 block text-xs font-bold" for="centro-search">Centro educativo</label>
         <div class="relative">
@@ -50,7 +51,7 @@ const centrosJson = JSON.stringify(centrosDisponibles).replace(/</g, "\\u003c");
         <textarea class="focus-ring min-h-28 w-full resize-y border border-ink/30 bg-transparent px-4 py-3" id="mensaxe" name="mensaxe"></textarea>
       </div>
       <label class="flex items-start gap-3 text-xs leading-relaxed">
-        <input class="mt-1 accent-red" type="checkbox" required />
+        <input class="mt-1 accent-red" type="checkbox" name="consent" value="accepted" required />
         <span>Acepto que AAEP empregue estes datos para contactar comigo sobre a creación dunha asemblea.</span>
       </label>
       <button class="focus-ring justify-self-start bg-ink px-6 py-4 text-xs font-black uppercase tracking-wider text-paper hover:bg-green" type="submit">
@@ -90,7 +91,7 @@ const centrosJson = JSON.stringify(centrosDisponibles).replace(/</g, "\\u003c");
       }
     } catch {
       if (status) {
-        status.textContent = "Houbo un problema. Escríbenos a info@asembleasensino.gal.";
+        status.textContent = `Houbo un problema. Escríbenos a ${form.dataset.contactEmail}.`;
         status.classList.remove("hidden");
       }
     } finally {

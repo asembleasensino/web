@@ -1,40 +1,44 @@
 ---
 import BaseLayout from "../../layouts/BaseLayout.astro";
+import { actualidadeUrl, formatDate, getActualidade } from "../../lib/content";
+import { site } from "../../config/site";
 
-const artigos = [
-  ["Comunicado", "16.06.2026", "O ensino público non se sostén con parches"],
-  ["Crónica", "11.06.2026", "Un martes máis, os centros toman a palabra"],
-  ["Tribuna docente", "04.06.2026", "Organizarnos tamén é coidar a escola"],
-  ["Convocatoria", "29.05.2026", "Asemblea xeral aberta en Compostela"],
-  ["Comunicado", "22.05.2026", "Por unha baixada real das ratios"],
-  ["Crónica", "14.05.2026", "A rede medra desde os centros"],
-];
+const artigos = await getActualidade();
+const [destacado, ...resto] = artigos;
 ---
-<BaseLayout title="Actualidade · AAEP">
+<BaseLayout title={`Actualidade · ${site.shortName}`}>
   <header class="mx-auto max-w-[1500px] px-4 pb-12 pt-16 md:px-8 md:pb-20 md:pt-24">
     <h1 class="display text-[clamp(3.7rem,13vw,11rem)]">Actualidade</h1>
   </header>
   <section class="mx-auto max-w-[1500px] px-4 pb-28 md:px-8">
-    <article class="grid gap-8 border-y border-ink py-10 md:grid-cols-12 md:py-16">
-      <div class="md:col-span-3">
-        <span class="eyebrow text-red">{artigos[0][0]}</span>
-        <p class="mt-3 text-xs text-ink/45">{artigos[0][1]}</p>
+    {destacado ? (
+      <>
+        <a href={actualidadeUrl(destacado)} class="group grid gap-8 border-y border-ink py-10 no-underline md:grid-cols-12 md:py-16">
+          <div class="md:col-span-3">
+            <span class="eyebrow text-red">{destacado.data.type}</span>
+            <p class="mt-3 text-xs text-ink/45">{formatDate(destacado.data.date)}</p>
+          </div>
+          <div class="md:col-span-8">
+            <h2 class="max-w-4xl text-[clamp(2.8rem,6vw,6.5rem)] font-extrabold leading-[.94] tracking-[-.05em] group-hover:text-red">{destacado.data.title}</h2>
+            <p class="mt-8 max-w-xl text-base leading-relaxed text-ink/60">{destacado.data.summary}</p>
+          </div>
+          <span class="self-end text-2xl md:col-span-1">→</span>
+        </a>
+        <div class="ml-auto max-w-5xl">
+          {resto.map((artigo, index) => (
+            <a href={actualidadeUrl(artigo)} class="group grid gap-5 border-b border-ink/25 py-8 no-underline md:grid-cols-[3rem_10rem_1fr_auto] md:items-center">
+              <span class="text-xs text-ink/30">{String(index + 2).padStart(2, "0")}</span>
+              <div><span class="eyebrow text-red">{artigo.data.type}</span><p class="mt-2 text-xs text-ink/45">{formatDate(artigo.data.date)}</p></div>
+              <h2 class:list={["font-extrabold leading-tight group-hover:text-red", index === 0 ? "text-3xl md:text-4xl" : "text-2xl md:text-3xl"]}>{artigo.data.title}</h2>
+              <span class="text-xl">→</span>
+            </a>
+          ))}
+        </div>
+      </>
+    ) : (
+      <div class="border-y border-ink py-16">
+        <p class="max-w-xl text-xl font-bold">A actualidade publicarase aquí desde o panel editorial.</p>
       </div>
-      <div class="md:col-span-8">
-        <h2 class="max-w-4xl text-[clamp(2.8rem,6vw,6.5rem)] font-extrabold leading-[.94] tracking-[-.05em]">{artigos[0][2]}</h2>
-        <p class="mt-8 max-w-xl text-base leading-relaxed text-ink/60">As asembleas reclaman planificación, estabilidade e recursos para o vindeiro curso.</p>
-      </div>
-      <span class="self-end text-2xl md:col-span-1">→</span>
-    </article>
-    <div class="ml-auto max-w-5xl">
-      {artigos.slice(1).map((artigo, index) => (
-        <article class="group grid gap-5 border-b border-ink/25 py-8 md:grid-cols-[3rem_10rem_1fr_auto] md:items-center">
-          <span class="text-xs text-ink/30">0{index + 2}</span>
-          <div><span class="eyebrow text-red">{artigo[0]}</span><p class="mt-2 text-xs text-ink/45">{artigo[1]}</p></div>
-          <h2 class:list={["font-extrabold leading-tight group-hover:text-red", index === 0 ? "text-3xl md:text-4xl" : "text-2xl md:text-3xl"]}>{artigo[2]}</h2>
-          <span class="text-xl">→</span>
-        </article>
-      ))}
-    </div>
+    )}
   </section>
 </BaseLayout>

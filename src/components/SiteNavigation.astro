@@ -1,0 +1,23 @@
+---
+import type { NavigationItem } from "../config/site";
+
+interface Props {
+  items: NavigationItem[];
+  mobile?: boolean;
+}
+
+const { items, mobile = false } = Astro.props;
+---
+
+{items.map((item) => (
+  <a
+    class:list={[
+      "focus-ring",
+      mobile ? "" : "decoration-red decoration-2 underline-offset-4 hover:underline",
+      item.primary && !mobile ? "bg-ink px-4 py-3 text-paper hover:bg-red hover:no-underline" : "",
+    ]}
+    href={item.href}
+  >
+    {item.label}
+  </a>
+))}

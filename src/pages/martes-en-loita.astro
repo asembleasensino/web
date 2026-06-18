@@ -1,11 +1,12 @@
 ---
 import BaseLayout from "../layouts/BaseLayout.astro";
-import centrosData from "../data/centros.json";
-const centros = centrosData.centros.map(({ codigo, nome, concello, comarca }) => ({ codigo, nome, concello, comarca }));
+import { centros as allCentros } from "../data/centros";
+import { site } from "../config/site";
+const centros = allCentros.map(({ codigo, nome, concello, comarca }) => ({ codigo, nome, concello, comarca }));
 const centrosJson = JSON.stringify(centros).replace(/</g, "\\u003c");
 ---
 
-<BaseLayout title="Martes en loita · Asembleas Abertas">
+<BaseLayout title={`Martes en loita · ${site.shortName}`}>
   <header class="mx-auto grid max-w-[1500px] gap-10 px-4 pb-16 pt-16 md:grid-cols-12 md:px-8 md:pb-24 md:pt-28">
     <h1 aria-label="Martes en loita" class="display text-[clamp(4rem,11vw,10rem)] md:col-span-8">
       <span aria-hidden="true">Martes<br />en
@@ -22,7 +23,7 @@ const centrosJson = JSON.stringify(centros).replace(/</g, "\\u003c");
         <h2 class="display text-5xl sm:text-7xl">Un arquivo colectivo</h2>
         <p class="mt-8 max-w-sm text-sm leading-relaxed text-paper/70">Sube unha fotografía por centro e data. Non é preciso preparar a imaxe: o sistema existente encárgase do resto.</p>
       </div>
-      <form id="martes-form" action="/api/martes-en-loita" method="post" enctype="multipart/form-data" class="grid gap-5 bg-paper p-5 text-ink sm:p-8 md:col-span-7 md:col-start-6">
+      <form id="martes-form" data-contact-email={site.email} action="/api/martes-en-loita" method="post" enctype="multipart/form-data" class="grid gap-5 bg-paper p-5 text-ink sm:p-8 md:col-span-7 md:col-start-6">
         <div>
           <label class="mb-2 block text-xs font-bold" for="martes-centro">Centro</label>
           <div class="relative">
@@ -45,6 +46,10 @@ const centrosJson = JSON.stringify(centros).replace(/</g, "\\u003c");
             <input id="martes-foto" name="foto" type="file" accept="image/jpeg,image/png,image/webp" required class="focus-ring w-full border border-ink/30 bg-paper px-4 py-3 text-sm" />
           </div>
         </div>
+        <label class="flex items-start gap-3 text-xs leading-relaxed">
+          <input class="mt-1 accent-green" type="checkbox" name="autorizacion" value="confirmed" required />
+          <span>Confirmo que a imaxe pode ser entregada á AAEP para o seu arquivo e posible publicación.</span>
+        </label>
         <button class="focus-ring justify-self-start bg-ink px-6 py-4 text-xs font-black uppercase tracking-wider text-paper" type="submit">Enviar fotografía →</button>
         <p id="martes-status" class="hidden text-sm font-bold" role="status"></p>
       </form>
@@ -132,14 +137,17 @@ const centrosJson = JSON.stringify(centros).replace(/</g, "\\u003c");
       try {
         const response = await fetch(form.action, { method: "POST", body: new FormData(form) });
         if (!response.ok) throw new Error();
+        const result = await response.json() as { storedIn?: string[]; warning?: string };
         form.reset();
         if (status) {
-          status.textContent = "Imaxe recibida. Grazas por construír este arquivo colectivo.";
+          status.textContent = result.storedIn?.includes("drive")
+            ? "Imaxe recibida e gardada no arquivo colectivo."
+            : "Imaxe recibida na copia de seguridade. O equipo revisará o envío a Drive.";
           status.classList.remove("hidden");
         }
       } catch {
         if (status) {
-          status.textContent = "Non foi posible enviar a imaxe. Escríbenos a info@asembleasensino.gal.";
+          status.textContent = `Non foi posible enviar a imaxe. Escríbenos a ${form.dataset.contactEmail}.`;
           status.classList.remove("hidden");
         }
       } finally {

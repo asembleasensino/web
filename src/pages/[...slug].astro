@@ -1,0 +1,42 @@
+---
+import { getCollection, render, type CollectionEntry } from "astro:content";
+import BaseLayout from "../layouts/BaseLayout.astro";
+import { site } from "../config/site";
+
+export async function getStaticPaths() {
+  const entries = await getCollection("paxinas", ({ data }) => !data.draft);
+  return entries.map((entry) => ({
+    params: { slug: entry.id.replace(/\.(md|mdx)$/i, "") },
+    props: { entry },
+  }));
+}
+
+interface Props {
+  entry: CollectionEntry<"paxinas">;
+}
+
+const { entry } = Astro.props;
+const { Content } = await render(entry);
+const canonical = new URL(`/${entry.id.replace(/\.(md|mdx)$/i, "")}/`, Astro.site);
+---
+
+<BaseLayout title={`${entry.data.title} · ${site.shortName}`} description={entry.data.summary} canonical={canonical}>
+  <article>
+    <header class="mx-auto grid max-w-[1500px] gap-8 px-4 pb-14 pt-16 md:grid-cols-12 md:px-8 md:pb-20 md:pt-24">
+      <div class="md:col-span-9">
+        <h1 class="max-w-5xl text-[clamp(3rem,8vw,8rem)] font-extrabold leading-[.92] tracking-[-.05em]">{entry.data.title}</h1>
+        <p class="mt-8 max-w-3xl text-xl leading-relaxed text-ink/65">{entry.data.summary}</p>
+      </div>
+    </header>
+    {entry.data.image && (
+      <figure class="mx-auto max-w-[1500px] px-4 md:px-8">
+        <img src={entry.data.image} alt="" class="max-h-[720px] w-full object-cover" />
+      </figure>
+    )}
+    <div class="mx-auto grid max-w-[1500px] gap-10 px-4 py-16 md:grid-cols-12 md:px-8 md:py-24">
+      <div class="content-body md:col-span-8 md:col-start-4">
+        <Content />
+      </div>
+    </div>
+  </article>
+</BaseLayout>

@@ -1,9 +1,10 @@
 ---
 import BaseLayout from "../layouts/BaseLayout.astro";
 import rede from "../data/rede.json";
+import { site } from "../config/site";
 ---
 
-<BaseLayout title="A rede · Asembleas Abertas">
+<BaseLayout title={`A rede · ${site.shortName}`}>
   <header class="mx-auto grid max-w-[1500px] gap-10 px-4 pb-16 pt-16 md:grid-cols-12 md:px-8 md:pb-24 md:pt-28">
     <h1 class="display text-[clamp(4.5rem,11vw,10rem)] md:col-span-8">A rede</h1>
     <p class="max-w-md self-end text-lg leading-relaxed text-ink/70 md:col-span-4">{rede.titulo}</p>

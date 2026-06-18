@@ -16,6 +16,8 @@
       h2 { margin: 0 0 .4rem; }
       p { line-height: 1.5; }
       .error { padding: 1rem; background: #c94a42; color: #f2f0ec; }
+      .actions { display: flex; flex-wrap: wrap; gap: .5rem; }
+      button { border: 1px solid; background: transparent; padding: .55rem .75rem; font: inherit; font-weight: 700; cursor: pointer; }
       @media (max-width: 650px) { body { padding: 1rem; } article { grid-template-columns: 1fr; gap: .5rem; } }
     </style>
   </head>
@@ -50,6 +52,11 @@
                 <small>Código ${escapeHtml(item.centroCodigo)}</small>
                 <p>${escapeHtml(item.nome)} · <a href="mailto:${encodeURIComponent(item.email)}">${escapeHtml(item.email)}</a></p>
                 ${item.mensaxe ? `<p>${escapeHtml(item.mensaxe)}</p>` : ""}
+                <div class="actions">
+                  <button data-id="${escapeHtml(item.id)}" data-state="en_contacto">Marcar en contacto</button>
+                  <button data-id="${escapeHtml(item.id)}" data-state="resolta">Marcar resolta</button>
+                  <button data-id="${escapeHtml(item.id)}" data-state="arquivada">Arquivar</button>
+                </div>
               </div>
             </article>
           `).join("");
@@ -57,6 +64,21 @@
         .catch((error) => {
           document.querySelector("#list").innerHTML = `<p class="error">${error.message}. Esta páxina debe estar protexida con Cloudflare Access.</p>`;
         });
+      document.querySelector("#list").addEventListener("click", async (event) => {
+        const button = event.target.closest("button[data-id]");
+        if (!button) return;
+        button.disabled = true;
+        const response = await fetch("/api/solicitudes", {
+          method: "PATCH",
+          headers: { "content-type": "application/json" },
+          body: JSON.stringify({ id: button.dataset.id, estado: button.dataset.state }),
+        });
+        if (response.ok) location.reload();
+        else {
+          button.disabled = false;
+          alert("Non foi posible actualizar a solicitude.");
+        }
+      });
     </script>
   </body>
 </html>

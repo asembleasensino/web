@@ -1,5 +1,10 @@
 import { readFile, writeFile } from "node:fs/promises";
 
+// Script histórico empregado para crear a primeira listaxe de asembleas.
+// Non forma parte do mantemento ordinario. Conservámolo para trazabilidade da
+// importación inicial; as actualizacións futuras fanse desde Decap ou mediante
+// un proceso de datos revisado explicitamente.
+
 const source = `
 CEIP Bragade|Oza-Cesuras
 CEIP Concepción Arenal|A Coruña

@@ -2,8 +2,15 @@ backend:
   name: github
   repo: asembleasensino/web
   branch: main
+  site_domain: https://asembleasensino.gal
+  base_url: https://asembleasensino.gal
+  auth_endpoint: /api/auth
+  use_graphql: true
 
 locale: gl
+site_url: https://asembleasensino.gal
+display_url: https://asembleasensino.gal
+logo_url: /favicon.svg
 media_folder: public/uploads
 public_folder: /uploads
 publish_mode: editorial_workflow
@@ -22,7 +29,11 @@ collections:
         widget: select
         options: [Nova, Comunicado, Convocatoria, "Tribuna docente", Crónica]
       - { label: Resumo, name: summary, widget: text }
-      - { label: Imaxe, name: image, widget: image, required: false }
+      - { label: Imaxe de cabeceira, name: image, widget: image, required: false, hint: "As imaxes editoriais pequenas poden gardarse no repositorio. As fotografías de arquivo deben permanecer en Drive." }
+      - { label: Destacar, name: featured, widget: boolean, default: false, required: false }
+      - { label: Data e hora do evento, name: eventDate, widget: datetime, required: false, hint: "Só para convocatorias. Permite que apareza automaticamente en Próximas convocatorias." }
+      - { label: Lugar do evento, name: eventLocation, widget: string, required: false }
+      - { label: Borrador técnico, name: draft, widget: boolean, default: false, required: false, hint: "Oculta o contido incluso se chega á rama principal." }
       - { label: Corpo, name: body, widget: markdown }
 
   - name: materiais
@@ -32,17 +43,94 @@ collections:
     slug: "{{slug}}"
     fields:
       - { label: Título, name: title, widget: string }
+      - { label: Data de publicación, name: date, widget: datetime }
       - label: Tipo
         name: type
         widget: select
         options: [Modelo, Recurso, Guía, "Documento legal", Cartaz, Presentación]
+      - { label: Resumo, name: summary, widget: text }
       - { label: Etiquetas, name: tags, widget: list, required: false }
-      - { label: Ficheiro, name: file, widget: file }
+      - { label: Ligazón pública de Google Drive, name: driveUrl, widget: string, pattern: ['^https://drive\.google\.com/.+', "Debe ser unha ligazón pública de Google Drive"], hint: "En Drive: Compartir → Acceso xeral → Calquera persoa coa ligazón → Lector." }
+      - { label: Imaxe de cabeceira, name: image, widget: image, required: false }
+      - { label: Destacar, name: featured, widget: boolean, default: false, required: false }
+      - { label: Borrador técnico, name: draft, widget: boolean, default: false, required: false }
       - { label: Descrición, name: body, widget: markdown }
+
+  - name: paxinas
+    label: Páxinas
+    label_singular: Páxina
+    folder: content/paxinas
+    create: true
+    slug: "{{slug}}"
+    fields:
+      - { label: Título, name: title, widget: string }
+      - { label: Resumo, name: summary, widget: text, hint: "Utilízase na cabeceira e nos buscadores." }
+      - { label: Imaxe de cabeceira, name: image, widget: image, required: false }
+      - { label: Borrador técnico, name: draft, widget: boolean, default: false, required: false }
+      - { label: Corpo, name: body, widget: markdown }
 
   - name: configuracion
     label: Páxinas e configuración
     files:
+      - label: Identidade, contacto e navegación
+        name: site
+        file: src/data/site.json
+        fields:
+          - { label: Nome completo, name: name, widget: string }
+          - { label: Nome curto, name: shortName, widget: string }
+          - { label: Liñas da marca, name: brandLines, widget: list, min: 1, max: 3 }
+          - { label: Descrición xeral, name: description, widget: text }
+          - { label: Correo público, name: email, widget: string }
+          - { label: Territorio, name: territory, widget: string }
+          - label: Redes sociais
+            name: social
+            widget: object
+            fields:
+              - { label: URL de Instagram, name: instagramUrl, widget: string }
+              - { label: Texto de Instagram, name: instagramLabel, widget: string }
+          - label: Navegación principal
+            name: headerNavigation
+            widget: list
+            summary: "{{fields.label}} → {{fields.href}}"
+            fields:
+              - { label: Texto, name: label, widget: string }
+              - { label: Ligazón, name: href, widget: string }
+              - { label: Botón destacado, name: primary, widget: boolean, default: false, required: false }
+          - label: Navegación do pé
+            name: footerNavigation
+            widget: list
+            summary: "{{fields.label}} → {{fields.href}}"
+            fields:
+              - { label: Texto, name: label, widget: string }
+              - { label: Ligazón, name: href, widget: string }
+          - { label: Mensaxe do pé, name: footerClaim, widget: text }
+      - label: Portada
+        name: home
+        file: src/data/home.json
+        fields:
+          - { label: Título principal, name: heroTitle, widget: string }
+          - { label: Texto destacado do título, name: heroHighlight, widget: string }
+          - { label: Introdución, name: heroIntroduction, widget: text }
+          - { label: Título sobre a organización, name: organizationTitle, widget: string }
+          - { label: Texto sobre a organización, name: organizationText, widget: text }
+          - { label: Texto da ligazón, name: organizationLinkLabel, widget: string }
+          - { label: Imaxe, name: organizationImage, widget: image }
+          - label: Niveis da organización
+            name: levels
+            widget: list
+            summary: "{{fields.title}}"
+            fields:
+              - { label: Título, name: title, widget: string }
+              - { label: Texto, name: text, widget: text }
+          - { label: Título da rede, name: networkTitle, widget: text }
+          - { label: Texto da rede, name: networkText, widget: text }
+          - label: Pasos para participar
+            name: participationSteps
+            widget: list
+            summary: "{{fields.title}}"
+            fields:
+              - { label: Título, name: title, widget: string }
+              - { label: Texto, name: text, widget: text }
       - label: A rede
         name: rede
         file: src/data/rede.json

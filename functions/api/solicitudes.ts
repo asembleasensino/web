@@ -65,23 +65,43 @@ export const onRequestGet: PagesFunction<Env> = async ({ request, env }) => {
   if (!canAdminister(request, env)) {
     return Response.json({ ok: false, error: "Non autorizado" }, { status: 401 });
   }
-  if (!env.SOLICITUDES) return Response.json({ ok: true, solicitudes: [] });
-  const keys = await env.SOLICITUDES.list({ prefix: "solicitude:" });
+  if (!env.SOLICITUDES) {
+    return Response.json({ ok: false, error: "Almacenamento non configurado" }, { status: 503 });
+  }
+  const allKeys: { name: string }[] = [];
+  let cursor: string | undefined;
+  do {
+    const page = await env.SOLICITUDES.list({ prefix: "solicitude:", cursor });
+    allKeys.push(...page.keys);
+    cursor = page.list_complete ? undefined : page.cursor;
+  } while (cursor);
   const solicitudes = (await Promise.all(
-    keys.keys.map((key) => env.SOLICITUDES?.get(key.name, "json"))
+    allKeys.map((key) => env.SOLICITUDES?.get(key.name, "json"))
   )).filter(Boolean).sort((a: any, b: any) => String(b.createdAt).localeCompare(String(a.createdAt)));
   return Response.json({ ok: true, solicitudes });
 };
 
 export const onRequestPost: PagesFunction<Env> = async ({ request, env }) => {
+  if (!env.SOLICITUDES) {
+    return Response.json({ ok: false, error: "Servizo temporalmente non dispoñible" }, { status: 503 });
+  }
   const form = await request.formData();
   const centro = String(form.get("centro") ?? "").trim();
   const centroCodigo = String(form.get("centroCodigo") ?? "").trim();
   const nome = String(form.get("nome") ?? "").trim();
   const email = String(form.get("email") ?? "").trim();
   const mensaxe = String(form.get("mensaxe") ?? "").trim();
+  const consent = String(form.get("consent") ?? "");
 
-  if (!centro || !centroCodigo || !nome || !email || !email.includes("@")) {
+  if (
+    !centro || centro.length > 200
+    || !centroCodigo || centroCodigo.length > 30
+    || !nome || nome.length > 150
+    || !email || email.length > 254
+    || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)
+    || mensaxe.length > 5000
+    || consent !== "accepted"
+  ) {
     return Response.json({ ok: false, error: "Datos incompletos" }, { status: 400 });
   }
 
@@ -94,13 +114,15 @@ export const onRequestPost: PagesFunction<Env> = async ({ request, env }) => {
     email,
     mensaxe,
     estado: "pendente_validacion",
+    privacyVersion: "2026-06-18",
     createdAt: new Date().toISOString(),
   };
 
-  if (env.SOLICITUDES) {
+  try {
     await env.SOLICITUDES.put(`solicitude:${id}`, JSON.stringify(payload));
-  } else {
-    console.log("Solicitude recibida sen KV configurado", payload);
+  } catch (error) {
+    console.error("Non foi posible gardar a solicitude", error);
+    return Response.json({ ok: false, error: "Non foi posible gardar a solicitude" }, { status: 503 });
   }
   try {
     await notifyByEmail(env, payload);
@@ -109,4 +131,34 @@ export const onRequestPost: PagesFunction<Env> = async ({ request, env }) => {
   }
 
   return Response.json({ ok: true, id }, { status: 201 });
+};
+
+export const onRequestPatch: PagesFunction<Env> = async ({ request, env }) => {
+  if (!canAdminister(request, env)) {
+    return Response.json({ ok: false, error: "Non autorizado" }, { status: 401 });
+  }
+  if (!env.SOLICITUDES) {
+    return Response.json({ ok: false, error: "Almacenamento non configurado" }, { status: 503 });
+  }
+
+  const body: { id?: string; estado?: string } = await request
+    .json<{ id?: string; estado?: string }>()
+    .catch(() => ({}));
+  const allowedStates = ["pendente_validacion", "en_contacto", "resolta", "arquivada"];
+  if (!body.id || !body.estado || !allowedStates.includes(body.estado)) {
+    return Response.json({ ok: false, error: "Datos incorrectos" }, { status: 400 });
+  }
+
+  const key = `solicitude:${body.id}`;
+  const existing = await env.SOLICITUDES.get<Record<string, unknown>>(key, "json");
+  if (!existing) {
+    return Response.json({ ok: false, error: "Solicitude non atopada" }, { status: 404 });
+  }
+
+  await env.SOLICITUDES.put(key, JSON.stringify({
+    ...existing,
+    estado: body.estado,
+    updatedAt: new Date().toISOString(),
+  }));
+  return Response.json({ ok: true });
 };

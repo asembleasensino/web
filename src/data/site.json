@@ -1,0 +1,29 @@
+{
+  "name": "Asembleas Abertas do Ensino Público",
+  "shortName": "AAEP",
+  "brandLines": ["Asembleas Abertas", "do Ensino Público"],
+  "description": "Unha rede aberta e descentralizada para organizar o ensino público galego.",
+  "siteUrl": "https://asembleasensino.gal",
+  "email": "info@asembleasensino.gal",
+  "territory": "Galicia",
+  "social": {
+    "instagramUrl": "https://instagram.com/asembleasensino",
+    "instagramLabel": "@asembleasensino"
+  },
+  "headerNavigation": [
+    { "label": "Mapa", "href": "/#mapa" },
+    { "label": "A rede", "href": "/a-rede/" },
+    { "label": "Actualidade", "href": "/actualidade/" },
+    { "label": "Materiais", "href": "/materiais/" },
+    { "label": "Martes en loita", "href": "/martes-en-loita/" },
+    { "label": "Activa o teu centro", "href": "/#participa", "primary": true }
+  ],
+  "footerNavigation": [
+    { "label": "Mapa da rede", "href": "/#mapa" },
+    { "label": "A rede", "href": "/a-rede/" },
+    { "label": "Actualidade", "href": "/actualidade/" },
+    { "label": "Materiais", "href": "/materiais/" },
+    { "label": "Martes en loita", "href": "/martes-en-loita/" }
+  ],
+  "footerClaim": "O público\norganízase."
+}

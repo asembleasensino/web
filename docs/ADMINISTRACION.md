@@ -4,14 +4,18 @@
 
 O panel editorial está en `/admin` e emprega Decap CMS. Non é WordPress: os cambios gárdanse no repositorio GitHub e Cloudflare publica automaticamente unha nova versión.
 
-Desde o panel pódense editar:
+Desde o panel pódense editar e publicar:
 
 - novas, comunicados, convocatorias, tribunas e crónicas;
 - materiais e ficheiros;
+- páxinas informativas;
+- identidade, contacto, navegación e portada;
 - a páxina “A rede”, grupos de WhatsApp e normas;
 - a listaxe reducida de asembleas activas ou en creación.
 
 O modo editorial crea un borrador para revisión antes de publicar.
+
+As entradas publicadas de actualidade e materiais xeran automaticamente páxinas individuais. A portada toma as últimas publicacións e as convocatorias futuras. Os documentos de materiais almacénanse en Google Drive; no CMS gárdanse a descrición e a ligazón pública.
 
 ## Persoas administradoras
 
@@ -19,7 +23,7 @@ Cada persoa precisa:
 
 1. unha conta GitHub;
 2. acceso de escritura ao repositorio;
-3. autorización no sistema OAuth configurado para Decap CMS.
+3. autorización no OAuth de GitHub configurado en Cloudflare.
 
 Entra en `https://dominio.gal/admin`, inicia sesión con GitHub e escolle a colección que queres editar.
 
@@ -55,11 +59,13 @@ Configura:
 
 O script valida que a data sexa martes, crea ou reutiliza a carpeta `AAAA-MM-DD` e garda dentro a fotografía como `Centro-Concello.ext`. Se xa existe, engade un número ao nome.
 
-## Configuración pendente antes de publicar
+## Configuración externa obrigatoria antes de publicar
 
-- configurar OAuth de GitHub para Decap;
+- crear a OAuth App de GitHub e cargar as credenciais;
 - crear e vincular o KV `SOLICITUDES`;
 - establecer `ADMIN_EMAILS` como lista de correos separados por comas;
 - configurar Resend para as notificacións por correo;
 - protexer `/xestion/*` con Cloudflare Access;
 - configurar R2 e o webhook de Google Drive.
+
+Consulta `DESPREGE_CLOUDFLARE.md` para o procedemento completo e `FLUXO_EDITORIAL.md` para a guía de uso.

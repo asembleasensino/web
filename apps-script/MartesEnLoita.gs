@@ -43,7 +43,8 @@ function doPost(e) {
       codigo: payload.centroCodigo,
       concello: payload.concello,
       comarca: payload.comarca,
-      data: payload.data
+      data: payload.data,
+      autorizacion: payload.autorizacion === true
     }));
 
     return jsonResponse({ ok: true, fileId: file.getId(), folderId: dateFolder.getId() });

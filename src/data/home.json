@@ -1,0 +1,39 @@
+{
+  "heroTitle": "O ensino",
+  "heroHighlight": "organízase.",
+  "heroIntroduction": "Unha rede de asembleas abertas, autónomas e coordinadas para defender e transformar o ensino público.",
+  "organizationTitle": "Unha organización feita desde os centros.",
+  "organizationText": "Nacemos para recuperar capacidade de decisión, poñer en común os problemas cotiáns e converter o malestar disperso en acción colectiva.",
+  "organizationLinkLabel": "Coñece como funcionamos →",
+  "organizationImage": "/images/martes/ceip-bergantinos.webp",
+  "levels": [
+    {
+      "title": "Asembleas de centro",
+      "text": "Espazos abertos para compartir información, deliberar e tomar decisións colectivas."
+    },
+    {
+      "title": "Coordinación comarcal",
+      "text": "Unha escala próxima para conectar centros, campañas e necesidades territoriais."
+    },
+    {
+      "title": "Asemblea xeral",
+      "text": "O lugar común onde a rede acorda prioridades e constrúe capacidade compartida."
+    }
+  ],
+  "networkTitle": "Unha rede.\nMoitas voces.",
+  "networkText": "Cada centro decide. As comarcas coordinan. A rede comparte forza, materiais e memoria.",
+  "participationSteps": [
+    {
+      "title": "Atopa o teu centro",
+      "text": "Todos os centros públicos están na base de datos, teñan ou non asemblea."
+    },
+    {
+      "title": "Activa a comunidade",
+      "text": "Solicita a creación dunha asemblea e recibe acompañamento da rede."
+    },
+    {
+      "title": "Coordínate e participa",
+      "text": "Comparte recursos, leva propostas á comarca e participa nas decisións xerais."
+    }
+  ]
+}

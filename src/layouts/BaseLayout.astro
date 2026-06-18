@@ -1,14 +1,18 @@
 ---
 import "../styles/global.css";
+import SiteNavigation from "../components/SiteNavigation.astro";
+import { currentYear, site } from "../config/site";
 
 interface Props {
   title?: string;
   description?: string;
+  canonical?: URL;
 }
 
 const {
-  title = "Asembleas Abertas do Ensino Público",
-  description = "Unha rede aberta e descentralizada para organizar o ensino público galego.",
+  title = site.name,
+  description = site.description,
+  canonical,
 } = Astro.props;
 ---
 
@@ -18,6 +22,11 @@ const {
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width" />
     <meta name="description" content={description} />
+    {canonical && <link rel="canonical" href={canonical} />}
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:type" content="website" />
+    {canonical && <meta property="og:url" content={canonical} />}
     <meta name="theme-color" content="#252321" />
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
     <title>{title}</title>
@@ -28,19 +37,14 @@ const {
     </a>
     <header class="border-b border-ink/20 bg-paper">
       <div class="mx-auto flex max-w-[1500px] items-center justify-between px-4 py-4 md:px-8">
-        <a href="/" class="focus-ring flex items-center gap-3 no-underline" aria-label="AAEP, portada">
+        <a href="/" class="focus-ring flex items-center gap-3 no-underline" aria-label={`${site.shortName}, portada`}>
           <span class="grid h-9 w-9 place-items-center bg-ink text-sm font-black text-paper">AA</span>
           <span class="max-w-44 text-[11px] font-extrabold uppercase leading-[1.05] tracking-[.1em]">
-            Asembleas Abertas<br />do Ensino Público
+            {site.brandLines.map((line) => <>{line}<br /></>)}
           </span>
         </a>
         <nav aria-label="Navegación principal" class="hidden items-center gap-7 text-xs font-bold uppercase tracking-wider lg:flex">
-          <a class="focus-ring decoration-red decoration-2 underline-offset-4 hover:underline" href="/#mapa">Mapa</a>
-          <a class="focus-ring decoration-red decoration-2 underline-offset-4 hover:underline" href="/a-rede">A rede</a>
-          <a class="focus-ring decoration-red decoration-2 underline-offset-4 hover:underline" href="/actualidade">Actualidade</a>
-          <a class="focus-ring decoration-red decoration-2 underline-offset-4 hover:underline" href="/materiais">Materiais</a>
-          <a class="focus-ring decoration-red decoration-2 underline-offset-4 hover:underline" href="/martes-en-loita">Martes en loita</a>
-          <a class="focus-ring bg-ink px-4 py-3 text-paper hover:bg-red" href="/#participa">Activa o teu centro</a>
+          <SiteNavigation items={site.headerNavigation} />
         </nav>
         <button id="menu-button" class="focus-ring border border-ink px-3 py-2 text-xs font-bold uppercase lg:hidden" aria-expanded="false">
           Menú
@@ -48,12 +52,7 @@ const {
       </div>
       <nav id="mobile-menu" class="hidden border-t border-ink/20 px-4 py-4 text-sm font-bold uppercase lg:hidden">
         <div class="grid gap-4">
-          <a href="/#mapa">Mapa</a>
-          <a href="/a-rede">A rede</a>
-          <a href="/actualidade">Actualidade</a>
-          <a href="/materiais">Materiais</a>
-          <a href="/martes-en-loita">Martes en loita</a>
-          <a href="/#participa">Activa o teu centro</a>
+          <SiteNavigation items={site.headerNavigation} mobile />
         </div>
       </nav>
     </header>
@@ -61,26 +60,22 @@ const {
     <footer class="bg-ink text-paper">
       <div class="mx-auto grid max-w-[1500px] gap-12 px-4 py-14 md:grid-cols-12 md:px-8">
         <div class="md:col-span-6">
-          <p class="display text-5xl sm:text-7xl">O público<br />organízase.</p>
+          <p class="display whitespace-pre-line text-5xl sm:text-7xl">{site.footerClaim}</p>
         </div>
         <div class="grid gap-8 text-sm md:col-span-3">
-          <a href="/#mapa">Mapa da rede</a>
-          <a href="/a-rede">A rede</a>
-          <a href="/actualidade">Actualidade</a>
-          <a href="/materiais">Materiais</a>
-          <a href="/martes-en-loita">Martes en loita</a>
+          <SiteNavigation items={site.footerNavigation} mobile />
         </div>
         <div class="grid content-start gap-8 text-sm md:col-span-3">
-          <a href="mailto:info@asembleasensino.gal">info@asembleasensino.gal</a>
-          <a href="https://instagram.com/asembleasensino" class="inline-flex items-center gap-3" aria-label="Instagram de Asembleas Ensino, @asembleasensino">
+          <a href={`mailto:${site.email}`}>{site.email}</a>
+          <a href={site.social.instagramUrl} class="inline-flex items-center gap-3" aria-label={`Instagram de ${site.name}, ${site.social.instagramLabel}`}>
             <svg aria-hidden="true" class="h-6 w-6 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
               <rect x="3" y="3" width="18" height="18" rx="5"></rect>
               <circle cx="12" cy="12" r="4"></circle>
               <circle cx="17.4" cy="6.7" r="1" fill="currentColor" stroke="none"></circle>
             </svg>
-            <span>@asembleasensino</span>
+            <span>{site.social.instagramLabel}</span>
           </a>
-          <p class="text-paper/60">Galicia · 2026</p>
+          <p class="text-paper/60">{site.territory} · {currentYear}</p>
         </div>
       </div>
     </footer>

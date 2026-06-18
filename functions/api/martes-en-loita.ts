@@ -19,6 +19,9 @@ function toBase64(buffer: ArrayBuffer) {
 }
 
 export const onRequestPost: PagesFunction<Env> = async ({ request, env }) => {
+  if (!env.GOOGLE_APPS_SCRIPT_URL || !env.GOOGLE_APPS_SCRIPT_SECRET) {
+    return Response.json({ ok: false, error: "Arquivo de Google Drive non configurado" }, { status: 503 });
+  }
   const form = await request.formData();
   const fotoEntry = form.get("foto");
   const centro = String(form.get("centro") ?? "").trim();
@@ -26,8 +29,9 @@ export const onRequestPost: PagesFunction<Env> = async ({ request, env }) => {
   const concello = String(form.get("concello") ?? "").trim();
   const comarca = String(form.get("comarca") ?? "").trim();
   const data = String(form.get("data") ?? "").trim();
+  const autorizacion = String(form.get("autorizacion") ?? "");
 
-  if (!fotoEntry || typeof fotoEntry === "string" || !centro || !centroCodigo || !concello || !comarca || !isTuesday(data)) {
+  if (!fotoEntry || typeof fotoEntry === "string" || !centro || !centroCodigo || !concello || !comarca || !isTuesday(data) || autorizacion !== "confirmed") {
     return Response.json({ ok: false, error: "Datos incompletos" }, { status: 400 });
   }
   const foto = fotoEntry as File;
@@ -41,39 +45,59 @@ export const onRequestPost: PagesFunction<Env> = async ({ request, env }) => {
   const key = `${data}/${filename}`;
   const bytes = await foto.arrayBuffer();
 
+  const storedIn: string[] = [];
+  const errors: string[] = [];
+
   if (env.MARTES_MEDIA) {
-    await env.MARTES_MEDIA.put(key, bytes, {
-      httpMetadata: { contentType: foto.type },
-      customMetadata: { centro, centroCodigo, concello, comarca, data },
-    });
+    try {
+      await env.MARTES_MEDIA.put(key, bytes, {
+        httpMetadata: { contentType: foto.type },
+        customMetadata: { centro, centroCodigo, concello, comarca, data, autorizacion: "confirmed" },
+      });
+      storedIn.push("r2");
+    } catch (error) {
+      console.error("Fallou a copia en R2", error);
+      errors.push("r2");
+    }
   }
 
   if (env.GOOGLE_APPS_SCRIPT_URL) {
-    const response = await fetch(env.GOOGLE_APPS_SCRIPT_URL, {
-      method: "POST",
-      headers: { "content-type": "application/json" },
-      body: JSON.stringify({
-        secret: env.GOOGLE_APPS_SCRIPT_SECRET || "",
-        filename,
-        mimeType: foto.type,
-        base64: toBase64(bytes),
-        centro,
-        centroCodigo,
-        concello,
-        comarca,
-        data,
-      }),
-    });
-    if (!response.ok) {
-      return Response.json({ ok: false, error: "Drive non respondeu correctamente" }, { status: 502 });
-    }
-    const driveResult: { ok?: boolean; error?: string } = await response
-      .json<{ ok?: boolean; error?: string }>()
-      .catch(() => ({ ok: false }));
-    if (!driveResult.ok) {
-      return Response.json({ ok: false, error: driveResult.error || "Erro ao gardar en Drive" }, { status: 502 });
+    try {
+      const response = await fetch(env.GOOGLE_APPS_SCRIPT_URL, {
+        method: "POST",
+        headers: { "content-type": "application/json" },
+        body: JSON.stringify({
+          secret: env.GOOGLE_APPS_SCRIPT_SECRET || "",
+          filename,
+          mimeType: foto.type,
+          base64: toBase64(bytes),
+          centro,
+          centroCodigo,
+          concello,
+          comarca,
+          data,
+          autorizacion: true,
+        }),
+      });
+      const driveResult: { ok?: boolean; error?: string } = await response
+        .json<{ ok?: boolean; error?: string }>()
+        .catch(() => ({ ok: false }));
+      if (!response.ok || !driveResult.ok) throw new Error(driveResult.error || `HTTP ${response.status}`);
+      storedIn.push("drive");
+    } catch (error) {
+      console.error("Fallou o gardado en Drive", error);
+      errors.push("drive");
     }
   }
 
-  return Response.json({ ok: true, key }, { status: 201 });
+  if (storedIn.length === 0) {
+    return Response.json({ ok: false, error: "Non foi posible gardar a imaxe" }, { status: 502 });
+  }
+  const driveStored = storedIn.includes("drive");
+  return Response.json({
+    ok: true,
+    key,
+    storedIn,
+    warning: errors.length ? `Fallou: ${errors.join(", ")}` : undefined,
+  }, { status: driveStored ? 201 : 202 });
 };

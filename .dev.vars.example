@@ -2,6 +2,8 @@
 # Non introduzas valores reais neste ficheiro de exemplo.
 
 ADMIN_EMAILS=
+GITHUB_CLIENT_ID=
+GITHUB_CLIENT_SECRET=
 RESEND_API_KEY=
 SOLICITUDES_FROM_EMAIL=
 SOLICITUDES_TO_EMAIL=
