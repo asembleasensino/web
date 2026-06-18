@@ -13,10 +13,10 @@ const counts = {
 ---
 
 <section id="mapa" class="border-y border-ink/20 bg-ink text-paper">
-  <div class="mx-auto max-w-[1500px]">
-    <div class="grid lg:grid-cols-[minmax(280px,390px)_1fr]">
-      <aside class="flex flex-col border-paper/20 p-4 sm:p-7 lg:border-r">
-        <h2 class="display max-w-xs text-5xl sm:text-6xl">Mapa das asembleas</h2>
+  <div class="mx-auto max-w-[1600px]">
+    <div class="grid lg:grid-cols-[minmax(320px,430px)_1fr]">
+      <aside class="flex flex-col border-paper/20 p-5 sm:p-8 lg:border-r lg:p-10">
+        <h2 class="display max-w-sm text-6xl sm:text-7xl">Mapa das asembleas</h2>
         <p class="mt-6 max-w-sm text-sm leading-relaxed text-paper/70">
           Un mapa da rede que xa está en movemento. Busca o teu centro para saber se conta cunha asemblea ou para comezar a organizala.
         </p>
@@ -49,7 +49,7 @@ const counts = {
           <span class="flex items-center gap-2"><i class="h-2.5 w-2.5 rounded-full bg-[#6f6c66]"></i> Resultado de busca</span>
         </div>
       </aside>
-      <div class="relative min-h-[620px] bg-[#dedbd4]">
+      <div class="relative min-h-[520px] bg-[#dedbd4] sm:min-h-[620px] lg:min-h-[720px]">
         <div id="assembly-map" class="absolute inset-0" aria-label="Mapa interactivo dos centros educativos de Galicia"></div>
         <p id="map-results" class="absolute bottom-3 left-3 z-[500] border-l-2 border-red bg-paper px-3 py-2 text-[10px] font-bold uppercase tracking-wider text-ink">
           {counts.activas} asembleas na rede

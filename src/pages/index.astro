@@ -38,7 +38,9 @@ const convocatorias = actualidade
     </div>
   </section>
 
-  <AssemblyMap />
+  <div class="py-10 md:py-16">
+    <AssemblyMap />
+  </div>
 
   {novas.length > 0 && <section class="mx-auto max-w-[1500px] px-4 py-20 md:px-8 md:py-32">
     <div class="grid gap-12 lg:grid-cols-12">
@@ -69,7 +71,7 @@ const convocatorias = actualidade
           <span class="eyebrow text-red">{novas[0].data.type}</span>
           <span class="text-[10px] font-bold text-ink/40">{formatDate(novas[0].data.date)}</span>
         </div>
-        <h3 class="mt-10 max-w-3xl text-[clamp(2.6rem,5vw,5.5rem)] font-extrabold leading-[.96] tracking-[-.045em] group-hover:text-red">
+        <h3 class="mt-10 max-w-3xl text-[clamp(2.25rem,4.4vw,4.75rem)] font-extrabold leading-[.98] tracking-[-.04em] group-hover:text-red">
           {novas[0].data.title}
         </h3>
         <p class="mt-8 max-w-xl text-base leading-relaxed text-ink/65">{novas[0].data.summary}</p>
@@ -91,16 +93,16 @@ const convocatorias = actualidade
   </section>}
 
   <section class="bg-green text-paper">
-    <div class="mx-auto grid max-w-[1500px] gap-16 px-4 py-20 md:grid-cols-12 md:px-8 md:py-32">
-      <div class="md:col-span-6">
+    <div class="mx-auto grid max-w-[1500px] gap-14 px-4 py-20 md:grid-cols-12 md:px-8 md:py-32">
+      <div class="md:col-span-5">
         <h2 class="display whitespace-pre-line text-6xl sm:text-8xl">{home.networkTitle}</h2>
-        <p class="mt-8 max-w-sm text-sm leading-relaxed text-paper/65">{home.networkText}</p>
+        <p class="mt-8 max-w-md text-base leading-relaxed text-paper/70">{home.networkText}</p>
       </div>
-      <ol class="grid border-t border-paper/30 md:col-span-6 md:mt-20">
+      <ol class="grid border-t border-paper/30 md:col-span-7 md:col-start-6 md:mt-10">
         {home.participationSteps.map((step, index) => (
-          <li class="grid grid-cols-[3rem_1fr] gap-4 border-b border-paper/30 py-6">
-            <span class="text-sm text-paper/45">{String(index + 1).padStart(2, "0")}</span>
-            <div><h3 class="text-xl font-bold">{step.title}</h3><p class="mt-2 text-sm leading-relaxed text-paper/70">{step.text}</p></div>
+          <li class="grid grid-cols-[4.5rem_minmax(0,1fr)] gap-5 border-b border-paper/30 py-8 sm:grid-cols-[6rem_minmax(0,1fr)] sm:py-10">
+            <span class="display text-4xl text-paper/40 sm:text-6xl">{String(index + 1).padStart(2, "0")}</span>
+            <div class="pt-1"><h3 class="text-2xl font-extrabold sm:text-3xl">{step.title}</h3><p class="mt-3 max-w-xl text-base leading-relaxed text-paper/75">{step.text}</p></div>
           </li>
         ))}
       </ol>

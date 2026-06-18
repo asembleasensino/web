@@ -1,0 +1,88 @@
+---
+import images from "../data/martes-gallery.json";
+---
+
+<section class="overflow-hidden border-t border-ink/20 py-20 md:py-28">
+  <div class="mx-auto grid max-w-[1500px] gap-10 px-4 md:grid-cols-12 md:px-8">
+    <div class="md:col-span-5">
+      <p class="eyebrow text-red">16 semanas de mobilización</p>
+      <h2 class="display mt-6 text-5xl sm:text-7xl">A insistencia tamén é forza.</h2>
+    </div>
+    <div class="md:col-span-6 md:col-start-7 md:pt-12">
+      <p class="text-lg font-bold leading-relaxed">
+        Os Martes en Loita visibilizan a forza e a constancia coa que o profesorado denuncia o deterioro do ensino público.
+      </p>
+      <p class="mt-5 max-w-2xl leading-relaxed text-ink/65">
+        Centro a centro e semana tras semana, demostramos que estamos unidas e unidos. As mobilizacións continuarán mentres non muden as ratios, os recursos, a burocracia e as condicións laborais que impiden ofrecer o ensino público que a sociedade merece.
+      </p>
+    </div>
+  </div>
+
+  <div class="mx-auto mt-12 max-w-[1700px]">
+    <div class="mb-5 flex items-center justify-between px-4 md:px-8">
+      <p class="text-xs font-black uppercase tracking-wider text-ink/50"><span id="gallery-position">01</span> / {String(images.length).padStart(2, "0")}</p>
+      <div class="flex gap-2">
+        <button class="focus-ring grid h-11 w-11 place-items-center border border-ink text-xl disabled:opacity-30" id="gallery-prev" type="button" aria-label="Fotografía anterior">←</button>
+        <button class="focus-ring grid h-11 w-11 place-items-center bg-ink text-xl text-paper disabled:opacity-30" id="gallery-next" type="button" aria-label="Fotografía seguinte">→</button>
+      </div>
+    </div>
+    <div id="martes-gallery" class="scrollbar-hidden flex snap-x snap-mandatory gap-3 overflow-x-auto px-4 pb-4 md:gap-5 md:px-8">
+      {images.map((image, index) => (
+        <figure class="min-w-[88vw] snap-center sm:min-w-[72vw] lg:min-w-[58vw] xl:min-w-[48rem]">
+          <div class="aspect-[16/10] overflow-hidden bg-ink/10">
+            <img
+              src={image.src}
+              alt={image.alt}
+              class:list={[
+                "h-full w-full object-cover transition duration-300",
+                image.monochrome ? "grayscale contrast-[1.08]" : "",
+              ]}
+              loading={index === 0 ? "eager" : "lazy"}
+              decoding="async"
+              width="1400"
+              height="900"
+            />
+          </div>
+          <figcaption class="flex items-start justify-between gap-5 border-b border-ink/25 py-4 text-sm">
+            <strong>{image.centro}</strong>
+            <span class="shrink-0 text-xs text-ink/45">{image.date}</span>
+          </figcaption>
+        </figure>
+      ))}
+    </div>
+  </div>
+</section>
+
+<script>
+  const gallery = document.querySelector<HTMLElement>("#martes-gallery");
+  const previous = document.querySelector<HTMLButtonElement>("#gallery-prev");
+  const next = document.querySelector<HTMLButtonElement>("#gallery-next");
+  const position = document.querySelector<HTMLElement>("#gallery-position");
+
+  if (gallery && previous && next && position) {
+    const slides = [...gallery.querySelectorAll<HTMLElement>("figure")];
+    const currentIndex = () => {
+      const centre = gallery.scrollLeft + gallery.clientWidth / 2;
+      return slides.reduce((closest, slide, index) => {
+        const slideCentre = slide.offsetLeft + slide.offsetWidth / 2;
+        return Math.abs(slideCentre - centre) < Math.abs((slides[closest]?.offsetLeft || 0) + (slides[closest]?.offsetWidth || 0) / 2 - centre)
+          ? index
+          : closest;
+      }, 0);
+    };
+    const update = () => {
+      const index = currentIndex();
+      position.textContent = String(index + 1).padStart(2, "0");
+      previous.disabled = index === 0;
+      next.disabled = index === slides.length - 1;
+    };
+    const move = (direction: -1 | 1) => {
+      const target = Math.min(Math.max(currentIndex() + direction, 0), slides.length - 1);
+      slides[target]?.scrollIntoView({ behavior: "smooth", inline: "center", block: "nearest" });
+    };
+    previous.addEventListener("click", () => move(-1));
+    next.addEventListener("click", () => move(1));
+    gallery.addEventListener("scroll", () => requestAnimationFrame(update), { passive: true });
+    update();
+  }
+</script>

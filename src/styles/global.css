@@ -76,6 +76,14 @@ button, input, select, textarea { font: inherit; }
 
 .documentary-image:hover { filter: grayscale(.2) contrast(1.03); }
 
+.scrollbar-hidden {
+  scrollbar-width: none;
+}
+
+.scrollbar-hidden::-webkit-scrollbar {
+  display: none;
+}
+
 .content-body {
   font-size: 1.08rem;
   line-height: 1.75;
