@@ -1,0 +1,177 @@
+---
+import { centros } from "../data/centros";
+const tiposPrincipais = ["CEIP", "CPI", "IES", "CIFP", "EEI"];
+const todosOsTipos = [...new Set(centros.map((centro) => centro.tipo))].filter(Boolean);
+const tipos = [
+  ...tiposPrincipais.filter((tipo) => todosOsTipos.includes(tipo)),
+  ...todosOsTipos.filter((tipo) => !tiposPrincipais.includes(tipo)).sort(),
+];
+
+const counts = {
+  activas: centros.filter((centro) => centro.estado === "activa").length,
+};
+---
+
+<section id="mapa" class="border-y border-ink/20 bg-ink text-paper">
+  <div class="mx-auto max-w-[1500px]">
+    <div class="grid lg:grid-cols-[minmax(280px,390px)_1fr]">
+      <aside class="flex flex-col border-paper/20 p-4 sm:p-7 lg:border-r">
+        <h2 class="display max-w-xs text-5xl sm:text-6xl">Mapa das asembleas</h2>
+        <p class="mt-6 max-w-sm text-sm leading-relaxed text-paper/70">
+          Un mapa da rede que xa está en movemento. Busca o teu centro para saber se conta cunha asemblea ou para comezar a organizala.
+        </p>
+
+        <div class="mt-8 border-y border-paper/20 py-5">
+          <div>
+            <strong id="count-active" class="display block text-4xl text-[#83a678]">{counts.activas}</strong>
+            <span class="text-[10px] uppercase tracking-wider text-paper/55">Asembleas activas</span>
+          </div>
+        </div>
+
+        <div class="mt-7 grid gap-3">
+          <label for="map-search" class="text-xs font-bold text-paper/70">Busca na rede de centros</label>
+          <input
+            id="map-search"
+            type="search"
+            placeholder="Centro, concello ou comarca"
+            class="focus-ring w-full border border-paper/30 bg-transparent px-4 py-3 text-sm text-paper placeholder:text-paper/40"
+          />
+          <div>
+            <select id="type-filter" aria-label="Filtrar por tipo de centro" class="focus-ring w-full border border-paper/25 bg-ink px-3 py-3 text-[11px] text-paper/75">
+              <option value="">Todos os tipos</option>
+              {tipos.map((tipo) => <option value={tipo}>{tipo}</option>)}
+            </select>
+          </div>
+        </div>
+
+        <div class="mt-auto flex flex-wrap gap-x-5 gap-y-2 pt-10 text-[10px] uppercase tracking-wider text-paper/55">
+          <span class="flex items-center gap-2"><i class="h-2.5 w-2.5 rounded-full bg-green-600"></i> Activa</span>
+          <span class="flex items-center gap-2"><i class="h-2.5 w-2.5 rounded-full bg-[#6f6c66]"></i> Resultado de busca</span>
+        </div>
+      </aside>
+      <div class="relative min-h-[620px] bg-[#dedbd4]">
+        <div id="assembly-map" class="absolute inset-0" aria-label="Mapa interactivo dos centros educativos de Galicia"></div>
+        <p id="map-results" class="absolute bottom-3 left-3 z-[500] border-l-2 border-red bg-paper px-3 py-2 text-[10px] font-bold uppercase tracking-wider text-ink">
+          {counts.activas} asembleas na rede
+        </p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<script>
+  import L from "leaflet";
+  import { centros } from "../data/centros";
+
+  type Estado = "activa" | "creacion" | "sen_asemblea";
+  type Centro = (typeof centros)[number];
+
+  const colors: Record<Estado, string> = {
+    activa: "#355a2c",
+    creacion: "#6f6c66",
+    sen_asemblea: "#6f6c66",
+  };
+
+  const labels: Record<Estado, string> = {
+    activa: "Asemblea activa",
+    creacion: "Aínda sen asemblea activa",
+    sen_asemblea: "Sen asemblea activa",
+  };
+
+  const mapElement = document.querySelector<HTMLElement>("#assembly-map");
+  if (mapElement) {
+    const map = L.map(mapElement, {
+      zoomControl: false,
+      minZoom: 7,
+      maxZoom: 16,
+      scrollWheelZoom: true,
+    }).setView([42.85, -8.05], 8);
+    map.createPane("territories");
+    const territoryPane = map.getPane("territories");
+    if (territoryPane) {
+      territoryPane.style.zIndex = "250";
+      territoryPane.style.pointerEvents = "none";
+    }
+
+    L.control.zoom({ position: "topright" }).addTo(map);
+
+    L.tileLayer("https://{s}.basemaps.cartocdn.com/light_nolabels/{z}/{x}/{y}{r}.png", {
+      attribution: '&copy; OpenStreetMap &copy; CARTO',
+      subdomains: "abcd",
+      maxZoom: 20,
+    }).addTo(map);
+
+    fetch("/data/comarcas.geojson")
+      .then((response) => response.json())
+      .then((data) => L.geoJSON(data as GeoJSON.GeoJsonObject, {
+        pane: "territories",
+        interactive: false,
+        style: {
+          color: "#252321",
+          weight: 1,
+          opacity: .42,
+          fillColor: "#f2f0ec",
+          fillOpacity: .12,
+        },
+      }).addTo(map))
+      .catch(() => undefined);
+
+    const markerLayer = L.layerGroup().addTo(map);
+    const search = document.querySelector<HTMLInputElement>("#map-search");
+    const typeFilter = document.querySelector<HTMLSelectElement>("#type-filter");
+    const results = document.querySelector<HTMLElement>("#map-results");
+
+    const popup = (centro: Centro) => {
+      const contacto = "contacto" in centro && centro.contacto
+        ? `<a style="display:inline-block;margin-top:.7rem;font-weight:700;text-decoration:underline" href="mailto:${centro.contacto}">Contacto público</a>`
+        : centro.estado === "sen_asemblea"
+          ? `<a style="display:inline-block;margin-top:.7rem;font-weight:700;text-decoration:underline" href="#participa">Activar este centro</a>`
+          : "";
+      return `
+        <p style="margin:0 0 .35rem;font-size:.65rem;font-weight:800;text-transform:uppercase;letter-spacing:.12em;color:${colors[centro.estado as Estado]}">${labels[centro.estado as Estado]}</p>
+        <strong style="font-size:1rem;line-height:1.15">${centro.nome}</strong>
+        <p style="margin:.45rem 0 0;font-size:.78rem;color:#625f5a">${centro.tipo} · ${centro.concello}<br>${centro.comarca}</p>
+        ${contacto}
+      `;
+    };
+
+    function render() {
+      markerLayer.clearLayers();
+      const query = search?.value.trim().toLocaleLowerCase("gl") ?? "";
+      const type = typeFilter?.value ?? "";
+      const visible = centros.filter((centro) => {
+        const haystack = `${centro.nome} ${centro.concello} ${centro.comarca}`.toLocaleLowerCase("gl");
+        const belongsToNetwork = centro.estado === "activa";
+        return (query ? haystack.includes(query) : belongsToNetwork)
+          && (!type || centro.tipo === type);
+      });
+
+      visible.forEach((centro) => {
+        const marker = L.circleMarker([centro.latitude, centro.longitude], {
+          pane: "overlayPane",
+          radius: centro.estado === "activa" ? 7 : 5.5,
+          color: "#f2f0ec",
+          weight: 1.5,
+          fillColor: colors[centro.estado as Estado],
+          fillOpacity: .94,
+        });
+        marker.bindPopup(popup(centro));
+        marker.addTo(markerLayer);
+      });
+
+      if (results) {
+        results.textContent = query
+          ? `${visible.length} centros atopados`
+          : `${visible.length} asembleas na rede`;
+      }
+      if (query && visible.length === 1) {
+        map.flyTo([visible[0].latitude, visible[0].longitude], 13, { duration: .7 });
+      }
+    }
+
+    [search, typeFilter].forEach((control) => {
+      control?.addEventListener(control === search ? "input" : "change", render);
+    });
+    render();
+  }
+</script>

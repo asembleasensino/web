@@ -1,0 +1,142 @@
+---
+import { centros } from "../data/centros";
+const centrosDisponibles = centros
+  .filter((centro) => centro.estado === "sen_asemblea")
+  .map(({ codigo, nome, concello, tipo }) => ({ codigo, nome, concello, tipo }));
+const centrosJson = JSON.stringify(centrosDisponibles).replace(/</g, "\\u003c");
+---
+
+<section id="participa" class="bg-red text-paper">
+  <div class="mx-auto grid max-w-[1500px] gap-10 px-4 py-16 md:grid-cols-12 md:px-8 md:py-24">
+    <div class="md:col-span-6">
+      <h2 class="display max-w-2xl text-6xl sm:text-8xl">Activa o teu centro.</h2>
+      <p class="mt-8 max-w-lg text-lg leading-relaxed text-paper/80">
+        Non precisas ter todo resolto. Déixanos os datos básicos e unha persoa da rede poñerase en contacto contigo.
+      </p>
+    </div>
+    <form id="activation-form" class="grid gap-5 self-start bg-paper p-5 text-ink sm:p-8 md:col-span-6" method="post" action="/api/solicitudes">
+      <div>
+        <label class="mb-2 block text-xs font-bold" for="centro-search">Centro educativo</label>
+        <div class="relative">
+          <input
+            class="focus-ring w-full border border-ink/30 bg-transparent px-4 py-3"
+            id="centro-search"
+            autocomplete="off"
+            role="combobox"
+            aria-autocomplete="list"
+            aria-controls="centre-results"
+            aria-expanded="false"
+            required
+            placeholder="Escribe o nome ou o concello"
+          />
+          <input id="centro-codigo" name="centroCodigo" type="hidden" />
+          <input id="centro-nome" name="centro" type="hidden" />
+          <div id="centre-results" role="listbox" class="absolute z-20 mt-1 hidden max-h-64 w-full overflow-y-auto border border-ink/30 bg-paper"></div>
+        </div>
+        <p class="mt-2 text-xs text-ink/55">Só aparecen centros que aínda non constan como activos.</p>
+      </div>
+      <div class="grid gap-5 sm:grid-cols-2">
+        <div>
+          <label class="mb-2 block text-xs font-bold" for="nome">O teu nome</label>
+          <input class="focus-ring w-full border border-ink/30 bg-transparent px-4 py-3" id="nome" name="nome" required autocomplete="name" />
+        </div>
+        <div>
+          <label class="mb-2 block text-xs font-bold" for="email">Correo electrónico</label>
+          <input class="focus-ring w-full border border-ink/30 bg-transparent px-4 py-3" id="email" name="email" required type="email" autocomplete="email" />
+        </div>
+      </div>
+      <div>
+        <label class="mb-2 block text-xs font-bold" for="mensaxe">Cóntanos o necesario <span class="font-normal text-ink/50">(opcional)</span></label>
+        <textarea class="focus-ring min-h-28 w-full resize-y border border-ink/30 bg-transparent px-4 py-3" id="mensaxe" name="mensaxe"></textarea>
+      </div>
+      <label class="flex items-start gap-3 text-xs leading-relaxed">
+        <input class="mt-1 accent-red" type="checkbox" required />
+        <span>Acepto que AAEP empregue estes datos para contactar comigo sobre a creación dunha asemblea.</span>
+      </label>
+      <button class="focus-ring justify-self-start bg-ink px-6 py-4 text-xs font-black uppercase tracking-wider text-paper hover:bg-green" type="submit">
+        Enviar solicitude →
+      </button>
+      <p id="form-status" class="hidden text-sm font-bold" role="status"></p>
+    </form>
+  </div>
+</section>
+
+<script>
+  const form = document.querySelector<HTMLFormElement>("#activation-form");
+  const status = document.querySelector<HTMLElement>("#form-status");
+
+  form?.addEventListener("submit", async (event) => {
+    event.preventDefault();
+    const codeInput = form.querySelector<HTMLInputElement>("#centro-codigo");
+    const searchInput = form.querySelector<HTMLInputElement>("#centro-search");
+    if (!codeInput?.value) {
+      searchInput?.setCustomValidity("Selecciona un centro da lista.");
+      searchInput?.reportValidity();
+      return;
+    }
+    searchInput?.setCustomValidity("");
+    const submit = form.querySelector<HTMLButtonElement>('button[type="submit"]');
+    if (submit) submit.disabled = true;
+    try {
+      const response = await fetch(form.action, {
+        method: "POST",
+        body: new FormData(form),
+      });
+      if (!response.ok) throw new Error("Non foi posible enviar");
+      form.reset();
+      if (status) {
+        status.textContent = "Recibimos a solicitude. Contactaremos contigo axiña.";
+        status.classList.remove("hidden");
+      }
+    } catch {
+      if (status) {
+        status.textContent = "Houbo un problema. Escríbenos a info@asembleasensino.gal.";
+        status.classList.remove("hidden");
+      }
+    } finally {
+      if (submit) submit.disabled = false;
+    }
+  });
+</script>
+<script is:inline id="available-centres" type="application/json" set:html={centrosJson}></script>
+<script>
+  const dataElement = document.querySelector<HTMLScriptElement>("#available-centres");
+  const availableCentres = JSON.parse(dataElement?.textContent || "[]") as Array<{
+    codigo: string; nome: string; concello: string; tipo: string;
+  }>;
+  const searchInput = document.querySelector<HTMLInputElement>("#centro-search");
+  const codeInput = document.querySelector<HTMLInputElement>("#centro-codigo");
+  const nameInput = document.querySelector<HTMLInputElement>("#centro-nome");
+  const resultBox = document.querySelector<HTMLElement>("#centre-results");
+
+  const normalize = (value: string) => value.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLocaleLowerCase("gl");
+  const selectCentre = (centre: typeof availableCentres[number]) => {
+    if (searchInput) searchInput.value = `${centre.nome} — ${centre.concello}`;
+    if (codeInput) codeInput.value = centre.codigo;
+    if (nameInput) nameInput.value = centre.nome;
+    resultBox?.classList.add("hidden");
+    searchInput?.setAttribute("aria-expanded", "false");
+  };
+
+  searchInput?.addEventListener("input", () => {
+    if (codeInput) codeInput.value = "";
+    if (nameInput) nameInput.value = "";
+    const query = normalize(searchInput.value.trim());
+    const matches = query.length < 2 ? [] : availableCentres
+      .filter((centre) => normalize(`${centre.nome} ${centre.concello} ${centre.codigo}`).includes(query))
+      .slice(0, 8);
+    if (!resultBox) return;
+    resultBox.replaceChildren(...matches.map((centre) => {
+      const button = document.createElement("button");
+      button.type = "button";
+      button.role = "option";
+      button.className = "block w-full border-b border-ink/15 px-4 py-3 text-left text-sm last:border-0 hover:bg-ink hover:text-paper";
+      button.innerHTML = `<strong>${centre.nome}</strong><span class="mt-1 block text-xs opacity-60">${centre.tipo} · ${centre.concello}</span>`;
+      button.addEventListener("click", () => selectCentre(centre));
+      return button;
+    }));
+    resultBox.classList.toggle("hidden", matches.length === 0);
+    searchInput.setAttribute("aria-expanded", String(matches.length > 0));
+  });
+
+</script>

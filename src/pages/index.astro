@@ -1,0 +1,156 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import AssemblyMap from "../components/AssemblyMap.astro";
+import ActivationForm from "../components/ActivationForm.astro";
+
+const novas = [
+  {
+    tipo: "Comunicado",
+    data: "16.06.2026",
+    titulo: "O ensino público non se sostén con parches",
+    resumo: "As asembleas reclaman planificación, estabilidade e recursos para o vindeiro curso.",
+  },
+  {
+    tipo: "Crónica",
+    data: "11.06.2026",
+    titulo: "Un martes máis, os centros toman a palabra",
+    resumo: "Imaxes e voces dunha xornada de mobilización espallada por toda Galicia.",
+  },
+  {
+    tipo: "Tribuna docente",
+    data: "04.06.2026",
+    titulo: "Organizarnos tamén é coidar a escola",
+    resumo: "Unha reflexión colectiva sobre tempos, comunidade e democracia nos centros.",
+  },
+];
+
+const convocatorias = [
+  { dia: "24", mes: "XUÑ", titulo: "Asemblea comarcal de Santiago", lugar: "IES Rosalía · 18:00" },
+  { dia: "27", mes: "XUÑ", titulo: "Encontro aberto en Vigo", lugar: "Casa das Artes · 11:30" },
+  { dia: "03", mes: "XUL", titulo: "Asemblea xeral", lugar: "Compostela · 17:30" },
+];
+---
+
+<BaseLayout>
+  <section class="overflow-hidden">
+    <div class="mx-auto grid min-h-[68vh] max-w-[1500px] px-4 py-12 md:px-8 md:py-16">
+      <div class="grid content-between gap-12 lg:grid-cols-12">
+        <div class="min-w-0 lg:col-span-9">
+          <h1 class="display text-[clamp(4rem,12vw,12.5rem)]">
+            O ensino<br /><span class="text-red">organízase.</span>
+          </h1>
+        </div>
+        <div class="min-w-0 flex max-w-sm flex-col justify-end pb-3 lg:col-span-3">
+          <p class="text-lg leading-relaxed">
+            Unha rede de asembleas abertas, autónomas e coordinadas para defender e transformar o ensino público.
+          </p>
+          <a href="#mapa" class="focus-ring mt-7 flex items-center justify-between border-t border-ink pt-4 text-xs font-black uppercase tracking-wider no-underline">
+            Explora a rede <span class="text-xl">↓</span>
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <AssemblyMap />
+
+  <section class="mx-auto max-w-[1500px] px-4 py-20 md:px-8 md:py-32">
+    <div class="grid gap-12 lg:grid-cols-12">
+      <figure class="overflow-hidden lg:col-span-7">
+        <img src="/images/martes/ceip-bergantinos.webp" alt="Asemblea do CEIP Bergantiños nunha xornada de Martes en loita" class="documentary-image aspect-[4/3] h-full w-full object-cover" loading="lazy" />
+      </figure>
+      <div class="lg:col-span-4 lg:col-start-9 lg:pt-20">
+        <h2 class="text-4xl font-extrabold leading-[1.02] tracking-[-.04em] sm:text-6xl">Unha organización feita desde os centros.</h2>
+        <p class="mt-8 text-base leading-relaxed text-ink/65">Nacemos para recuperar capacidade de decisión, poñer en común os problemas cotiáns e converter o malestar disperso en acción colectiva.</p>
+        <a href="/a-rede" class="mt-9 inline-block border-b border-red pb-1 text-xs font-black uppercase tracking-wider">Coñece como funcionamos →</a>
+      </div>
+    </div>
+    <div class="mt-16 ml-auto grid max-w-5xl gap-8 border-t border-ink/25 pt-8 md:grid-cols-3">
+      <div><h3 class="text-xl font-bold">Asembleas de centro</h3><p class="mt-3 text-sm leading-relaxed text-ink/60">Espazos abertos para compartir información, deliberar e tomar decisións colectivas.</p></div>
+      <div><h3 class="text-xl font-bold">Coordinación comarcal</h3><p class="mt-3 text-sm leading-relaxed text-ink/60">Unha escala próxima para conectar centros, campañas e necesidades territoriais.</p></div>
+      <div><h3 class="text-xl font-bold">Asemblea xeral</h3><p class="mt-3 text-sm leading-relaxed text-ink/60">O lugar común onde a rede acorda prioridades e constrúe capacidade compartida.</p></div>
+    </div>
+  </section>
+
+  <section class="mx-auto max-w-[1500px] px-4 py-20 md:px-8 md:py-32">
+    <div class="mb-12 flex items-end justify-between border-b border-ink pb-5">
+      <div>
+        <h2 class="display text-5xl sm:text-7xl">Actualidade</h2>
+      </div>
+      <a href="/actualidade" class="hidden text-xs font-black uppercase tracking-wider underline decoration-red decoration-2 underline-offset-4 sm:block">Ver todas →</a>
+    </div>
+    <div class="grid gap-10 lg:grid-cols-12 lg:gap-0">
+      <article class="group border-b border-ink/25 pb-10 lg:col-span-7 lg:border-r lg:border-b-0 lg:pb-0 lg:pr-12">
+        <div class="flex items-center gap-4">
+          <span class="eyebrow text-red">{novas[0].tipo}</span>
+          <span class="text-[10px] font-bold text-ink/40">{novas[0].data}</span>
+        </div>
+        <h3 class="mt-10 max-w-3xl text-[clamp(2.6rem,5vw,5.5rem)] font-extrabold leading-[.96] tracking-[-.045em] group-hover:text-red">
+          {novas[0].titulo}
+        </h3>
+        <p class="mt-8 max-w-xl text-base leading-relaxed text-ink/65">{novas[0].resumo}</p>
+        <span class="mt-10 block text-xl" aria-hidden="true">→</span>
+      </article>
+      <div class="lg:col-span-5 lg:pl-12 lg:pt-16">
+        {novas.slice(1).map((nova, index) => (
+          <article class:list={["group border-ink/25 py-7", index === 0 ? "border-b pt-0" : "pb-0"]}>
+            <div class="flex items-center justify-between">
+              <span class="eyebrow text-red">{nova.tipo}</span>
+              <span class="text-[10px] font-bold text-ink/40">{nova.data}</span>
+            </div>
+            <h3 class="mt-6 max-w-md text-2xl font-extrabold leading-tight group-hover:text-red sm:text-3xl">{nova.titulo}</h3>
+            <p class="mt-4 max-w-md text-sm leading-relaxed text-ink/60">{nova.resumo}</p>
+          </article>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <section class="bg-green text-paper">
+    <div class="mx-auto grid max-w-[1500px] gap-16 px-4 py-20 md:grid-cols-12 md:px-8 md:py-32">
+      <div class="md:col-span-6">
+        <h2 class="display text-6xl sm:text-8xl">Unha rede.<br />Moitas voces.</h2>
+        <p class="mt-8 max-w-sm text-sm leading-relaxed text-paper/65">Cada centro decide. As comarcas coordinan. A rede comparte forza, materiais e memoria.</p>
+      </div>
+      <ol class="grid border-t border-paper/30 md:col-span-6 md:mt-20">
+        <li class="grid grid-cols-[3rem_1fr] gap-4 border-b border-paper/30 py-6">
+          <span class="text-sm text-paper/45">01</span>
+          <div><h3 class="text-xl font-bold">Atopa o teu centro</h3><p class="mt-2 text-sm leading-relaxed text-paper/70">Todos os centros públicos están na base de datos, teñan ou non asemblea.</p></div>
+        </li>
+        <li class="grid grid-cols-[3rem_1fr] gap-4 border-b border-paper/30 py-6">
+          <span class="text-sm text-paper/45">02</span>
+          <div><h3 class="text-xl font-bold">Activa a comunidade</h3><p class="mt-2 text-sm leading-relaxed text-paper/70">Solicita a creación dunha asemblea e recibe acompañamento da rede.</p></div>
+        </li>
+        <li class="grid grid-cols-[3rem_1fr] gap-4 border-b border-paper/30 py-6">
+          <span class="text-sm text-paper/45">03</span>
+          <div><h3 class="text-xl font-bold">Coordínate e participa</h3><p class="mt-2 text-sm leading-relaxed text-paper/70">Comparte recursos, leva propostas á comarca e participa nas decisións xerais.</p></div>
+        </li>
+      </ol>
+    </div>
+  </section>
+
+  <section class="mx-auto max-w-[1500px] px-4 py-20 md:px-8 md:py-32">
+    <div class="grid gap-16 lg:grid-cols-12 lg:gap-24">
+      <div class="min-w-0 lg:col-span-5">
+        <h2 class="display text-5xl sm:text-7xl">Próximas<br />convocatorias</h2>
+      </div>
+      <div class="min-w-0 lg:col-span-7 lg:pt-28">
+        {convocatorias.map((evento, index) => (
+          <article class:list={["min-w-0 grid grid-cols-[4rem_minmax(0,1fr)_auto] items-center gap-4 border-t border-ink/25 last:border-b", index === 0 ? "py-9" : "py-6"]}>
+            <div>
+              <strong class="display block text-4xl">{evento.dia}</strong>
+              <span class="eyebrow text-red">{evento.mes}</span>
+            </div>
+            <div>
+              <h3 class:list={["font-extrabold", index === 0 ? "text-2xl" : "text-lg"]}>{evento.titulo}</h3>
+              <p class="mt-1 text-sm text-ink/55">{evento.lugar}</p>
+            </div>
+            <span aria-hidden="true" class="text-2xl">↗</span>
+          </article>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <ActivationForm />
+</BaseLayout>

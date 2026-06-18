@@ -1,0 +1,62 @@
+<!doctype html>
+<html lang="gl">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Solicitudes · AAEP</title>
+    <style>
+      :root { font-family: Inter, Arial, sans-serif; color: #252321; background: #f2f0ec; }
+      body { margin: 0; padding: 2rem; }
+      main { max-width: 1100px; margin: auto; }
+      header { display: flex; justify-content: space-between; gap: 2rem; align-items: end; border-bottom: 2px solid; padding-bottom: 1rem; }
+      h1 { margin: 0; font-size: clamp(3rem, 9vw, 7rem); line-height: .85; text-transform: uppercase; letter-spacing: -.05em; }
+      a { color: inherit; font-weight: 700; }
+      article { display: grid; grid-template-columns: 11rem 1fr; gap: 2rem; border-bottom: 1px solid #25232144; padding: 1.5rem 0; }
+      small { color: #25232199; }
+      h2 { margin: 0 0 .4rem; }
+      p { line-height: 1.5; }
+      .error { padding: 1rem; background: #c94a42; color: #f2f0ec; }
+      @media (max-width: 650px) { body { padding: 1rem; } article { grid-template-columns: 1fr; gap: .5rem; } }
+    </style>
+  </head>
+  <body>
+    <main>
+      <header>
+        <h1>Solicitudes</h1>
+        <a href="/admin/#/collections/configuracion/entries/asembleas">Xestionar asembleas →</a>
+      </header>
+      <div id="list"><p>Cargando solicitudes…</p></div>
+    </main>
+    <script>
+      const escapeHtml = (value = "") => String(value).replace(/[&<>"']/g, (character) => ({
+        "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#039;"
+      })[character]);
+      fetch("/api/solicitudes")
+        .then((response) => {
+          if (!response.ok) throw new Error("Acceso non autorizado");
+          return response.json();
+        })
+        .then(({ solicitudes }) => {
+          const list = document.querySelector("#list");
+          if (!solicitudes.length) {
+            list.innerHTML = "<p>Non hai solicitudes pendentes.</p>";
+            return;
+          }
+          list.innerHTML = solicitudes.map((item) => `
+            <article>
+              <div><small>${new Date(item.createdAt).toLocaleString("gl")}</small><p><strong>${item.estado}</strong></p></div>
+              <div>
+                <h2>${escapeHtml(item.centro)}</h2>
+                <small>Código ${escapeHtml(item.centroCodigo)}</small>
+                <p>${escapeHtml(item.nome)} · <a href="mailto:${encodeURIComponent(item.email)}">${escapeHtml(item.email)}</a></p>
+                ${item.mensaxe ? `<p>${escapeHtml(item.mensaxe)}</p>` : ""}
+              </div>
+            </article>
+          `).join("");
+        })
+        .catch((error) => {
+          document.querySelector("#list").innerHTML = `<p class="error">${error.message}. Esta páxina debe estar protexida con Cloudflare Access.</p>`;
+        });
+    </script>
+  </body>
+</html>

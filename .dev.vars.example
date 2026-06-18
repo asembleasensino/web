@@ -1,0 +1,9 @@
+# Copia este ficheiro como .dev.vars só para desenvolvemento local.
+# Non introduzas valores reais neste ficheiro de exemplo.
+
+ADMIN_EMAILS=
+RESEND_API_KEY=
+SOLICITUDES_FROM_EMAIL=
+SOLICITUDES_TO_EMAIL=
+GOOGLE_APPS_SCRIPT_URL=
+GOOGLE_APPS_SCRIPT_SECRET=

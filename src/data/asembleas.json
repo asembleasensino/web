@@ -1,0 +1,616 @@
+{
+  "asembleas": [
+    {
+      "codigo": "36010162",
+      "nome": "CEIP A Canicouva",
+      "concello": "Vigo",
+      "estado": "activa"
+    },
+    {
+      "codigo": "36010228",
+      "nome": "CEIP A Paz",
+      "concello": "Vigo",
+      "estado": "activa"
+    },
+    {
+      "codigo": "36010460",
+      "nome": "CEIP Alfonso D. Rodríguez Castelao",
+      "concello": "Vigo",
+      "estado": "activa"
+    },
+    {
+      "codigo": "15021354",
+      "nome": "CEIP Bergantiños",
+      "concello": "Carballo",
+      "estado": "activa"
+    },
+    {
+      "codigo": "15003807",
+      "nome": "CEIP de Bormoio-Agualada",
+      "concello": "Coristanco",
+      "estado": "activa"
+    },
+    {
+      "codigo": "15007655",
+      "nome": "CEIP de Caión",
+      "concello": "A Laracha",
+      "estado": "activa"
+    },
+    {
+      "codigo": "36015032",
+      "nome": "CEIP de Chans-Bembrive",
+      "concello": "Vigo",
+      "estado": "activa"
+    },
+    {
+      "codigo": "15022577",
+      "nome": "CEIP de Maciñeira",
+      "concello": "Neda",
+      "estado": "activa"
+    },
+    {
+      "codigo": "36010484",
+      "nome": "CEIP Eduardo Pondal",
+      "concello": "Vigo",
+      "estado": "activa"
+    },
+    {
+      "codigo": "15021524",
+      "nome": "CEIP Plurilingüe A Cristina",
+      "concello": "Carballo",
+      "estado": "activa"
+    },
+    {
+      "codigo": "15021780",
+      "nome": "CEIP Plurilingüe Bragade",
+      "concello": "Oza-Cesuras",
+      "estado": "activa"
+    },
+    {
+      "codigo": "36010083",
+      "nome": "CEIP Plurilingüe Carballal-Cabral",
+      "concello": "Vigo",
+      "estado": "activa"
+    },
+    {
+      "codigo": "15004964",
+      "nome": "CEIP Plurilingüe Concepción Arenal",
+      "concello": "A Coruña",
+      "estado": "activa"
+    },
+    {
+      "codigo": "15024896",
+      "nome": "CEIP Plurilingüe de Nétoma-Razo",
+      "concello": "Carballo",
+      "estado": "activa"
+    },
+    {
+      "codigo": "15026960",
+      "nome": "CEIP Plurilingüe de Ponzos",
+      "concello": "Ferrol",
+      "estado": "activa"
+    },
+    {
+      "codigo": "36004733",
+      "nome": "CEIP Plurilingüe de Reibón",
+      "concello": "Moaña",
+      "estado": "activa"
+    },
+    {
+      "codigo": "36001033",
+      "nome": "CEIP Plurilingüe de San Roque de Darbo",
+      "concello": "Cangas",
+      "estado": "activa"
+    },
+    {
+      "codigo": "36000934",
+      "nome": "CEIP Plurilingüe do Castrillón-Coiro",
+      "concello": "Cangas",
+      "estado": "activa"
+    },
+    {
+      "codigo": "36009949",
+      "nome": "CEIP Plurilingüe Javier Sensat",
+      "concello": "Vigo",
+      "estado": "activa"
+    },
+    {
+      "codigo": "36010101",
+      "nome": "CEIP Plurilingüe O Sello",
+      "concello": "Vigo",
+      "estado": "activa"
+    },
+    {
+      "codigo": "15009998",
+      "nome": "CEIP Plurilingüe Ramón de Artaza y Malvárez",
+      "concello": "Muros",
+      "estado": "activa"
+    },
+    {
+      "codigo": "36010472",
+      "nome": "CEIP Plurilingüe Ría de Vigo",
+      "concello": "Vigo",
+      "estado": "activa"
+    },
+    {
+      "codigo": "15027708",
+      "nome": "CEIP Plurilingüe Ría do Burgo",
+      "concello": "Culleredo",
+      "estado": "activa"
+    },
+    {
+      "codigo": "15021846",
+      "nome": "CEIP Plurilingüe San Xoán de Filgueira",
+      "concello": "Ferrol",
+      "estado": "activa"
+    },
+    {
+      "codigo": "15005521",
+      "nome": "CEIP Ramón de la Sagra",
+      "concello": "A Coruña",
+      "estado": "activa"
+    },
+    {
+      "codigo": "36015241",
+      "nome": "CEP Celso Emilio Ferreiro",
+      "concello": "Vigo",
+      "estado": "activa"
+    },
+    {
+      "codigo": "36010711",
+      "nome": "CEP Dr. Fleming",
+      "concello": "Vigo",
+      "estado": "activa"
+    },
+    {
+      "codigo": "15025220",
+      "nome": "CEP Plurilingüe de Ventín",
+      "concello": "Ames",
+      "estado": "activa"
+    },
+    {
+      "codigo": "36013448",
+      "nome": "CIFP Manuel Antonio",
+      "concello": "Vigo",
+      "estado": "activa"
+    },
+    {
+      "codigo": "15005749",
+      "nome": "CIFP Universidade Laboral",
+      "concello": "Culleredo",
+      "estado": "activa"
+    },
+    {
+      "codigo": "36014568",
+      "nome": "CIFP Valentín Paz Andrade",
+      "concello": "Vigo",
+      "estado": "activa"
+    },
+    {
+      "codigo": "15003881",
+      "nome": "CPI Alcalde Xosé Pichel",
+      "concello": "Coristanco",
+      "estado": "activa"
+    },
+    {
+      "codigo": "15001926",
+      "nome": "CPI As Revoltas",
+      "concello": "Cabana de Bergantiños",
+      "estado": "activa"
+    },
+    {
+      "codigo": "15018203",
+      "nome": "CPI de Bembibre",
+      "concello": "Val do Dubra",
+      "estado": "activa"
+    },
+    {
+      "codigo": "36013588",
+      "nome": "CPI do Toural",
+      "concello": "Vilaboa",
+      "estado": "activa"
+    },
+    {
+      "codigo": "36013576",
+      "nome": "CPI Manuel Suárez Marquier",
+      "concello": "O Rosal",
+      "estado": "activa"
+    },
+    {
+      "codigo": "15032251",
+      "nome": "CRA Ponte da Pedra",
+      "concello": "Carballo",
+      "estado": "activa"
+    },
+    {
+      "codigo": "36010265",
+      "nome": "EEI Cristo da Victoria",
+      "concello": "Vigo",
+      "estado": "activa"
+    },
+    {
+      "codigo": "36018941",
+      "nome": "EOI de Vigo",
+      "concello": "Vigo",
+      "estado": "activa"
+    },
+    {
+      "codigo": "36024598",
+      "nome": "EOI de Vilagarcía",
+      "concello": "Vilagarcía de Arousa",
+      "estado": "activa"
+    },
+    {
+      "codigo": "36011579",
+      "nome": "IES A Guía",
+      "concello": "Vigo",
+      "estado": "activa"
+    },
+    {
+      "codigo": "15027873",
+      "nome": "IES Afonso X O Sabio",
+      "concello": "Cambre",
+      "estado": "activa"
+    },
+    {
+      "codigo": "15027654",
+      "nome": "IES Agra de Leborís",
+      "concello": "A Laracha",
+      "estado": "activa"
+    },
+    {
+      "codigo": "15005233",
+      "nome": "IES Agra do Orzán",
+      "concello": "A Coruña",
+      "estado": "activa"
+    },
+    {
+      "codigo": "36011798",
+      "nome": "IES Alexandre Bóveda",
+      "concello": "Vigo",
+      "estado": "activa"
+    },
+    {
+      "codigo": "15002581",
+      "nome": "IES Alfredo Brañas",
+      "concello": "Carballo",
+      "estado": "activa"
+    },
+    {
+      "codigo": "36014601",
+      "nome": "IES Álvaro Cunqueiro",
+      "concello": "Vigo",
+      "estado": "activa"
+    },
+    {
+      "codigo": "15025712",
+      "nome": "IES Antonio Fraguas Fraguas",
+      "concello": "Santiago de Compostela",
+      "estado": "activa"
+    },
+    {
+      "codigo": "15027940",
+      "nome": "IES As Insuas",
+      "concello": "Muros",
+      "estado": "activa"
+    },
+    {
+      "codigo": "36019220",
+      "nome": "IES Auga da Laxe",
+      "concello": "Gondomar",
+      "estado": "activa"
+    },
+    {
+      "codigo": "15026352",
+      "nome": "IES Brión",
+      "concello": "Brión",
+      "estado": "activa"
+    },
+    {
+      "codigo": "36016681",
+      "nome": "IES Carlos Casares",
+      "concello": "Vigo",
+      "estado": "activa"
+    },
+    {
+      "codigo": "36011567",
+      "nome": "IES Castelao",
+      "concello": "Vigo",
+      "estado": "activa"
+    },
+    {
+      "codigo": "36019426",
+      "nome": "IES Coruxo",
+      "concello": "Vigo",
+      "estado": "activa"
+    },
+    {
+      "codigo": "36019050",
+      "nome": "IES de Beade",
+      "concello": "Vigo",
+      "estado": "activa"
+    },
+    {
+      "codigo": "15027411",
+      "nome": "IES de Cacheiras",
+      "concello": "Teo",
+      "estado": "activa"
+    },
+    {
+      "codigo": "36019566",
+      "nome": "IES de Chapela",
+      "concello": "Redondela",
+      "estado": "activa"
+    },
+    {
+      "codigo": "36020131",
+      "nome": "IES de Mos",
+      "concello": "Mos",
+      "estado": "activa"
+    },
+    {
+      "codigo": "15027691",
+      "nome": "IES de Porto do Son",
+      "concello": "Porto do Son",
+      "estado": "activa"
+    },
+    {
+      "codigo": "36019475",
+      "nome": "IES de Rodeira",
+      "concello": "Cangas",
+      "estado": "activa"
+    },
+    {
+      "codigo": "36020337",
+      "nome": "IES de Salvaterra de Miño",
+      "concello": "Salvaterra de Miño",
+      "estado": "activa"
+    },
+    {
+      "codigo": "15027319",
+      "nome": "IES de Sar",
+      "concello": "Santiago de Compostela",
+      "estado": "activa"
+    },
+    {
+      "codigo": "36024987",
+      "nome": "IES de Soutomaior",
+      "concello": "Soutomaior",
+      "estado": "activa"
+    },
+    {
+      "codigo": "36018173",
+      "nome": "IES de Teis",
+      "concello": "Vigo",
+      "estado": "activa"
+    },
+    {
+      "codigo": "36024781",
+      "nome": "IES do Barral",
+      "concello": "Ponteareas",
+      "estado": "activa"
+    },
+    {
+      "codigo": "36019670",
+      "nome": "IES do Castro",
+      "concello": "Vigo",
+      "estado": "activa"
+    },
+    {
+      "codigo": "15026406",
+      "nome": "IES Eduardo Pondal",
+      "concello": "Ponteceso",
+      "estado": "activa"
+    },
+    {
+      "codigo": "36015184",
+      "nome": "IES Escolas Proval",
+      "concello": "Nigrán",
+      "estado": "activa"
+    },
+    {
+      "codigo": "15003224",
+      "nome": "IES Fernando Blanco",
+      "concello": "Cee",
+      "estado": "activa"
+    },
+    {
+      "codigo": "32013582",
+      "nome": "IES García-Barbón",
+      "concello": "Verín",
+      "estado": "activa"
+    },
+    {
+      "codigo": "36019268",
+      "nome": "IES Gonzalo Torrente Ballester",
+      "concello": "Pontevedra",
+      "estado": "activa"
+    },
+    {
+      "codigo": "15027307",
+      "nome": "IES Isidro Parga Pondal",
+      "concello": "Carballo",
+      "estado": "activa"
+    },
+    {
+      "codigo": "36019463",
+      "nome": "IES Johan Carballeira",
+      "concello": "Bueu",
+      "estado": "activa"
+    },
+    {
+      "codigo": "15027885",
+      "nome": "IES Lamas de Castelo",
+      "concello": "Carnota",
+      "estado": "activa"
+    },
+    {
+      "codigo": "36018677",
+      "nome": "IES Luís Seoane",
+      "concello": "Pontevedra",
+      "estado": "activa"
+    },
+    {
+      "codigo": "32015037",
+      "nome": "IES Manuel Chamoso Lamas",
+      "concello": "O Carballiño",
+      "estado": "activa"
+    },
+    {
+      "codigo": "36002335",
+      "nome": "IES Manuel García Barros",
+      "concello": "A Estrada",
+      "estado": "activa"
+    },
+    {
+      "codigo": "15027939",
+      "nome": "IES Maruxa Mallo",
+      "concello": "Ordes",
+      "estado": "activa"
+    },
+    {
+      "codigo": "36018501",
+      "nome": "IES Monte Carrasco",
+      "concello": "Cangas",
+      "estado": "activa"
+    },
+    {
+      "codigo": "15002591",
+      "nome": "IES Monte Neme",
+      "concello": "Carballo",
+      "estado": "activa"
+    },
+    {
+      "codigo": "15014568",
+      "nome": "IES Nº 1",
+      "concello": "Ribeira",
+      "estado": "activa"
+    },
+    {
+      "codigo": "36018380",
+      "nome": "IES O Carril",
+      "concello": "Vilagarcía de Arousa",
+      "estado": "activa"
+    },
+    {
+      "codigo": "36019402",
+      "nome": "IES Pazo da Mercé",
+      "concello": "As Neves",
+      "estado": "activa"
+    },
+    {
+      "codigo": "36024628",
+      "nome": "IES Pedras Rubias",
+      "concello": "Salceda de Caselas",
+      "estado": "activa"
+    },
+    {
+      "codigo": "36016656",
+      "nome": "IES Pedro Floriani",
+      "concello": "Redondela",
+      "estado": "activa"
+    },
+    {
+      "codigo": "36007011",
+      "nome": "IES Pino Manso",
+      "concello": "O Porriño",
+      "estado": "activa"
+    },
+    {
+      "codigo": "36004745",
+      "nome": "IES Plurilingüe A Paralaia",
+      "concello": "Moaña",
+      "estado": "activa"
+    },
+    {
+      "codigo": "15026388",
+      "nome": "IES Plurilingüe Fontexería",
+      "concello": "Muros",
+      "estado": "activa"
+    },
+    {
+      "codigo": "36014520",
+      "nome": "IES Plurilingüe Pedra da Auga",
+      "concello": "Ponteareas",
+      "estado": "activa"
+    },
+    {
+      "codigo": "36011634",
+      "nome": "IES Politécnico de Vigo",
+      "concello": "Vigo",
+      "estado": "activa"
+    },
+    {
+      "codigo": "36019657",
+      "nome": "IES Primeiro de Marzo",
+      "concello": "Baiona",
+      "estado": "activa"
+    },
+    {
+      "codigo": "36018461",
+      "nome": "IES República Oriental do Uruguai",
+      "concello": "Vigo",
+      "estado": "activa"
+    },
+    {
+      "codigo": "36019529",
+      "nome": "IES Ribeira do Louro",
+      "concello": "O Porriño",
+      "estado": "activa"
+    },
+    {
+      "codigo": "36017430",
+      "nome": "IES Ricardo Mella",
+      "concello": "Vigo",
+      "estado": "activa"
+    },
+    {
+      "codigo": "36019062",
+      "nome": "IES Rosais 2",
+      "concello": "Vigo",
+      "estado": "activa"
+    },
+    {
+      "codigo": "36009901",
+      "nome": "IES San Paio",
+      "concello": "Tui",
+      "estado": "activa"
+    },
+    {
+      "codigo": "36011580",
+      "nome": "IES San Tomé de Freixeiro",
+      "concello": "Vigo",
+      "estado": "activa"
+    },
+    {
+      "codigo": "36011592",
+      "nome": "IES Santa Irene",
+      "concello": "Vigo",
+      "estado": "activa"
+    },
+    {
+      "codigo": "36013692",
+      "nome": "IES Val do Tea",
+      "concello": "Ponteareas",
+      "estado": "activa"
+    },
+    {
+      "codigo": "36014428",
+      "nome": "IES Val Miñor",
+      "concello": "Nigrán",
+      "estado": "activa"
+    },
+    {
+      "codigo": "36020374",
+      "nome": "IES Valadares",
+      "concello": "Vigo",
+      "estado": "activa"
+    },
+    {
+      "codigo": "15026391",
+      "nome": "IES Xulián Magariños",
+      "concello": "Negreira",
+      "estado": "activa"
+    }
+  ]
+}

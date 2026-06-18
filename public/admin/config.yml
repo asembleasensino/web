@@ -1,0 +1,81 @@
+backend:
+  name: github
+  repo: asembleasensino/web
+  branch: main
+
+locale: gl
+media_folder: public/uploads
+public_folder: /uploads
+publish_mode: editorial_workflow
+
+collections:
+  - name: actualidade
+    label: Actualidade
+    folder: content/actualidade
+    create: true
+    slug: "{{year}}-{{month}}-{{day}}-{{slug}}"
+    fields:
+      - { label: Título, name: title, widget: string }
+      - { label: Data, name: date, widget: datetime }
+      - label: Tipo
+        name: type
+        widget: select
+        options: [Nova, Comunicado, Convocatoria, "Tribuna docente", Crónica]
+      - { label: Resumo, name: summary, widget: text }
+      - { label: Imaxe, name: image, widget: image, required: false }
+      - { label: Corpo, name: body, widget: markdown }
+
+  - name: materiais
+    label: Materiais
+    folder: content/materiais
+    create: true
+    slug: "{{slug}}"
+    fields:
+      - { label: Título, name: title, widget: string }
+      - label: Tipo
+        name: type
+        widget: select
+        options: [Modelo, Recurso, Guía, "Documento legal", Cartaz, Presentación]
+      - { label: Etiquetas, name: tags, widget: list, required: false }
+      - { label: Ficheiro, name: file, widget: file }
+      - { label: Descrición, name: body, widget: markdown }
+
+  - name: configuracion
+    label: Páxinas e configuración
+    files:
+      - label: A rede
+        name: rede
+        file: src/data/rede.json
+        fields:
+          - { label: Título introdutorio, name: titulo, widget: string }
+          - { label: Introdución, name: introducion, widget: text }
+          - { label: Ligazón á comunidade de WhatsApp, name: comunidadeWhatsapp, widget: string, required: false }
+          - { label: Texto sobre WhatsApp, name: textoWhatsapp, widget: text }
+          - label: Grupos
+            name: grupos
+            widget: list
+            summary: "{{fields.nome}}"
+            fields:
+              - { label: Nome, name: nome, widget: string }
+              - { label: Ligazón de WhatsApp, name: whatsapp, widget: string, required: false }
+              - { label: Ligazón ao arquivo, name: arquivo, widget: string, required: false }
+          - { label: Normas de participación, name: normas, widget: list }
+      - label: Asembleas
+        name: asembleas
+        file: src/data/asembleas.json
+        fields:
+          - label: Asembleas
+            name: asembleas
+            widget: list
+            summary: "{{fields.nome}} · {{fields.estado}}"
+            fields:
+              - { label: Código, name: codigo, widget: string }
+              - { label: Nome, name: nome, widget: string }
+              - { label: Concello, name: concello, widget: string }
+              - label: Estado
+                name: estado
+                widget: select
+                options:
+                  - { label: En creación, value: creacion }
+                  - { label: Activa, value: activa }
+              - { label: Contacto público, name: contacto, widget: string, required: false }

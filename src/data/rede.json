@@ -1,0 +1,23 @@
+{
+  "titulo": "Unha rede aberta, autónoma e coordinada",
+  "introducion": "Asembleas Abertas do Ensino Público nace da organización directa das traballadoras e traballadores nos centros. Cada asemblea decide con autonomía e comparte coa rede información, recursos e capacidade de acción.",
+  "comunidadeWhatsapp": "",
+  "textoWhatsapp": "A comunidade de WhatsApp reúne os grupos territoriais e de traballo da rede. As ligazóns de acceso publícanse e actualízanse nesta páxina.",
+  "grupos": [
+    { "nome": "A Coruña e comarca", "whatsapp": "", "arquivo": "https://asembleasensino.gal/tag/norte/" },
+    { "nome": "Barbanza", "whatsapp": "", "arquivo": "https://asembleasensino.gal/tag/barbanza/" },
+    { "nome": "Compostela e comarca", "whatsapp": "", "arquivo": "https://asembleasensino.gal/tag/compostela/" },
+    { "nome": "Costa da Morte", "whatsapp": "", "arquivo": "https://asembleasensino.gal/tag/costa-da-morte/" },
+    { "nome": "Ferrolterra", "whatsapp": "", "arquivo": "https://asembleasensino.gal/tag/norte/" },
+    { "nome": "Ourense norte", "whatsapp": "", "arquivo": "" },
+    { "nome": "Ourense sur", "whatsapp": "", "arquivo": "" },
+    { "nome": "Pontevedra", "whatsapp": "", "arquivo": "" },
+    { "nome": "Pontevedra Sur", "whatsapp": "", "arquivo": "https://asembleasensino.gal/tag/pontevedra-sur/" }
+  ],
+  "normas": [
+    "Identifícate co teu nome e co centro educativo ao entrar.",
+    "Emprega cada grupo para o ámbito e a finalidade indicados.",
+    "Respecta os tempos, as persoas e os acordos colectivos.",
+    "Non difundas fóra da comunidade información interna sen autorización."
+  ]
+}
