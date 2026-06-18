@@ -8,19 +8,19 @@ const centrosJson = JSON.stringify(centros).replace(/</g, "\\u003c");
 ---
 
 <BaseLayout title={`Martes en loita · ${site.shortName}`}>
-  <header class="mx-auto grid max-w-[1500px] gap-10 px-4 pb-16 pt-16 md:grid-cols-12 md:px-8 md:pb-24 md:pt-28">
-    <h1 aria-label="Martes en loita" class="display text-[clamp(4rem,11vw,10rem)] md:col-span-8">
+  <header class="mx-auto grid max-w-[1500px] gap-10 px-4 pb-16 pt-16 md:px-8 md:pb-24 md:pt-28 lg:grid-cols-12">
+    <h1 aria-label="Martes en loita" class="display text-[clamp(4rem,11vw,10rem)] lg:col-span-8">
       <span aria-hidden="true">Martes<br />en
       <span class="relative inline-block">
         loit<span class="relative inline-block">o<span class="absolute inset-0 rotate-[7deg] text-red" aria-hidden="true">A</span></span>
       </span></span>
     </h1>
-    <p class="max-w-md self-end text-lg leading-relaxed text-ink/70 md:col-span-4">Envía a imaxe da acción do teu centro. O ficheiro entrará na estrutura compartida que alimenta o pipeline de publicacións.</p>
+    <p class="max-w-md self-end text-lg leading-relaxed text-ink/70 lg:col-span-4">Envía a imaxe da acción do teu centro. O ficheiro entrará na estrutura compartida que alimenta o pipeline de publicacións.</p>
   </header>
 
   <section class="bg-green text-paper">
-    <div class="mx-auto grid max-w-[1500px] gap-14 px-4 py-20 md:grid-cols-12 md:px-8 md:py-28">
-      <div class="md:col-span-4">
+    <div class="mx-auto grid max-w-[1500px] gap-14 px-4 py-20 md:px-8 md:py-28 xl:grid-cols-12">
+      <div class="xl:col-span-4">
         <h2 class="display text-5xl sm:text-7xl">Un arquivo colectivo</h2>
         <p class="mt-8 max-w-sm text-sm leading-relaxed text-paper/70">Sube unha fotografía por centro e data. Non é preciso preparar a imaxe: o sistema existente encárgase do resto.</p>
         <a
@@ -33,7 +33,7 @@ const centrosJson = JSON.stringify(centros).replace(/</g, "\\u003c");
           <strong class="mt-3 block text-xl leading-tight">Aínda non tedes a vosa camiseta? Facede o pedido na web de Afouta ↗</strong>
         </a>
       </div>
-      <form id="martes-form" data-contact-email={site.email} action="/api/martes-en-loita" method="post" enctype="multipart/form-data" class="grid gap-5 bg-paper p-5 text-ink sm:p-8 md:col-span-7 md:col-start-6">
+      <form id="martes-form" data-contact-email={site.email} action="/api/martes-en-loita" method="post" enctype="multipart/form-data" class="grid gap-5 bg-paper p-5 text-ink sm:p-8 xl:col-span-7 xl:col-start-6">
         <div>
           <label class="mb-2 block text-xs font-bold" for="martes-centro">Centro</label>
           <div class="relative">

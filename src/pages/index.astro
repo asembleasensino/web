@@ -110,12 +110,12 @@ const convocatorias = actualidade
   </section>}
 
   <section data-reveal class="bg-green text-paper">
-    <div class="mx-auto grid max-w-[1500px] gap-14 px-4 py-20 md:grid-cols-12 md:px-8 md:py-32">
-      <div class="md:col-span-5">
+    <div class="mx-auto grid max-w-[1500px] gap-14 px-4 py-20 md:px-8 md:py-32 lg:grid-cols-12">
+      <div class="lg:col-span-5">
         <h2 class="display whitespace-pre-line text-6xl sm:text-8xl">{home.networkTitle}</h2>
         <p class="mt-8 max-w-md text-base leading-relaxed text-paper/70">{home.networkText}</p>
       </div>
-      <ol class="grid border-t border-paper/30 md:col-span-7 md:col-start-6 md:mt-10">
+      <ol class="grid border-t border-paper/30 lg:col-span-7 lg:col-start-6 lg:mt-10">
         {home.participationSteps.map((step, index) => (
           <li class="grid grid-cols-[4.5rem_minmax(0,1fr)] gap-5 border-b border-paper/30 py-8 sm:grid-cols-[6rem_minmax(0,1fr)] sm:py-10">
             <span class="display text-4xl text-paper/40 sm:text-6xl">{String(index + 1).padStart(2, "0")}</span>

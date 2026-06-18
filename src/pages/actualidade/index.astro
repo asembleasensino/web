@@ -13,20 +13,20 @@ const [destacado, ...resto] = artigos;
   <section class="mx-auto max-w-[1500px] px-4 pb-28 md:px-8">
     {destacado ? (
       <>
-        <a href={actualidadeUrl(destacado)} class="group grid gap-8 border-y border-ink py-10 no-underline md:grid-cols-12 md:py-16">
-          <div class="md:col-span-3">
+        <a href={actualidadeUrl(destacado)} class="group grid gap-8 border-y border-ink py-10 no-underline md:py-16 lg:grid-cols-12">
+          <div class="lg:col-span-3">
             <span class="eyebrow text-red">{destacado.data.type}</span>
             <p class="mt-3 text-xs text-ink/45">{formatDate(destacado.data.date)}</p>
           </div>
-          <div class="md:col-span-8">
+          <div class="lg:col-span-8">
             <h2 class="max-w-4xl text-[clamp(2.4rem,5.2vw,5.5rem)] font-extrabold leading-[.97] tracking-[-.045em] group-hover:text-red">{destacado.data.title}</h2>
             <p class="mt-8 max-w-xl text-base leading-relaxed text-ink/60">{destacado.data.summary}</p>
           </div>
-          <span class="self-end text-2xl md:col-span-1">→</span>
+          <span class="self-end text-2xl lg:col-span-1">→</span>
         </a>
         <div class="ml-auto max-w-5xl">
           {resto.map((artigo, index) => (
-            <a href={actualidadeUrl(artigo)} class="group grid gap-5 border-b border-ink/25 py-8 no-underline md:grid-cols-[3rem_10rem_1fr_auto] md:items-center">
+            <a href={actualidadeUrl(artigo)} class="group grid gap-5 border-b border-ink/25 py-8 no-underline lg:grid-cols-[3rem_10rem_minmax(0,1fr)_auto] lg:items-center">
               <span class="text-xs text-ink/30">{String(index + 2).padStart(2, "0")}</span>
               <div><span class="eyebrow text-red">{artigo.data.type}</span><p class="mt-2 text-xs text-ink/45">{formatDate(artigo.data.date)}</p></div>
               <h2 class:list={["font-extrabold leading-tight group-hover:text-red", index === 0 ? "text-3xl md:text-4xl" : "text-2xl md:text-3xl"]}>{artigo.data.title}</h2>

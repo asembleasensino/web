@@ -23,12 +23,12 @@ const canonical = new URL(materialUrl(entry), Astro.site);
 
 <BaseLayout title={`${entry.data.title} · Materiais · ${site.shortName}`} description={entry.data.summary} canonical={canonical}>
   <article>
-    <header class="mx-auto grid max-w-[1500px] gap-10 px-4 pb-16 pt-16 md:grid-cols-12 md:px-8 md:pb-24 md:pt-24">
-      <div class="md:col-span-3">
+    <header class="mx-auto grid max-w-[1500px] gap-10 px-4 pb-16 pt-16 md:px-8 md:pb-24 md:pt-24 lg:grid-cols-12">
+      <div class="lg:col-span-3">
         <span class="eyebrow text-green">{entry.data.type}</span>
         <p class="mt-4 text-sm text-ink/50">{formatDate(entry.data.date)}</p>
       </div>
-      <div class="md:col-span-9">
+      <div class="lg:col-span-9">
         <h1 class="max-w-5xl text-[clamp(3rem,7vw,7rem)] font-extrabold leading-[.94] tracking-[-.05em]">{entry.data.title}</h1>
         <p class="mt-8 max-w-3xl text-xl leading-relaxed text-ink/65">{entry.data.summary}</p>
         <a class="mt-10 inline-block bg-green px-6 py-4 text-xs font-black uppercase tracking-wider text-paper" href={entry.data.driveUrl} target="_blank" rel="noopener noreferrer">
@@ -41,9 +41,9 @@ const canonical = new URL(materialUrl(entry), Astro.site);
         <img src={entry.data.image} alt="" class="max-h-[680px] w-full object-cover" />
       </figure>
     )}
-    <div class="mx-auto grid max-w-[1500px] gap-10 border-t border-ink/20 px-4 py-16 md:grid-cols-12 md:px-8 md:py-24">
-      <a href="/materiais/" class="text-xs font-black uppercase tracking-wider underline decoration-green decoration-2 underline-offset-4 md:col-span-3">← Materiais</a>
-      <div class="content-body md:col-span-8">
+    <div class="mx-auto grid max-w-[1500px] gap-10 border-t border-ink/20 px-4 py-16 md:px-8 md:py-24 lg:grid-cols-12">
+      <a href="/materiais/" class="text-xs font-black uppercase tracking-wider underline decoration-green decoration-2 underline-offset-4 lg:col-span-3">← Materiais</a>
+      <div class="content-body lg:col-span-8">
         <Content />
         {entry.data.tags.length > 0 && (
           <p class="mt-12 border-t border-ink/20 pt-5 text-xs text-ink/50">{entry.data.tags.join(" · ")}</p>

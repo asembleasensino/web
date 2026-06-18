@@ -23,12 +23,12 @@ const canonical = new URL(actualidadeUrl(entry), Astro.site);
 
 <BaseLayout title={`${entry.data.title} · ${site.shortName}`} description={entry.data.summary} canonical={canonical}>
   <article>
-    <header class="mx-auto grid max-w-[1500px] gap-8 px-4 pb-14 pt-16 md:grid-cols-12 md:px-8 md:pb-20 md:pt-24">
-      <div class="md:col-span-3">
+    <header class="mx-auto grid max-w-[1500px] gap-8 px-4 pb-14 pt-16 md:px-8 md:pb-20 md:pt-24 lg:grid-cols-12">
+      <div class="lg:col-span-3">
         <span class="eyebrow text-red">{entry.data.type}</span>
         <p class="mt-4 text-sm text-ink/50">{formatDate(entry.data.date)}</p>
       </div>
-      <div class="md:col-span-9">
+      <div class="lg:col-span-9">
         <h1 class="max-w-5xl text-[clamp(2.5rem,5.8vw,5.9rem)] font-extrabold leading-[.97] tracking-[-.045em]">{entry.data.title}</h1>
         <p class="mt-8 max-w-3xl text-xl leading-relaxed text-ink/65">{entry.data.summary}</p>
         {entry.data.eventDate && (
@@ -44,9 +44,9 @@ const canonical = new URL(actualidadeUrl(entry), Astro.site);
         <img src={entry.data.image} alt="" class="max-h-[760px] w-full object-cover" />
       </figure>
     )}
-    <div class="mx-auto grid max-w-[1500px] gap-10 px-4 py-16 md:grid-cols-12 md:px-8 md:py-24">
-      <a href="/actualidade/" class="text-xs font-black uppercase tracking-wider underline decoration-red decoration-2 underline-offset-4 md:col-span-3">← Actualidade</a>
-      <div class="content-body md:col-span-8">
+    <div class="mx-auto grid max-w-[1500px] gap-10 px-4 py-16 md:px-8 md:py-24 lg:grid-cols-12">
+      <a href="/actualidade/" class="text-xs font-black uppercase tracking-wider underline decoration-red decoration-2 underline-offset-4 lg:col-span-3">← Actualidade</a>
+      <div class="content-body lg:col-span-8">
         <Content />
       </div>
     </div>

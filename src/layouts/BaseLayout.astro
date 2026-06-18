@@ -44,14 +44,14 @@ const {
             {site.brandLines.map((line) => <>{line}<br /></>)}
           </span>
         </a>
-        <nav aria-label="Navegación principal" class="hidden items-center gap-7 text-xs font-bold uppercase tracking-wider lg:flex">
+        <nav aria-label="Navegación principal" class="hidden items-center gap-6 text-xs font-bold uppercase tracking-wider xl:flex">
           <SiteNavigation items={site.headerNavigation} />
         </nav>
-        <button id="menu-button" class="focus-ring border border-ink px-3 py-2 text-xs font-bold uppercase lg:hidden" aria-expanded="false">
+        <button id="menu-button" class="focus-ring border border-ink px-3 py-2 text-xs font-bold uppercase xl:hidden" aria-expanded="false" aria-controls="mobile-menu">
           Menú
         </button>
       </div>
-      <nav id="mobile-menu" class="hidden border-t border-ink/20 px-4 py-4 text-sm font-bold uppercase lg:hidden">
+      <nav id="mobile-menu" class="hidden border-t border-ink/20 px-4 py-4 text-sm font-bold uppercase xl:hidden">
         <div class="grid gap-4">
           <SiteNavigation items={site.headerNavigation} mobile />
         </div>

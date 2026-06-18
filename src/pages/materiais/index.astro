@@ -7,11 +7,11 @@ const materiais = await getMateriais();
 const [destacado, ...resto] = materiais;
 ---
 <BaseLayout title={`Materiais · ${site.shortName}`}>
-  <header class="mx-auto grid max-w-[1500px] gap-8 px-4 pb-12 pt-16 md:grid-cols-12 md:px-8 md:pb-20 md:pt-24">
-    <div class="md:col-span-8">
+  <header class="mx-auto grid max-w-[1500px] gap-8 px-4 pb-12 pt-16 md:px-8 md:pb-20 md:pt-24 lg:grid-cols-12">
+    <div class="lg:col-span-8">
       <h1 class="display text-[clamp(5rem,13vw,11rem)]">Materiais</h1>
     </div>
-    <p class="max-w-sm self-end text-lg leading-relaxed text-ink/65 md:col-span-4">Documentos abertos, reutilizables e preparados para o traballo cotián nos centros.</p>
+    <p class="max-w-sm self-end text-lg leading-relaxed text-ink/65 lg:col-span-4">Documentos abertos, reutilizables e preparados para o traballo cotián nos centros.</p>
   </header>
   <section class="mx-auto max-w-[1500px] px-4 pb-28 md:px-8">
     <div class="mb-12 grid gap-5 border-y border-ink/25 py-5 sm:grid-cols-[1fr_220px]">
