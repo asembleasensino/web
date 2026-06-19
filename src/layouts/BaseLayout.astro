@@ -20,7 +20,7 @@ const {
 <html lang="gl">
   <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="description" content={description} />
     {canonical && <link rel="canonical" href={canonical} />}
     <meta property="og:title" content={title} />
@@ -61,7 +61,7 @@ const {
     <footer class="bg-ink text-paper">
       <div class="mx-auto grid max-w-[1500px] gap-12 px-4 py-14 md:grid-cols-12 md:px-8">
         <div class="md:col-span-6">
-          <p class="display whitespace-pre-line text-5xl sm:text-7xl">{site.footerClaim}</p>
+          <p class="display type-display-section whitespace-pre-line">{site.footerClaim}</p>
         </div>
         <div class="grid gap-8 text-sm md:col-span-3">
           <SiteNavigation items={site.footerNavigation} mobile />

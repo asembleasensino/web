@@ -9,7 +9,7 @@ const [destacado, ...resto] = materiais;
 <BaseLayout title={`Materiais · ${site.shortName}`}>
   <header class="mx-auto grid max-w-[1500px] gap-8 px-4 pb-12 pt-16 md:px-8 md:pb-20 md:pt-24 lg:grid-cols-12">
     <div class="lg:col-span-8">
-      <h1 class="display text-[clamp(5rem,13vw,11rem)]">Materiais</h1>
+      <h1 class="display type-page-materiais">Materiais</h1>
     </div>
     <p class="max-w-sm self-end text-lg leading-relaxed text-ink/65 lg:col-span-4">Documentos abertos, reutilizables e preparados para o traballo cotián nos centros.</p>
   </header>
@@ -31,7 +31,7 @@ const [destacado, ...resto] = materiais;
           class="group border-t-4 border-green pt-6 no-underline lg:col-span-5"
         >
           <span class="eyebrow text-green">{destacado.data.type}{destacado.data.featured ? " · Destacado" : ""}</span>
-          <h2 class="mt-12 max-w-lg text-4xl font-extrabold leading-[1.02] tracking-[-.035em] group-hover:text-green sm:text-5xl">{destacado.data.title}</h2>
+          <h2 class="type-material-feature mt-12 max-w-lg font-extrabold leading-[1.02] tracking-[-.035em] group-hover:text-green">{destacado.data.title}</h2>
           <p class="mt-6 max-w-md text-sm leading-relaxed text-ink/60">{destacado.data.summary}</p>
           <div class="mt-12 flex items-center justify-between border-t border-ink/25 pt-4 text-xs text-ink/50"><span>{destacado.data.tags.join(" · ")}</span><span class="text-xl text-ink">→</span></div>
         </a>

@@ -29,7 +29,7 @@ const canonical = new URL(materialUrl(entry), Astro.site);
         <p class="mt-4 text-sm text-ink/50">{formatDate(entry.data.date)}</p>
       </div>
       <div class="lg:col-span-9">
-        <h1 class="max-w-5xl text-[clamp(3rem,7vw,7rem)] font-extrabold leading-[.94] tracking-[-.05em]">{entry.data.title}</h1>
+        <h1 class="type-material-title max-w-5xl font-extrabold leading-[.94] tracking-[-.05em]">{entry.data.title}</h1>
         <p class="mt-8 max-w-3xl text-xl leading-relaxed text-ink/65">{entry.data.summary}</p>
         <a class="mt-10 inline-block bg-green px-6 py-4 text-xs font-black uppercase tracking-wider text-paper" href={entry.data.driveUrl} target="_blank" rel="noopener noreferrer">
           Abrir ou descargar en Drive ↗

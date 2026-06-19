@@ -6,12 +6,12 @@ import { site } from "../config/site";
 
 <BaseLayout title={`A rede · ${site.shortName}`}>
   <header class="mx-auto grid max-w-[1500px] gap-10 px-4 pb-16 pt-16 md:px-8 md:pb-24 md:pt-28 lg:grid-cols-12">
-    <h1 class="display text-[clamp(4.5rem,11vw,10rem)] lg:col-span-8">A rede</h1>
+    <h1 class="display type-page-short lg:col-span-8">A rede</h1>
     <p class="max-w-md self-end text-lg leading-relaxed text-ink/70 lg:col-span-4">{rede.titulo}</p>
   </header>
 
   <section class="mx-auto grid max-w-[1500px] gap-12 border-t border-ink px-4 py-16 md:px-8 md:py-24 lg:grid-cols-12">
-    <p class="max-w-3xl text-2xl font-bold leading-snug md:text-4xl lg:col-span-7">{rede.introducion}</p>
+    <p class="type-intro-statement max-w-3xl font-bold leading-snug lg:col-span-7">{rede.introducion}</p>
     <div class="space-y-5 text-sm leading-relaxed text-ink/65 lg:col-span-4 lg:col-start-9">
       <p>A rede non substitúe as asembleas: conéctaas. As decisións nacen nos centros e coordínanse nas comarcas e na asemblea xeral.</p>
       <a class="inline-block border-b border-red pb-1 font-bold text-ink" href="/#mapa">Consulta o mapa da rede →</a>
@@ -21,7 +21,7 @@ import { site } from "../config/site";
   <section class="bg-ink text-paper">
     <div class="mx-auto grid max-w-[1500px] gap-14 px-4 py-20 md:px-8 md:py-28 lg:grid-cols-12">
       <div class="lg:col-span-5">
-        <h2 class="display text-6xl sm:text-8xl">Grupos e comunidade</h2>
+        <h2 class="display type-display-section-lg">Grupos e comunidade</h2>
         <p class="mt-8 max-w-md text-sm leading-relaxed text-paper/65">{rede.textoWhatsapp}</p>
         {rede.comunidadeWhatsapp && (
           <a class="mt-8 inline-block bg-paper px-5 py-4 text-xs font-black uppercase tracking-wider text-ink" href={rede.comunidadeWhatsapp}>Entrar na comunidade</a>
@@ -42,7 +42,7 @@ import { site } from "../config/site";
   </section>
 
   <section class="mx-auto grid max-w-[1500px] gap-12 px-4 py-20 md:px-8 md:py-28 lg:grid-cols-12">
-    <h2 class="display text-6xl sm:text-8xl lg:col-span-5">Coidar os espazos</h2>
+    <h2 class="display type-display-section-lg lg:col-span-5">Coidar os espazos</h2>
     <ol class="border-t border-ink lg:col-span-7 lg:mt-16">
       {rede.normas.map((norma, index) => (
         <li class="grid grid-cols-[3rem_1fr] gap-5 border-b border-ink/25 py-6">

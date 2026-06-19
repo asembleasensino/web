@@ -22,8 +22,8 @@ const convocatorias = actualidade
     <div class="mx-auto grid min-h-[54vh] max-w-[1500px] px-4 py-10 md:min-h-[58vh] md:px-8 md:py-14">
       <div class="grid content-between gap-12 lg:grid-cols-12">
         <div class="min-w-0 lg:col-span-9">
-          <h1 class="display max-w-[12ch] text-[clamp(4rem,10.5vw,10.75rem)]">
-            {home.heroTitle}<br /><span class="text-red">{home.heroHighlight}</span>
+          <h1 class="display type-home-hero">
+            {home.heroTitle}<br /><span class="inline-block whitespace-nowrap text-red">{home.heroHighlight}</span>
           </h1>
         </div>
         <div class="min-w-0 flex max-w-sm flex-col justify-end pb-3 lg:col-span-3">
@@ -65,7 +65,7 @@ const convocatorias = actualidade
         />
       </figure>
       <div class="mt-10 lg:col-span-4 lg:col-start-9 lg:mt-14">
-        <h2 class="text-4xl font-extrabold leading-[1.02] tracking-[-.04em] sm:text-6xl">{home.organizationTitle}</h2>
+        <h2 class="type-editorial-section font-extrabold leading-[1.02] tracking-[-.04em]">{home.organizationTitle}</h2>
         <p class="mt-8 text-base leading-relaxed text-ink/65">{home.organizationText}</p>
         <a href="/a-rede/" class="mt-9 inline-block border-b border-red pb-1 text-xs font-black uppercase tracking-wider">{home.organizationLinkLabel}</a>
       </div>
@@ -78,7 +78,7 @@ const convocatorias = actualidade
   <section class="mx-auto max-w-[1500px] px-4 py-20 md:px-8 md:py-32">
     <div class="mb-12 flex items-end justify-between border-b border-ink pb-5">
       <div>
-        <h2 class="display text-5xl sm:text-7xl">Actualidade</h2>
+        <h2 class="display type-display-section">Actualidade</h2>
       </div>
       <a href="/actualidade" class="hidden text-xs font-black uppercase tracking-wider underline decoration-red decoration-2 underline-offset-4 sm:block">Ver todas →</a>
     </div>
@@ -88,7 +88,7 @@ const convocatorias = actualidade
           <span class="eyebrow text-red">{novas[0].data.type}</span>
           <span class="text-[10px] font-bold text-ink/40">{formatDate(novas[0].data.date)}</span>
         </div>
-        <h3 class="mt-10 max-w-3xl text-[clamp(2.25rem,4.4vw,4.75rem)] font-extrabold leading-[.98] tracking-[-.04em] group-hover:text-red">
+        <h3 class="type-feature-title mt-10 max-w-3xl font-extrabold leading-[.98] tracking-[-.04em] group-hover:text-red">
           {novas[0].data.title}
         </h3>
         <p class="mt-8 max-w-xl text-base leading-relaxed text-ink/65">{novas[0].data.summary}</p>
@@ -101,7 +101,7 @@ const convocatorias = actualidade
               <span class="eyebrow text-red">{nova.data.type}</span>
               <span class="text-[10px] font-bold text-ink/40">{formatDate(nova.data.date)}</span>
             </div>
-            <h3 class="mt-6 max-w-md text-2xl font-extrabold leading-tight group-hover:text-red sm:text-3xl">{nova.data.title}</h3>
+            <h3 class="type-card-title mt-6 max-w-md font-extrabold leading-tight group-hover:text-red">{nova.data.title}</h3>
             <p class="mt-4 max-w-md text-sm leading-relaxed text-ink/60">{nova.data.summary}</p>
           </a>
         ))}
@@ -112,14 +112,14 @@ const convocatorias = actualidade
   <section data-reveal class="bg-green text-paper">
     <div class="mx-auto grid max-w-[1500px] gap-14 px-4 py-20 md:px-8 md:py-32 lg:grid-cols-12">
       <div class="lg:col-span-5">
-        <h2 class="display whitespace-pre-line text-6xl sm:text-8xl">{home.networkTitle}</h2>
+        <h2 class="display type-display-section-lg whitespace-pre-line">{home.networkTitle}</h2>
         <p class="mt-8 max-w-md text-base leading-relaxed text-paper/70">{home.networkText}</p>
       </div>
       <ol class="grid border-t border-paper/30 lg:col-span-7 lg:col-start-6 lg:mt-10">
         {home.participationSteps.map((step, index) => (
           <li class="grid grid-cols-[4.5rem_minmax(0,1fr)] gap-5 border-b border-paper/30 py-8 sm:grid-cols-[6rem_minmax(0,1fr)] sm:py-10">
-            <span class="display text-4xl text-paper/40 sm:text-6xl">{String(index + 1).padStart(2, "0")}</span>
-            <div class="pt-1"><h3 class="text-2xl font-extrabold sm:text-3xl">{step.title}</h3><p class="mt-3 max-w-xl text-base leading-relaxed text-paper/75">{step.text}</p></div>
+            <span class="display type-step-number text-paper/40">{String(index + 1).padStart(2, "0")}</span>
+            <div class="pt-1"><h3 class="type-card-title font-extrabold">{step.title}</h3><p class="mt-3 max-w-xl text-base leading-relaxed text-paper/75">{step.text}</p></div>
           </li>
         ))}
       </ol>
@@ -129,7 +129,7 @@ const convocatorias = actualidade
   {convocatorias.length > 0 && <section class="mx-auto max-w-[1500px] px-4 py-20 md:px-8 md:py-32">
     <div class="grid gap-16 lg:grid-cols-12 lg:gap-24">
       <div class="min-w-0 lg:col-span-5">
-        <h2 class="display text-5xl sm:text-7xl">Próximas<br />convocatorias</h2>
+        <h2 class="display type-display-section">Próximas<br />convocatorias</h2>
       </div>
       <div class="min-w-0 lg:col-span-7 lg:pt-28">
         {convocatorias.map((evento, index) => (

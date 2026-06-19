@@ -18,7 +18,11 @@
   font-synthesis: none;
 }
 
-html { scroll-behavior: smooth; }
+html {
+  scroll-behavior: smooth;
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+}
 html,
 body {
   max-width: 100%;
@@ -54,7 +58,8 @@ input[type="file"] {
 
 button,
 a {
-  overflow-wrap: anywhere;
+  overflow-wrap: break-word;
+  word-break: normal;
 }
 
 h1,
@@ -66,12 +71,13 @@ li,
 label,
 figcaption {
   overflow-wrap: break-word;
+  word-break: normal;
 }
 
 h1,
 h2,
 h3 {
-  text-wrap: balance;
+  text-wrap: pretty;
 }
 
 .display {
@@ -81,6 +87,75 @@ h3 {
   letter-spacing: -0.045em;
   line-height: .9;
   font-weight: 900;
+  text-wrap: balance;
+}
+
+.type-home-hero {
+  font-size: clamp(4rem, 10.5vw, 10.75rem);
+}
+
+.type-page-actualidade {
+  font-size: clamp(3.7rem, 13vw, 11rem);
+}
+
+.type-page-materiais {
+  font-size: clamp(5rem, 13vw, 11rem);
+}
+
+.type-page-short {
+  font-size: clamp(4.5rem, 11vw, 10rem);
+}
+
+.type-article-title {
+  font-size: clamp(2.5rem, 5.8vw, 5.9rem);
+}
+
+.type-content-page-title {
+  font-size: clamp(3rem, 8vw, 8rem);
+}
+
+.type-material-title {
+  font-size: clamp(3rem, 7vw, 7rem);
+}
+
+.type-feature-title {
+  font-size: clamp(2.25rem, 4.4vw, 4.75rem);
+}
+
+.type-index-feature-title {
+  font-size: clamp(2.4rem, 5.2vw, 5.5rem);
+}
+
+.type-display-section {
+  font-size: clamp(3rem, calc(1.5rem + 7.5vw), 4.5rem);
+}
+
+.type-display-section-lg {
+  font-size: clamp(3.75rem, calc(1.5rem + 11.25vw), 6rem);
+}
+
+.type-editorial-section {
+  font-size: clamp(2.25rem, calc(.75rem + 7.5vw), 3.75rem);
+}
+
+.type-card-title {
+  font-size: clamp(1.5rem, calc(1.125rem + 1.875vw), 1.875rem);
+}
+
+.type-step-number {
+  font-size: clamp(2.25rem, calc(.75rem + 7.5vw), 3.75rem);
+}
+
+.type-list-title-lg {
+  font-size: clamp(1.875rem, calc(1.25rem + 3.125vw), 2.5rem);
+}
+
+.type-intro-statement {
+  font-size: clamp(1.5rem, calc(.5rem + 5vw), 2.5rem);
+}
+
+.type-material-feature {
+  font-size: clamp(2.25rem, calc(1.5rem + 3.75vw), 3rem);
 }
 
 .eyebrow {
@@ -187,6 +262,7 @@ h3 {
 .content-body ol { list-style: decimal; padding-left: 1.5rem; }
 .content-body a {
   font-weight: 700;
+  overflow-wrap: anywhere;
   text-decoration: underline;
   text-decoration-color: var(--color-red);
   text-decoration-thickness: 2px;
@@ -211,8 +287,36 @@ h3 {
 }
 
 @media (max-width: 30rem) {
-  .display {
-    letter-spacing: -0.025em;
-    line-height: .97;
+  .type-home-hero {
+    font-size: clamp(3.05rem, calc(.375rem + 13.4vw), 4rem);
+  }
+
+  .type-page-actualidade {
+    font-size: clamp(2.95rem, calc(.2rem + 13.75vw), 3.9rem);
+  }
+
+  .type-page-materiais {
+    font-size: clamp(4.1rem, calc(1.48rem + 13.1vw), 5rem);
+  }
+
+  .type-page-short {
+    font-size: clamp(3.75rem, calc(1.56rem + 10.95vw), 4.5rem);
+  }
+
+  .type-article-title {
+    font-size: clamp(2.1rem, calc(.94rem + 5.8vw), 2.5rem);
+  }
+
+  .type-content-page-title,
+  .type-material-title {
+    font-size: clamp(2.5rem, calc(1.05rem + 7.25vw), 3rem);
+  }
+
+  .type-feature-title {
+    font-size: clamp(1.95rem, calc(1.07rem + 4.4vw), 2.25rem);
+  }
+
+  .type-index-feature-title {
+    font-size: clamp(1.95rem, calc(.64rem + 6.55vw), 2.4rem);
   }
 }
