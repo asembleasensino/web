@@ -23,7 +23,7 @@
     "@cloudflare/workers-types": "^4.20260617.1",
     "@tailwindcss/postcss": "^4.3.1",
     "@tailwindcss/vite": "^4.1.0",
-    "astro": "^6.4.8",
+    "astro": "^7.0.4",
     "leaflet": "^1.9.4",
     "papaparse": "^5.5.3",
     "sharp": "^0.35.1",
