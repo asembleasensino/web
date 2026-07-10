@@ -10,12 +10,26 @@ Desde o panel pódense editar e publicar:
 - materiais e ficheiros;
 - páxinas informativas;
 - identidade, contacto, navegación e portada;
+- tipos de contido usados como criterio editorial;
 - a páxina “A rede”, grupos de WhatsApp e normas;
 - a listaxe reducida de asembleas activas ou en creación.
 
 O modo editorial crea un borrador para revisión antes de publicar.
 
 As entradas publicadas de actualidade e materiais xeran automaticamente páxinas individuais. A portada toma as últimas publicacións e as convocatorias futuras. Os documentos de materiais almacénanse en Google Drive; no CMS gárdanse a descrición e a ligazón pública.
+
+## Que se modifica en cada lugar
+
+- **Actualidade:** novas, comunicados, convocatorias, crónicas e textos editoriais con páxina propia.
+- **Materiais:** recursos ou documentos descargables. O ficheiro vive en Google Drive; aquí gárdase a ficha pública e a ligazón.
+- **Páxinas:** novas seccións sinxelas de contido institucional. Despois de crealas, engade a súa ligazón en “Identidade, contacto e navegación” se deben aparecer no menú.
+- **Identidade, contacto e navegación:** nome público, dominio canónico, correo, Instagram, menús superior e inferior e mensaxe do pé.
+- **Portada:** textos principais, bloque institucional, pasos de participación e bloque da rede.
+- **A rede:** texto da páxina da rede, grupos, ligazóns de WhatsApp/arquivo e normas.
+- **Asembleas:** só a listaxe resumida de asembleas activas ou en creación que debe aparecer no mapa.
+- **Tipos de contido:** lista orientativa de categorías para manter coherencia editorial. Se se crea unha categoría nova nunha noticia ou material, debe engadirse aquí para que o equipo a reutilice.
+
+Evita crear categorías case iguais, por exemplo `Comunicado`, `Comunicados` e `comunicado`. O CMS non bloquea estes casos para non romper publicacións, así que a coherencia depende do criterio editorial.
 
 ## Persoas administradoras
 

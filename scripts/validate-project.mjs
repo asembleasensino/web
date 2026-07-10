@@ -77,10 +77,27 @@ for (const name of requiredCollections) {
 }
 
 for (const [collectionName, expectedOptions] of Object.entries(contentTypes)) {
+  if (!Array.isArray(expectedOptions) || expectedOptions.some((item) => typeof item !== "string" || !item.trim())) {
+    fail(`src/data/content-types.json: ${collectionName} debe ser unha lista de textos non baleiros`);
+  }
   const collection = (decap.collections || []).find((item) => item.name === collectionName);
   const typeField = collection?.fields?.find((field) => field.name === "type");
-  if (JSON.stringify(typeField?.options || []) !== JSON.stringify(expectedOptions)) {
-    fail(`public/admin/config.yml: as opcións de ${collectionName}.type non coinciden con content-types.json`);
+  if (typeField?.widget !== "string") {
+    fail(`public/admin/config.yml: ${collectionName}.type debe ser texto libre para non bloquear categorías novas`);
+  }
+}
+
+const configCollection = (decap.collections || []).find((item) => item.name === "configuracion");
+const editableConfigFiles = new Set((configCollection?.files || []).map((file) => file.file));
+for (const requiredFile of [
+  "src/data/site.json",
+  "src/data/home.json",
+  "src/data/rede.json",
+  "src/data/asembleas.json",
+  "src/data/content-types.json",
+]) {
+  if (!editableConfigFiles.has(requiredFile)) {
+    fail(`public/admin/config.yml: ${requiredFile} debe estar exposto no CMS`);
   }
 }
 

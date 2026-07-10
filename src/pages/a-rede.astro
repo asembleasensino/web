@@ -29,9 +29,9 @@ import { site } from "../config/site";
       </div>
       <div class="lg:col-span-7 lg:pt-16">
         {rede.grupos.map((grupo) => (
-          <article class="grid grid-cols-[minmax(0,1fr)_auto] items-center gap-5 border-t border-paper/25 py-5 last:border-b">
+          <article class="grid gap-3 border-t border-paper/25 py-5 last:border-b sm:grid-cols-[minmax(0,1fr)_auto] sm:items-center sm:gap-5">
             <h3 class="text-xl font-bold">{grupo.nome}</h3>
-            <div class="flex gap-5 text-xs font-bold uppercase tracking-wider text-paper/65">
+            <div class="flex flex-wrap gap-x-5 gap-y-2 text-xs font-bold uppercase tracking-wider text-paper/65">
               {grupo.arquivo && <a href={grupo.arquivo}>Arquivo</a>}
               {grupo.whatsapp ? <a class="text-paper" href={grupo.whatsapp}>WhatsApp ↗</a> : <span>Ligazón pendente</span>}
             </div>

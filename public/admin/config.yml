@@ -24,10 +24,7 @@ collections:
     fields:
       - { label: Título, name: title, widget: string }
       - { label: Data, name: date, widget: datetime }
-      - label: Tipo
-        name: type
-        widget: select
-        options: [Nova, Comunicado, Convocatoria, "Tribuna docente", Crónica]
+      - { label: Tipo, name: type, widget: string, default: Nova, hint: "Valores recomendados: Nova, Comunicado, Convocatoria, Tribuna docente ou Crónica. Se engades un tipo novo, anótao tamén en “Tipos de contido”." }
       - { label: Resumo, name: summary, widget: text }
       - { label: Imaxe de cabeceira, name: image, widget: image, required: false, hint: "As imaxes editoriais pequenas poden gardarse no repositorio. As fotografías de arquivo deben permanecer en Drive." }
       - { label: Destacar, name: featured, widget: boolean, default: false, required: false }
@@ -44,10 +41,7 @@ collections:
     fields:
       - { label: Título, name: title, widget: string }
       - { label: Data de publicación, name: date, widget: datetime }
-      - label: Tipo
-        name: type
-        widget: select
-        options: [Modelo, Recurso, Guía, "Documento legal", Cartaz, Presentación]
+      - { label: Tipo, name: type, widget: string, default: Recurso, hint: "Valores recomendados: Modelo, Recurso, Guía, Documento legal, Cartaz ou Presentación. Se engades un tipo novo, anótao tamén en “Tipos de contido”." }
       - { label: Resumo, name: summary, widget: text }
       - { label: Etiquetas, name: tags, widget: list, required: false }
       - { label: Ligazón pública de Google Drive, name: driveUrl, widget: string, pattern: ['^https://drive\.google\.com/.+', "Debe ser unha ligazón pública de Google Drive"], hint: "En Drive: Compartir → Acceso xeral → Calquera persoa coa ligazón → Lector." }
@@ -80,6 +74,7 @@ collections:
           - { label: Nome curto, name: shortName, widget: string }
           - { label: Liñas da marca, name: brandLines, widget: list, min: 1, max: 3 }
           - { label: Descrición xeral, name: description, widget: text }
+          - { label: URL pública da web, name: siteUrl, widget: string, hint: "Dominio canónico. Cambiar cando a web pase de staging a produción." }
           - { label: Correo público, name: email, widget: string }
           - { label: Territorio, name: territory, widget: string }
           - label: Redes sociais
@@ -166,3 +161,19 @@ collections:
                   - { label: En creación, value: creacion }
                   - { label: Activa, value: activa }
               - { label: Contacto público, name: contacto, widget: string, required: false }
+      - label: Tipos de contido
+        name: content_types
+        file: src/data/content-types.json
+        fields:
+          - label: Tipos de actualidade
+            name: actualidade
+            widget: list
+            summary: "{{fields.value}}"
+            field: { label: Tipo, name: value, widget: string }
+            hint: "Lista de referencia para que o equipo use categorías coherentes nas noticias."
+          - label: Tipos de materiais
+            name: materiais
+            widget: list
+            summary: "{{fields.value}}"
+            field: { label: Tipo, name: value, widget: string }
+            hint: "Lista de referencia para que o equipo use categorías coherentes nos materiais."
