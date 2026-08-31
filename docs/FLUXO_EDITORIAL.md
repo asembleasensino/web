@@ -5,7 +5,7 @@
 1. Entra en `https://asembleasensino.gal/admin/` con GitHub.
 2. Abre **Actualidade → Nova Actualidade**.
 3. Completa título, data, tipo, resumo e corpo.
-4. Engade imaxe de cabeceira só se é necesaria.
+4. Engade imaxe de cabeceira só se é necesaria, e escribe sempre o **texto alternativo da imaxe** (describe o que se ve; queda baleiro só se a imaxe é puramente decorativa). É importante para quen usa lector de pantalla.
 5. Para unha convocatoria, completa tamén data/hora e lugar do evento.
 6. Usa **Destacar** se debe ter prioridade editorial.
 7. Garda. O elemento entra no fluxo editorial como borrador.

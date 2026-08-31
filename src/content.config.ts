@@ -10,6 +10,7 @@ const actualidade = defineCollection({
     type: z.string().min(1),
     summary: z.string(),
     image: z.string().optional(),
+    imageAlt: z.string().optional(),
     featured: z.boolean().default(false),
     eventDate: z.coerce.date().optional(),
     eventLocation: z.string().optional(),
@@ -27,6 +28,7 @@ const materiais = defineCollection({
     tags: z.array(z.string()).default([]),
     driveUrl: z.url(),
     image: z.string().optional(),
+    imageAlt: z.string().optional(),
     featured: z.boolean().default(false),
     draft: z.boolean().default(false),
   }),
@@ -38,6 +40,7 @@ const paxinas = defineCollection({
     title: z.string(),
     summary: z.string(),
     image: z.string().optional(),
+    imageAlt: z.string().optional(),
     draft: z.boolean().default(false),
   }),
 });

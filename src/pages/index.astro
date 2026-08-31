@@ -2,7 +2,7 @@
 import BaseLayout from "../layouts/BaseLayout.astro";
 import AssemblyMap from "../components/AssemblyMap.astro";
 import ActivationForm from "../components/ActivationForm.astro";
-import { actualidadeUrl, formatDate, getActualidade } from "../lib/content";
+import { actualidadeUrl, formatDate, getActualidade, isType } from "../lib/content";
 import home from "../data/home.json";
 
 const actualidade = await getActualidade();
@@ -12,7 +12,7 @@ const novas = [
 ].slice(0, 3);
 const agora = new Date();
 const convocatorias = actualidade
-  .filter((entry) => entry.data.type === "Convocatoria" && entry.data.eventDate && entry.data.eventDate >= agora)
+  .filter((entry) => isType(entry.data.type, "Convocatoria") && entry.data.eventDate && entry.data.eventDate >= agora)
   .sort((a, b) => (a.data.eventDate?.getTime() || 0) - (b.data.eventDate?.getTime() || 0))
   .slice(0, 3);
 ---

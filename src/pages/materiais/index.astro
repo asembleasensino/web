@@ -15,12 +15,19 @@ const [destacado, ...resto] = materiais;
   </header>
   <section class="mx-auto max-w-[1500px] px-4 pb-28 md:px-8">
     <div class="mb-12 grid gap-5 border-y border-ink/25 py-5 sm:grid-cols-[1fr_220px]">
-      <input id="material-search" class="focus-ring border-0 bg-transparent px-0 py-2 text-sm" type="search" placeholder="Buscar no arquivo de materiais" />
-      <select id="material-type" class="focus-ring border-0 bg-transparent px-0 py-2 text-sm text-ink/65">
-        <option value="">Todos os tipos</option>
-        {[...new Set(materiais.map((material) => material.data.type))].sort().map((type) => <option value={type}>{type}</option>)}
-      </select>
+      <div>
+        <label for="material-search" class="sr-only">Buscar no arquivo de materiais</label>
+        <input id="material-search" class="focus-ring w-full border-0 bg-transparent px-0 py-2 text-sm" type="search" placeholder="Buscar no arquivo de materiais" />
+      </div>
+      <div>
+        <label for="material-type" class="sr-only">Filtrar por tipo de material</label>
+        <select id="material-type" class="focus-ring w-full border-0 bg-transparent px-0 py-2 text-sm text-ink/65">
+          <option value="">Todos os tipos</option>
+          {[...new Set(materiais.map((material) => material.data.type))].sort().map((type) => <option value={type}>{type}</option>)}
+        </select>
+      </div>
     </div>
+    <p id="material-empty" hidden class="border-y border-ink/25 py-10 text-lg font-bold text-ink/60">Non se atoparon materiais con eses criterios de busca.</p>
     {destacado ? (
       <div class="grid gap-12 lg:grid-cols-12">
         <a
@@ -65,14 +72,18 @@ const [destacado, ...resto] = materiais;
     const type = document.querySelector<HTMLSelectElement>("#material-type");
     const cards = [...document.querySelectorAll<HTMLElement>("[data-material]")];
     const normalize = (value: string) => value.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLocaleLowerCase("gl");
+    const empty = document.querySelector<HTMLElement>("#material-empty");
     const filter = () => {
       const query = normalize(search?.value.trim() || "");
       const selectedType = type?.value || "";
+      let visibleCount = 0;
       for (const card of cards) {
         const haystack = normalize(card.dataset.search || "");
         const visible = (!query || haystack.includes(query)) && (!selectedType || card.dataset.type === selectedType);
         card.classList.toggle("hidden", !visible);
+        if (visible) visibleCount += 1;
       }
+      if (empty) empty.hidden = visibleCount > 0;
     };
     search?.addEventListener("input", filter);
     type?.addEventListener("change", filter);

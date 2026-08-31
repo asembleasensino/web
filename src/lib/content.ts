@@ -6,6 +6,18 @@ export type MaterialEntry = CollectionEntry<"materiais">;
 const newestFirst = <T extends { data: { date: Date } }>(a: T, b: T) =>
   b.data.date.getTime() - a.data.date.getTime();
 
+/**
+ * O campo "type" é texto libre en Decap (deliberado: permite crear categorías
+ * novas sen tocar código, ver scripts/validate-project.mjs). Como contrapartida,
+ * unha entrada escrita como "convocatoria" ou "Convocatoria " (con espazo) non
+ * coincidiría cunha comparación exacta e desaparecería en silencio de calquera
+ * filtro. isType() compara ignorando maiúsculas/minúsculas e espazos sobrantes
+ * para que ese tipo de erro editorial non rompa a funcionalidade.
+ */
+export function isType(value: string, expected: string) {
+  return value.trim().toLocaleLowerCase("gl") === expected.trim().toLocaleLowerCase("gl");
+}
+
 export async function getActualidade() {
   return (await getCollection("actualidade", ({ data }) => !data.draft)).sort(newestFirst);
 }
