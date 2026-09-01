@@ -62,6 +62,14 @@ Non gardar valores reais no repositorio. `.dev.vars.example` serve como inventar
 
 O intermediario OAuth vive en `functions/api/auth.ts` e `functions/api/callback.ts`. Valida o parámetro `state` mediante cookie segura e non persiste tokens.
 
+Para staging en `*.pages.dev`, crea preferentemente unha OAuth App separada:
+
+- Homepage URL: `https://web-5ng.pages.dev`.
+- Authorization callback URL: `https://web-5ng.pages.dev/api/callback`.
+- Usa o seu `GITHUB_CLIENT_ID` e `GITHUB_CLIENT_SECRET` no ambiente de Cloudflare onde estás probando.
+
+O panel `/admin/` sobrescribe en tempo de execución o `base_url` de Decap co dominio actual. Polo tanto, se entras en `https://web-5ng.pages.dev/admin/`, o popup debe abrir `https://web-5ng.pages.dev/api/auth`; cando a web pase a `https://asembleasensino.gal/admin/`, abrirá `https://asembleasensino.gal/api/auth`.
+
 ## 5. Resend
 
 1. Verifica `asembleasensino.gal` en Resend.
