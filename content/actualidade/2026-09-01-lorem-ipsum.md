@@ -1,5 +1,5 @@
 ---
-title: Lorem ipsum
+title: Defender o ensino público é defender o noso futuro
 date: 2026-09-01T16:45:00.000+02:00
 type: Reflexión dalguén
 summary: Defender o ensino público é defender o noso futuro
