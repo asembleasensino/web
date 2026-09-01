@@ -52,7 +52,15 @@ export const onRequestPost: PagesFunction<Env> = async ({ request, env }) => {
     try {
       await env.MARTES_MEDIA.put(key, bytes, {
         httpMetadata: { contentType: foto.type },
-        customMetadata: { centro, centroCodigo, concello, comarca, data, autorizacion: "confirmed" },
+        customMetadata: {
+          centro,
+          centroCodigo,
+          concello,
+          comarca,
+          data,
+          autorizacion: "confirmed",
+          privacyVersion: "2026-09-01",
+        },
       });
       storedIn.push("r2");
     } catch (error) {
@@ -77,6 +85,7 @@ export const onRequestPost: PagesFunction<Env> = async ({ request, env }) => {
           comarca,
           data,
           autorizacion: true,
+          privacyVersion: "2026-09-01",
         }),
       });
       const driveResult: { ok?: boolean; error?: string } = await response

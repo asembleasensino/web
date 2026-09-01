@@ -114,7 +114,7 @@ export const onRequestPost: PagesFunction<Env> = async ({ request, env }) => {
     email,
     mensaxe,
     estado: "pendente_validacion",
-    privacyVersion: "2026-06-18",
+    privacyVersion: "2026-09-01",
     createdAt: new Date().toISOString(),
   };
 
