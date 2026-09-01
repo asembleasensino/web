@@ -7,7 +7,7 @@ summary: O centro celebrará unha xornada participativa con obradoiros, lecturas
 image: https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT9Z3wM3m53V8SXWDW9-EUnFQz_jYHVqlPLS4cO0178up-VrJpfiHWn9Vs&s=10
 imageAlt: Varias persoas sentadas arredor dunha mesa con libros e cadernos
   durante unha actividade de lectura.
-featured: false
+featured: true
 draft: false
 ---
 O próximo mes o centro porá en marcha unha xornada aberta dedicada á lectura, á escritura e á creación colectiva.
