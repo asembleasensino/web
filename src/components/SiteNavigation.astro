@@ -14,7 +14,7 @@ const { items, mobile = false } = Astro.props;
     class:list={[
       "focus-ring",
       mobile ? "" : "decoration-red decoration-2 underline-offset-4 hover:underline",
-      item.primary && !mobile ? "bg-ink px-4 py-3 text-paper hover:bg-red hover:no-underline" : "",
+      item.primary && !mobile ? "bg-ink px-4 py-3 rounded-[4px] text-paper hover:bg-red hover:no-underline" : "",
     ]}
     href={item.href}
   >

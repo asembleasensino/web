@@ -37,8 +37,8 @@ const centrosJson = JSON.stringify(centros).replace(/</g, "\\u003c");
         <div>
           <label class="mb-2 block text-xs font-bold" for="martes-centro">Centro</label>
           <div class="relative">
-            <input id="martes-centro" autocomplete="off" role="combobox" aria-autocomplete="list" aria-controls="martes-centros-list" aria-expanded="false" required placeholder="Nome do centro ou concello" class="focus-ring w-full border border-ink/30 bg-paper px-4 py-3" />
-            <div id="martes-centros-list" role="listbox" class="absolute z-20 mt-1 hidden max-h-64 w-full overflow-y-auto border border-ink/30 bg-paper"></div>
+            <input id="martes-centro" autocomplete="off" role="combobox" aria-autocomplete="list" aria-controls="martes-centros-list" aria-expanded="false" required placeholder="Nome do centro ou concello" class="focus-ring w-full rounded-[4px] border border-ink/30 bg-paper px-4 py-3" />
+            <div id="martes-centros-list" role="listbox" class="absolute z-20 mt-1 hidden max-h-64 w-full overflow-y-auto rounded-[4px] border border-ink/30 bg-paper"></div>
           </div>
           <input id="martes-centro-nome" name="centro" type="hidden" />
           <input id="martes-centro-codigo" name="centroCodigo" type="hidden" />
@@ -48,19 +48,19 @@ const centrosJson = JSON.stringify(centros).replace(/</g, "\\u003c");
         <div class="grid gap-5 sm:grid-cols-2">
           <div>
             <label class="mb-2 block text-xs font-bold" for="martes-data">Data</label>
-            <input id="martes-data" name="data" type="date" required class="focus-ring w-full border border-ink/30 bg-paper px-4 py-3" />
+            <input id="martes-data" name="data" type="date" required class="focus-ring w-full rounded-[4px] border border-ink/30 bg-paper px-4 py-3" />
             <p class="mt-2 text-xs text-ink/50">Só se admiten martes.</p>
           </div>
           <div>
             <label class="mb-2 block text-xs font-bold" for="martes-foto">Fotografía</label>
-            <input id="martes-foto" name="foto" type="file" accept="image/jpeg,image/png,image/webp" required class="focus-ring w-full border border-ink/30 bg-paper px-4 py-3 text-sm" />
+            <input id="martes-foto" name="foto" type="file" accept="image/jpeg,image/png,image/webp" required class="focus-ring w-full rounded-[4px] border border-ink/30 bg-paper px-4 py-3 text-sm" />
           </div>
         </div>
         <label class="flex items-start gap-3 text-xs leading-relaxed">
           <input class="mt-1 accent-green" type="checkbox" name="autorizacion" value="confirmed" required />
           <span>Confirmo que a imaxe pode ser entregada á AAEP para o seu arquivo e posible publicación.</span>
         </label>
-        <button class="focus-ring justify-self-start bg-ink px-6 py-4 text-xs font-black uppercase tracking-wider text-paper" type="submit">Enviar fotografía</button>
+        <button class="focus-ring justify-self-start rounded-[4px] bg-ink px-6 py-4 text-xs font-black uppercase tracking-wider text-paper" type="submit">Enviar fotografía</button>
         <p id="martes-status" class="hidden text-sm font-bold" role="status"></p>
       </form>
     </div>

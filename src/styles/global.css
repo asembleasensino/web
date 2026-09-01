@@ -16,10 +16,13 @@
   background: var(--color-paper);
   color: var(--color-ink);
   font-synthesis: none;
+  --rule-hair: color-mix(in srgb, var(--color-ink) 22%, transparent);
+  --rule-strong: color-mix(in srgb, var(--color-ink) 72%, transparent);
+  --paper-fibre: color-mix(in srgb, var(--color-ink) 4%, transparent);
 }
 
 html {
-  scroll-behavior: smooth;
+  scroll-behavior: auto;
   -webkit-text-size-adjust: 100%;
   text-size-adjust: 100%;
 }
@@ -28,7 +31,13 @@ body {
   max-width: 100%;
   overflow-x: clip;
 }
-body { margin: 0; background: var(--color-paper); }
+body {
+  margin: 0;
+  background:
+    linear-gradient(90deg, var(--paper-fibre) 1px, transparent 1px) 0 0 / 27px 27px,
+    linear-gradient(0deg, rgb(255 255 255 / .18) 1px, transparent 1px) 0 0 / 100% 11px,
+    var(--color-paper);
+}
 * { box-sizing: border-box; }
 ::selection { background: var(--color-red); color: var(--color-paper); }
 button, input, select, textarea { font: inherit; }
@@ -60,6 +69,11 @@ button,
 a {
   overflow-wrap: break-word;
   word-break: normal;
+  transition:
+    background-color 90ms linear,
+    color 90ms linear,
+    border-color 90ms linear,
+    text-decoration-color 90ms linear;
 }
 
 h1,
@@ -85,8 +99,8 @@ h3 {
   font-family: var(--font-display);
   font-stretch: condensed;
   text-transform: uppercase;
-  letter-spacing: -0.045em;
-  line-height: .9;
+  letter-spacing: -0.04em;
+  line-height: .91;
   font-weight: 900;
   text-wrap: balance;
   overflow-wrap: normal;
@@ -95,27 +109,27 @@ h3 {
 }
 
 .type-home-hero {
-  font-size: clamp(4rem, 10.5vw, 10.75rem);
+  font-size: clamp(4rem, 10vw, 10.5rem);
 }
 
 .type-page-actualidade {
-  font-size: clamp(3.7rem, 13vw, 11rem);
+  font-size: clamp(3.5rem, 12vw, 10rem);
 }
 
 .type-page-materiais {
-  font-size: clamp(5rem, 13vw, 11rem);
+  font-size: clamp(4.75rem, 12vw, 10rem);
 }
 
 .type-page-short {
-  font-size: clamp(4.5rem, 11vw, 10rem);
+  font-size: clamp(4.25rem, 10vw, 9rem);
 }
 
 .type-article-title {
-  font-size: clamp(2.5rem, 5.8vw, 5.9rem);
+  font-size: clamp(2.5rem, 6vw, 5.75rem);
 }
 
 .type-content-page-title {
-  font-size: clamp(3rem, 8vw, 8rem);
+  font-size: clamp(3rem, 8vw, 7.5rem);
 }
 
 .type-material-title {
@@ -123,75 +137,84 @@ h3 {
 }
 
 .type-feature-title {
-  font-size: clamp(2.25rem, 4.4vw, 4.75rem);
+  font-size: clamp(2.25rem, 4.5vw, 4.5rem);
 }
 
 .type-index-feature-title {
-  font-size: clamp(2.4rem, 5.2vw, 5.5rem);
+  font-size: clamp(2.25rem, 5vw, 5.25rem);
 }
 
 .type-display-section {
-  font-size: clamp(3rem, calc(1.5rem + 7.5vw), 4.5rem);
+  font-size: clamp(3rem, 8vw, 4.5rem);
 }
 
 .type-display-section-lg {
-  font-size: clamp(3.75rem, calc(1.5rem + 11.25vw), 6rem);
+  font-size: clamp(3.75rem, 10vw, 6rem);
 }
 
 .type-footer-claim {
-  font-size: clamp(3rem, calc(1.5rem + 7.5vw), 4.5rem);
+  font-size: clamp(3rem, 8vw, 4.5rem);
 }
 
 .type-editorial-section {
-  font-size: clamp(2.25rem, calc(.75rem + 7.5vw), 3.75rem);
+  font-size: clamp(2.25rem, 7vw, 3.75rem);
 }
 
 .type-card-title {
-  font-size: clamp(1.5rem, calc(1.125rem + 1.875vw), 1.875rem);
+  font-size: clamp(1.5rem, 2vw, 1.875rem);
 }
 
 .type-step-number {
-  font-size: clamp(2.25rem, calc(.75rem + 7.5vw), 3.75rem);
+  font-size: clamp(2.25rem, 7vw, 3.75rem);
 }
 
 .type-list-title-lg {
-  font-size: clamp(1.875rem, calc(1.25rem + 3.125vw), 2.5rem);
+  font-size: clamp(1.875rem, 3vw, 2.5rem);
 }
 
 .type-intro-statement {
-  font-size: clamp(1.5rem, calc(.5rem + 5vw), 2.5rem);
+  font-size: clamp(1.5rem, 5vw, 2.5rem);
 }
 
 .type-material-feature {
-  font-size: clamp(2.25rem, calc(1.5rem + 3.75vw), 3rem);
+  font-size: clamp(2.25rem, 4vw, 3rem);
 }
 
 .eyebrow {
-  font-size: .72rem;
+  display: inline-flex;
+  align-items: center;
+  gap: .45rem;
+  border-left: .45rem solid currentColor;
+  padding-left: .5rem;
+  font-size: .68rem;
   line-height: 1;
   font-weight: 800;
-  letter-spacing: .16em;
+  letter-spacing: .075em;
   text-transform: uppercase;
 }
 
-.rule { border-top: 1px solid color-mix(in srgb, var(--color-ink) 25%, transparent); }
+.rule { border-top: 1px solid var(--rule-hair); }
 
 .leaflet-container {
   background: #dedbd4;
   font-family: var(--font-sans);
 }
 
+.leaflet-tile-pane {
+  filter: grayscale(1) contrast(1.05) brightness(1.1);
+}
+
 .leaflet-control-zoom a {
-  border-radius: 0 !important;
+  border-radius: 4px !important;
   color: var(--color-ink) !important;
 }
 
 .leaflet-popup-content-wrapper,
 .leaflet-popup-tip {
-  border-radius: 0;
+  border-radius: 4px;
   background: var(--color-paper);
   color: var(--color-ink);
-  box-shadow: 2px 3px 0 rgb(37 35 33 / .10);
+  box-shadow: 4px 4px 0 rgb(37 35 33 / .16);
 }
 
 .leaflet-popup-content { margin: 1rem; min-width: 210px; }
@@ -203,27 +226,28 @@ h3 {
 }
 
 .documentary-image {
-  filter: grayscale(1) contrast(1.08);
-  transform: scale(1.002);
-  transition: filter 240ms ease, transform 500ms cubic-bezier(.2,.7,.2,1);
+  filter: grayscale(1) contrast(1.18) saturate(.75);
+  transform: none;
+  transition: filter 90ms linear;
 }
 
 .documentary-image:hover {
-  filter: grayscale(0) contrast(1.02);
-  transform: scale(1.012);
+  filter: grayscale(.72) contrast(1.12) saturate(.9);
+  transform: none;
 }
 
 .js [data-reveal] {
-  opacity: 0;
-  transform: translateY(18px);
+  opacity: .001;
+  transform: none;
   transition:
-    opacity 650ms cubic-bezier(.2,.7,.2,1),
-    transform 800ms cubic-bezier(.2,.7,.2,1);
+    opacity 140ms linear,
+    clip-path 180ms steps(3, end);
+  clip-path: inset(0 0 14% 0);
 }
 
 .js [data-reveal][data-visible="true"] {
   opacity: 1;
-  transform: translateY(0);
+  clip-path: inset(0);
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -235,7 +259,7 @@ h3 {
 
   .documentary-image {
     transform: none;
-    transition: filter 160ms ease;
+    transition: none;
   }
 
   .documentary-image:hover {
@@ -285,7 +309,7 @@ h3 {
 
 @media (max-width: 63.999rem) {
   .display {
-    letter-spacing: -0.035em;
+    letter-spacing: -0.032em;
     line-height: .94;
   }
 
@@ -296,72 +320,72 @@ h3 {
 
 @media (max-width: 30rem) {
   .type-display-section {
-    font-size: clamp(2.55rem, calc(1.05rem + 7.5vw), 3.35rem);
+    font-size: clamp(2.5rem, 7vw, 3.25rem);
   }
 
   .type-display-section-lg {
-    font-size: clamp(2.65rem, calc(.75rem + 9.5vw), 3.55rem);
+    font-size: clamp(2.625rem, 8vw, 3.5rem);
   }
 
   .type-home-hero {
-    font-size: clamp(2.9rem, calc(.8rem + 10.5vw), 3.75rem);
+    font-size: clamp(2.875rem, 10vw, 3.75rem);
   }
 
   .type-page-actualidade {
-    font-size: clamp(2.55rem, calc(.7rem + 9.25vw), 3.35rem);
+    font-size: clamp(2.5rem, 8vw, 3.25rem);
   }
 
   .type-page-materiais {
-    font-size: clamp(3.45rem, calc(1.3rem + 10.75vw), 4.35rem);
+    font-size: clamp(3.375rem, 10vw, 4.25rem);
   }
 
   .type-page-short {
-    font-size: clamp(3.2rem, calc(1.5rem + 8.5vw), 4rem);
+    font-size: clamp(3.125rem, 9vw, 4rem);
   }
 
   .type-article-title {
-    font-size: clamp(1.95rem, calc(1.22rem + 3.65vw), 2.35rem);
+    font-size: clamp(1.875rem, 5vw, 2.375rem);
   }
 
   .type-content-page-title,
   .type-material-title {
-    font-size: clamp(2.2rem, calc(1.2rem + 5vw), 2.8rem);
+    font-size: clamp(2.125rem, 6vw, 2.75rem);
   }
 
   .type-feature-title {
-    font-size: clamp(1.75rem, calc(1.2rem + 2.75vw), 2.05rem);
+    font-size: clamp(1.75rem, 5vw, 2.125rem);
   }
 
   .type-index-feature-title {
-    font-size: clamp(1.75rem, calc(.9rem + 4.25vw), 2.2rem);
+    font-size: clamp(1.75rem, 5vw, 2.25rem);
   }
 }
 
 @media (max-width: 23rem) {
   .display {
-    letter-spacing: -0.025em;
+    letter-spacing: -0.022em;
     line-height: .98;
   }
 
   .type-home-hero {
-    font-size: clamp(2.45rem, calc(1.15rem + 6.5vw), 2.9rem);
+    font-size: clamp(2.4rem, 7vw, 2.8rem);
   }
 
   .type-page-actualidade {
-    font-size: clamp(2.1rem, calc(.8rem + 6.5vw), 2.55rem);
+    font-size: clamp(2.05rem, 6vw, 2.45rem);
   }
 
   .type-page-materiais {
-    font-size: clamp(2.85rem, calc(1.1rem + 8.75vw), 3.45rem);
+    font-size: clamp(2.75rem, 8vw, 3.25rem);
   }
 
   .type-page-short {
-    font-size: clamp(2.75rem, calc(1.45rem + 6.5vw), 3.2rem);
+    font-size: clamp(2.65rem, 8vw, 3.05rem);
   }
 
   .type-display-section,
   .type-display-section-lg,
   .type-footer-claim {
-    font-size: clamp(2.25rem, calc(1.1rem + 5.75vw), 2.75rem);
+    font-size: clamp(2.2rem, 7vw, 2.65rem);
   }
 }

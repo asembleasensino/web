@@ -22,8 +22,8 @@ import images from "../data/martes-gallery.json";
     <div class="mb-5 flex items-center justify-between px-4 md:px-8">
       <p class="text-xs font-black uppercase tracking-wider text-ink/50"><span id="gallery-position">01</span> / {String(images.length).padStart(2, "0")}</p>
       <div class="flex gap-2">
-        <button class="focus-ring grid h-11 w-11 place-items-center border border-ink text-xl disabled:opacity-30" id="gallery-prev" type="button" aria-label="Fotografía anterior">←</button>
-        <button class="focus-ring grid h-11 w-11 place-items-center bg-ink text-xl text-paper disabled:opacity-30" id="gallery-next" type="button" aria-label="Fotografía seguinte">→</button>
+        <button class="focus-ring grid h-11 w-11 place-items-center rounded-[4px] border border-ink text-xl disabled:opacity-30" id="gallery-prev" type="button" aria-label="Fotografía anterior">←</button>
+        <button class="focus-ring grid h-11 w-11 place-items-center rounded-[4px] bg-ink text-xl text-paper disabled:opacity-30" id="gallery-next" type="button" aria-label="Fotografía seguinte">→</button>
       </div>
     </div>
     <div id="martes-gallery" class="scrollbar-hidden flex snap-x snap-mandatory gap-3 overflow-x-auto px-4 pb-4 md:gap-5 md:px-8">
@@ -34,8 +34,8 @@ import images from "../data/martes-gallery.json";
               src={image.src}
               alt={image.alt}
               class:list={[
-                "h-full w-full object-cover transition duration-300",
-                image.monochrome ? "grayscale contrast-[1.08]" : "",
+                "h-full w-full object-cover",
+                image.monochrome ? "grayscale contrast-[1.12] saturate-[.8]" : "",
               ]}
               loading={index === 0 ? "eager" : "lazy"}
               decoding="async"
@@ -78,7 +78,7 @@ import images from "../data/martes-gallery.json";
     };
     const move = (direction: -1 | 1) => {
       const target = Math.min(Math.max(currentIndex() + direction, 0), slides.length - 1);
-      slides[target]?.scrollIntoView({ behavior: "smooth", inline: "center", block: "nearest" });
+      slides[target]?.scrollIntoView({ behavior: "auto", inline: "center", block: "nearest" });
     };
     previous.addEventListener("click", () => move(-1));
     next.addEventListener("click", () => move(1));

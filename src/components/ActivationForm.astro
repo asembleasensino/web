@@ -20,7 +20,7 @@ const centrosJson = JSON.stringify(centrosDisponibles).replace(/</g, "\\u003c");
         <label class="mb-2 block text-xs font-bold" for="centro-search">Centro educativo</label>
         <div class="relative">
           <input
-            class="focus-ring w-full border border-ink/30 bg-transparent px-4 py-3"
+            class="focus-ring w-full rounded-[4px] border border-ink/30 bg-transparent px-4 py-3"
             id="centro-search"
             autocomplete="off"
             role="combobox"
@@ -32,29 +32,29 @@ const centrosJson = JSON.stringify(centrosDisponibles).replace(/</g, "\\u003c");
           />
           <input id="centro-codigo" name="centroCodigo" type="hidden" />
           <input id="centro-nome" name="centro" type="hidden" />
-          <div id="centre-results" role="listbox" class="absolute z-20 mt-1 hidden max-h-64 w-full overflow-y-auto border border-ink/30 bg-paper"></div>
+          <div id="centre-results" role="listbox" class="absolute z-20 mt-1 hidden max-h-64 w-full overflow-y-auto rounded-[4px] border border-ink/30 bg-paper"></div>
         </div>
         <p class="mt-2 text-xs text-ink/55">Só aparecen centros que aínda non constan como activos.</p>
       </div>
       <div class="grid gap-5 sm:grid-cols-2">
         <div>
           <label class="mb-2 block text-xs font-bold" for="nome">O teu nome</label>
-          <input class="focus-ring w-full border border-ink/30 bg-transparent px-4 py-3" id="nome" name="nome" required autocomplete="name" />
+          <input class="focus-ring w-full rounded-[4px] border border-ink/30 bg-transparent px-4 py-3" id="nome" name="nome" required autocomplete="name" />
         </div>
         <div>
           <label class="mb-2 block text-xs font-bold" for="email">Correo electrónico</label>
-          <input class="focus-ring w-full border border-ink/30 bg-transparent px-4 py-3" id="email" name="email" required type="email" autocomplete="email" />
+          <input class="focus-ring w-full rounded-[4px] border border-ink/30 bg-transparent px-4 py-3" id="email" name="email" required type="email" autocomplete="email" />
         </div>
       </div>
       <div>
         <label class="mb-2 block text-xs font-bold" for="mensaxe">Cóntanos o necesario <span class="font-normal text-ink/50">(opcional)</span></label>
-        <textarea class="focus-ring min-h-28 w-full resize-y border border-ink/30 bg-transparent px-4 py-3" id="mensaxe" name="mensaxe"></textarea>
+        <textarea class="focus-ring min-h-28 w-full resize-y rounded-[4px] border border-ink/30 bg-transparent px-4 py-3" id="mensaxe" name="mensaxe"></textarea>
       </div>
       <label class="flex items-start gap-3 text-xs leading-relaxed">
         <input class="mt-1 accent-red" type="checkbox" name="consent" value="accepted" required />
         <span>Acepto que AAEP empregue estes datos para contactar comigo sobre a creación dunha asemblea.</span>
       </label>
-      <button class="focus-ring justify-self-start bg-ink px-6 py-4 text-xs font-black uppercase tracking-wider text-paper hover:bg-green" type="submit">
+      <button class="focus-ring justify-self-start rounded-[4px] bg-ink px-6 py-4 text-xs font-black uppercase tracking-wider text-paper hover:bg-green" type="submit">
         Enviar solicitude
       </button>
       <p id="form-status" class="hidden text-sm font-bold" role="status"></p>

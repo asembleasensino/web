@@ -30,8 +30,8 @@ const convocatorias = actualidade
           <p class="text-lg leading-relaxed">
             {home.heroIntroduction}
           </p>
-          <a href="#mapa" class="focus-ring mt-7 flex items-center justify-between border-t border-ink pt-4 text-xs font-black uppercase tracking-wider no-underline">
-            Explora a rede <span class="text-xl">↓</span>
+          <a href="#mapa" class="focus-ring mt-7 flex items-center border-t border-ink pt-4 text-xs font-black uppercase tracking-wider no-underline transition-colors hover:border-red hover:text-red">
+            Explora a rede
           </a>
         </div>
       </div>
@@ -80,7 +80,7 @@ const convocatorias = actualidade
       <div>
         <h2 class="display type-display-section">Actualidade</h2>
       </div>
-      <a href="/actualidade" class="hidden text-xs font-black uppercase tracking-wider underline decoration-red decoration-2 underline-offset-4 sm:block">Ver todas →</a>
+      <a href="/actualidade" class="hidden text-xs font-black uppercase tracking-wider underline decoration-red decoration-2 underline-offset-4 sm:block">Ver todas</a>
     </div>
     <div class="grid gap-10 lg:grid-cols-12 lg:gap-0">
       <a href={actualidadeUrl(novas[0])} class="group border-b border-ink/25 pb-10 no-underline lg:col-span-7 lg:border-r lg:border-b-0 lg:pb-0 lg:pr-12">
@@ -92,7 +92,6 @@ const convocatorias = actualidade
           {novas[0].data.title}
         </h3>
         <p class="mt-8 max-w-xl text-base leading-relaxed text-ink/65">{novas[0].data.summary}</p>
-        <span class="mt-10 block text-xl" aria-hidden="true">→</span>
       </a>
       <div class="lg:col-span-5 lg:pl-12 lg:pt-16">
         {novas.slice(1).map((nova, index) => (
