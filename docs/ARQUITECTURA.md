@@ -94,6 +94,12 @@ a `src/data/comarcas-aliases.json`. Para unha actualización oficial completa, i
 
 `scripts/archive/` contén procesos históricos só para trazabilidade. Non forman parte da operación normal.
 
+### Peso do catálogo no cliente (revisado 31/08/2026)
+
+`ActivationForm.astro`, `martes-en-loita.astro` e `AssemblyMap.astro` len cada un `centros.ts` por separado e envían o seu propio subconxunto ao navegador (JSON inline os dous primeiros, un *chunk* de Vite illado o mapa). Medido sobre un build real: a portada carga ≈22,7 KB (HTML, gzip) máis ≈87 KB (JS do mapa, gzip) só para estes datos; `/martes-en-loita/` carga ≈24 KB adicionais. Non é un problema de corrección —cada compoñente xa pide só os campos que precisa— senón de reutilización: os tres nunca comparten caché de rede entre si nin entre páxinas, e o *chunk* do mapa invalídase enteiro con calquera cambio no compoñente aínda que os datos non cambien.
+
+**Decisión (31/08/2026): non se optimiza agora.** Os números reais son moderados para o tráfico esperado, e o cambio natural (un único `fetch()` a un JSON público cacheable, compartido polos tres compoñentes) toca tres fluxos de busca de cara ao público (activación de asemblea, envío de fotos de Martes en loita, mapa) que non se puideron probar visualmente nesta sesión de traballo por falta de acceso a un navegador real conectado ao servidor de desenvolvemento. Retómese cando: (a) o catálogo de centros creza significativamente, ou (b) se detecte queixa real de rendemento en móbil, o que sexa antes.
+
 ## Fronteiras deliberadas
 
 - Os contidos editoriais non viven en compoñentes.

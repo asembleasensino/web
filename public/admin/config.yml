@@ -27,6 +27,7 @@ collections:
       - { label: Tipo, name: type, widget: string, default: Nova, hint: "Valores recomendados: Nova, Comunicado, Convocatoria, Tribuna docente ou Crónica. Se engades un tipo novo, anótao tamén en “Tipos de contido”." }
       - { label: Resumo, name: summary, widget: text }
       - { label: Imaxe de cabeceira, name: image, widget: image, required: false, hint: "As imaxes editoriais pequenas poden gardarse no repositorio. As fotografías de arquivo deben permanecer en Drive." }
+      - { label: Texto alternativo da imaxe, name: imageAlt, widget: string, required: false, hint: "Describe o que se ve na imaxe para persoas que usan lector de pantalla. Deixa baleiro só se a imaxe é puramente decorativa." }
       - { label: Destacar, name: featured, widget: boolean, default: false, required: false }
       - { label: Data e hora do evento, name: eventDate, widget: datetime, required: false, hint: "Só para convocatorias. Permite que apareza automaticamente en Próximas convocatorias." }
       - { label: Lugar do evento, name: eventLocation, widget: string, required: false }
@@ -46,6 +47,7 @@ collections:
       - { label: Etiquetas, name: tags, widget: list, required: false }
       - { label: Ligazón pública de Google Drive, name: driveUrl, widget: string, pattern: ['^https://drive\.google\.com/.+', "Debe ser unha ligazón pública de Google Drive"], hint: "En Drive: Compartir → Acceso xeral → Calquera persoa coa ligazón → Lector." }
       - { label: Imaxe de cabeceira, name: image, widget: image, required: false }
+      - { label: Texto alternativo da imaxe, name: imageAlt, widget: string, required: false, hint: "Describe o que se ve na imaxe para persoas que usan lector de pantalla. Deixa baleiro só se a imaxe é puramente decorativa." }
       - { label: Destacar, name: featured, widget: boolean, default: false, required: false }
       - { label: Borrador técnico, name: draft, widget: boolean, default: false, required: false }
       - { label: Descrición, name: body, widget: markdown }
@@ -60,6 +62,7 @@ collections:
       - { label: Título, name: title, widget: string }
       - { label: Resumo, name: summary, widget: text, hint: "Utilízase na cabeceira e nos buscadores." }
       - { label: Imaxe de cabeceira, name: image, widget: image, required: false }
+      - { label: Texto alternativo da imaxe, name: imageAlt, widget: string, required: false, hint: "Describe o que se ve na imaxe para persoas que usan lector de pantalla. Deixa baleiro só se a imaxe é puramente decorativa." }
       - { label: Borrador técnico, name: draft, widget: boolean, default: false, required: false }
       - { label: Corpo, name: body, widget: markdown }
 
