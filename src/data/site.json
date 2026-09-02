@@ -19,11 +19,6 @@
     { "label": "Activa o teu centro", "href": "/#participa", "primary": true }
   ],
   "footerNavigation": [
-    { "label": "Mapa da rede", "href": "/#mapa" },
-    { "label": "A rede", "href": "/a-rede/" },
-    { "label": "Actualidade", "href": "/actualidade/" },
-    { "label": "Materiais", "href": "/materiais/" },
-    { "label": "Martes en loita", "href": "/martes-en-loita/" },
     { "label": "Aviso legal e privacidade", "href": "/aviso-legal/" }
   ],
   "footerClaim": "O público\norganízase."
