@@ -34,6 +34,14 @@ Sen este binding, `POST /api/solicitudes` responde `503` e non acepta datos.
 
 R2 é unha copia de seguridade operativa das fotografías; Google Drive segue sendo o arquivo de traballo.
 
+### KV do censo do referendo
+
+1. Crea un namespace KV, por exemplo `aaep-censo-referendo`.
+2. No proxecto Pages: **Settings → Bindings → Add → KV namespace**.
+3. Nome exacto do binding: `CENSO_REFERENDO`.
+
+Sen este binding, `POST /api/referendo-censo` responde `503` e a páxina `/referendo/` non pode gardar inscricións. A páxina `/xestion/censo-referendo.html` (protexida por Cloudflare Access, ver punto 6) permite consultar e exportar en CSV as persoas inscritas.
+
 ## 3. Variables e segredos
 
 Configura en **Settings → Variables and Secrets**:

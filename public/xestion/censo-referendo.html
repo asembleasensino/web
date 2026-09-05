@@ -1,0 +1,92 @@
+<!doctype html>
+<html lang="gl">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Censo do referendo · AAEP</title>
+    <style>
+      :root { font-family: Inter, Arial, sans-serif; color: #252321; background: #f2f0ec; }
+      body { margin: 0; padding: 2rem; }
+      main { max-width: 1100px; margin: auto; }
+      header { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 1rem; align-items: end; border-bottom: 2px solid; padding-bottom: 1rem; }
+      h1 { margin: 0; font-size: clamp(3rem, 9vw, 7rem); line-height: .85; text-transform: uppercase; letter-spacing: -.05em; }
+      a { color: inherit; font-weight: 700; }
+      .actions { display: flex; flex-wrap: wrap; gap: .5rem; }
+      button { border: 1px solid; background: transparent; padding: .55rem .75rem; font: inherit; font-weight: 700; cursor: pointer; }
+      button:disabled { opacity: .5; cursor: default; }
+      .count { margin: 1.5rem 0 0; font-weight: 700; }
+      table { width: 100%; border-collapse: collapse; margin-top: 1rem; font-size: .92rem; }
+      th, td { text-align: left; padding: .6rem .5rem; border-bottom: 1px solid #25232122; }
+      th { font-size: .75rem; text-transform: uppercase; letter-spacing: .05em; color: #25232199; }
+      .error { padding: 1rem; background: #c94a42; color: #f2f0ec; margin-top: 1.5rem; }
+      @media (max-width: 650px) { body { padding: 1rem; } }
+    </style>
+  </head>
+  <body>
+    <main>
+      <header>
+        <h1>Censo</h1>
+        <div class="actions">
+          <button id="download-csv" disabled>Descargar CSV</button>
+          <a href="/referendo/">Ver a páxina pública →</a>
+        </div>
+      </header>
+      <p class="count" id="count">Cargando censo…</p>
+      <table id="table" hidden>
+        <thead><tr><th>Correo</th><th>Inscrición</th><th>Última actualización</th></tr></thead>
+        <tbody id="rows"></tbody>
+      </table>
+    </main>
+    <script>
+      const escapeHtml = (value = "") => String(value).replace(/[&<>"']/g, (character) => ({
+        "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#039;"
+      })[character]);
+
+      let inscricions = [];
+
+      fetch("/api/referendo-censo")
+        .then((response) => {
+          if (!response.ok) throw new Error("Acceso non autorizado");
+          return response.json();
+        })
+        .then(({ inscricions: data }) => {
+          inscricions = data || [];
+          const count = document.querySelector("#count");
+          const table = document.querySelector("#table");
+          const rows = document.querySelector("#rows");
+          if (!inscricions.length) {
+            count.textContent = "Aínda non hai ninguén inscrito no censo.";
+            return;
+          }
+          count.textContent = `${inscricions.length} persoas inscritas.`;
+          table.hidden = false;
+          rows.innerHTML = inscricions.map((item) => `
+            <tr>
+              <td><a href="mailto:${encodeURIComponent(item.email)}">${escapeHtml(item.email)}</a></td>
+              <td>${new Date(item.createdAt).toLocaleString("gl")}</td>
+              <td>${new Date(item.updatedAt).toLocaleString("gl")}</td>
+            </tr>
+          `).join("");
+          document.querySelector("#download-csv").disabled = false;
+        })
+        .catch((error) => {
+          document.querySelector("#count").textContent = "";
+          document.querySelector("main").insertAdjacentHTML("beforeend", `<p class="error">${error.message}. Esta páxina debe estar protexida con Cloudflare Access.</p>`);
+        });
+
+      document.querySelector("#download-csv").addEventListener("click", () => {
+        const header = "correo,inscricion,actualizacion\n";
+        const body = inscricions.map((item) => [item.email, item.createdAt, item.updatedAt].join(",")).join("\n");
+        const blob = new Blob([header + body], { type: "text/csv;charset=utf-8" });
+        const url = URL.createObjectURL(blob);
+        const link = document.createElement("a");
+        link.href = url;
+        link.download = `censo-referendo-${new Date().toISOString().slice(0, 10)}.csv`;
+        document.body.appendChild(link);
+        link.click();
+        link.remove();
+        URL.revokeObjectURL(url);
+      });
+    </script>
+  </body>
+</html>
