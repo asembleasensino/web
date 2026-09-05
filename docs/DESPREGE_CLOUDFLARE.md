@@ -17,30 +17,33 @@ Cloudflare detecta automaticamente o directorio raíz `functions/`. O ficheiro `
 
 ## 2. Crear almacenamento
 
+### Bindings de KV/R2: xestiónanse en `wrangler.jsonc`, non no panel
+
+Cloudflare pode xestionar os bindings deste proxecto a través do ficheiro `wrangler.jsonc` do repositorio en vez de na pantalla **Settings → Bindings** (se o panel amosa o aviso "Bindings for this project are being managed through wrangler.toml", é este o caso). Cando é así:
+
+1. Crea o namespace/bucket coma sempre, pero dende as seccións xerais da conta (**KV** e **R2** no menú principal de Cloudflare), non dentro do proxecto de Pages.
+2. Copia o ID que che dá (nos namespaces KV; un bucket R2 non ten ID, abonda co nome).
+3. Engade a entrada correspondente en `wrangler.jsonc`, por exemplo:
+
+   ```jsonc
+   "kv_namespaces": [
+     { "binding": "SOLICITUDES", "id": "<id-do-namespace>" },
+     { "binding": "CENSO_REFERENDO", "id": "<id-do-namespace>" }
+   ]
+   ```
+4. Fai commit e push do cambio a `main`; Cloudflare recolle os bindings novos no seguinte despregue.
+
 ### KV obrigatorio
 
-1. Crea un namespace KV, por exemplo `aaep-solicitudes`.
-2. No proxecto Pages: **Settings → Bindings → Add → KV namespace**.
-3. Nome exacto do binding: `SOLICITUDES`.
-4. Asóciao en produción e previews se se van probar formularios.
+Namespace KV `aaep-solicitudes`, binding exacto `SOLICITUDES`. Sen el, `POST /api/solicitudes` responde `503` e non acepta datos.
 
-Sen este binding, `POST /api/solicitudes` responde `503` e non acepta datos.
+### R2 opcional
 
-### R2 recomendado
-
-1. Crea un bucket privado, por exemplo `aaep-martes-media`.
-2. Engade un binding R2 chamado `MARTES_MEDIA`.
-3. Define unha política de retención e copia de seguridade.
-
-R2 é unha copia de seguridade operativa das fotografías; Google Drive segue sendo o arquivo de traballo.
+Bucket R2 `aaep-martes-media`, binding `MARTES_MEDIA`, para gardar unha copia de respaldo das fotografías de "Martes en loita" ademais de Drive. O plan gratuíto de Cloudflare inclúe R2 con límites; se non se quere activar (por exemplo, por evitar calquera paso que pida datos de facturación), pódese omitir sen problema: a Function funciona igual só con Drive, simplemente sen copia de respaldo.
 
 ### KV do censo do referendo
 
-1. Crea un namespace KV, por exemplo `aaep-censo-referendo`.
-2. No proxecto Pages: **Settings → Bindings → Add → KV namespace**.
-3. Nome exacto do binding: `CENSO_REFERENDO`.
-
-Sen este binding, `POST /api/referendo-censo` responde `503` e a páxina `/referendo/` non pode gardar inscricións. A páxina `/xestion/censo-referendo.html` (protexida por Cloudflare Access, ver punto 6) permite consultar e exportar en CSV as persoas inscritas.
+Namespace KV `aaep-censo-referendo`, binding exacto `CENSO_REFERENDO`. Sen el, `POST /api/referendo-censo` responde `503` e a páxina `/referendo/` non pode gardar inscricións. A páxina `/xestion/censo-referendo.html` (protexida por Cloudflare Access, ver punto 6) permite consultar e exportar en CSV as persoas inscritas.
 
 ## 3. Variables e segredos
 
