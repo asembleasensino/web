@@ -143,7 +143,6 @@ collections:
             fields:
               - { label: Nome, name: nome, widget: string }
               - { label: Ligazón de WhatsApp, name: whatsapp, widget: string, required: false }
-              - { label: Ligazón ao arquivo, name: arquivo, widget: string, required: false }
           - { label: Normas de participación, name: normas, widget: list }
       - label: Asembleas
         name: asembleas

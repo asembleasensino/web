@@ -4,15 +4,46 @@
   "comunidadeWhatsapp": "",
   "textoWhatsapp": "A comunidade de WhatsApp reúne os grupos territoriais e de traballo da rede. As ligazóns de acceso publícanse e actualízanse nesta páxina.",
   "grupos": [
-    { "nome": "A Coruña e comarca", "whatsapp": "", "arquivo": "https://asembleasensino.gal/tag/norte/" },
-    { "nome": "Barbanza", "whatsapp": "", "arquivo": "https://asembleasensino.gal/tag/barbanza/" },
-    { "nome": "Compostela e comarca", "whatsapp": "", "arquivo": "https://asembleasensino.gal/tag/compostela/" },
-    { "nome": "Costa da Morte", "whatsapp": "", "arquivo": "https://asembleasensino.gal/tag/costa-da-morte/" },
-    { "nome": "Ferrolterra", "whatsapp": "", "arquivo": "https://asembleasensino.gal/tag/norte/" },
-    { "nome": "Ourense norte", "whatsapp": "", "arquivo": "" },
-    { "nome": "Ourense sur", "whatsapp": "", "arquivo": "" },
-    { "nome": "Pontevedra", "whatsapp": "", "arquivo": "" },
-    { "nome": "Pontevedra Sur", "whatsapp": "", "arquivo": "https://asembleasensino.gal/tag/pontevedra-sur/" }
+    {
+      "nome": "Comunidade: Asembleas Abertas do Ensino Público - Galiza",
+      "whatsapp": ""
+    },
+    {
+      "nome": "A Coruña e comarca",
+      "whatsapp": ""
+    },
+    {
+      "nome": "Barbanza",
+      "whatsapp": ""
+    },
+    {
+      "nome": "Compostela e comarca",
+      "whatsapp": ""
+    },
+    {
+      "nome": "Costa da Morte",
+      "whatsapp": ""
+    },
+    {
+      "nome": "Ferrolterra",
+      "whatsapp": ""
+    },
+    {
+      "nome": "Ourense norte",
+      "whatsapp": ""
+    },
+    {
+      "nome": "Ourense sur",
+      "whatsapp": ""
+    },
+    {
+      "nome": "Pontevedra",
+      "whatsapp": ""
+    },
+    {
+      "nome": "Pontevedra Sur",
+      "whatsapp": ""
+    }
   ],
   "normas": [
     "Identifícate co teu nome e co centro educativo ao entrar.",
