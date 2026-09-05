@@ -39,9 +39,12 @@ export const onRequestPost: PagesFunction<Env> = async ({ request, env }) => {
     return Response.json({ ok: false, error: "Formato ou tamaño non admitido" }, { status: 400 });
   }
 
-  const safe = (value: string) => value.normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/[^a-zA-Z0-9._-]+/g, "-");
+  // O guión de Instagram le "Centro - Concello.ext" tal cal, así que mantemos
+  // acentos, eñes e maiúsculas orixinais; só quitamos caracteres que rompen
+  // un nome de ficheiro e recortamos espazos sobrantes.
+  const forFilename = (value: string) => value.trim().replace(/[\\/:*?"<>|]+/g, "").replace(/\s+/g, " ");
   const extension = foto.type === "image/png" ? "png" : foto.type === "image/webp" ? "webp" : "jpg";
-  const filename = `${safe(centro)}-${safe(concello)}.${extension}`;
+  const filename = `${forFilename(centro)} - ${forFilename(concello)}.${extension}`;
   const key = `${data}/${filename}`;
   const bytes = await foto.arrayBuffer();
 
