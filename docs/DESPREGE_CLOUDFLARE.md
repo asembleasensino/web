@@ -51,7 +51,7 @@ Configura en **Settings → Variables and Secrets**:
 
 | Nome | Tipo | Obrigatorio | Uso |
 | --- | --- | --- | --- |
-| `ADMIN_EMAILS` | variable | si | Correos autorizados, separados por comas |
+| `XESTION_PASSWORD` | secret | si | Contrasinal compartido para entrar en `/xestion/*` |
 | `GITHUB_CLIENT_ID` | variable/secret | si | OAuth de Decap CMS |
 | `GITHUB_CLIENT_SECRET` | secret | si | OAuth de Decap CMS |
 | `RESEND_API_KEY` | secret | recomendado | Notificación de solicitudes |
@@ -91,18 +91,15 @@ O panel `/admin/` sobrescribe en tempo de execución o `base_url` de Decap co do
 
 Un fallo de correo non perde a solicitude: queda gardada en KV e rexístrase o erro.
 
-## 6. Cloudflare Access
+## 6. Acceso a /xestion/
 
-Protexe a aplicación `https://asembleasensino.gal/xestion/*`:
+Cloudflare Access esixe ter un método de pago rexistrado mesmo no plan gratuíto, así que este proxecto non o usa para `/xestion/*`. En troques, `functions/xestion/_middleware.ts` protexe todo o que hai baixo esa ruta cun contrasinal compartido (autenticación HTTP básica): calquera petición sen el recibe `401` e o navegador pide usuario e contrasinal (o usuario non se comproba, só o contrasinal).
 
-1. Zero Trust → Access → Applications → Add self-hosted application.
-2. Dominio: `asembleasensino.gal`; path: `/xestion/*`.
-3. Política Allow limitada aos correos administradores.
-4. Conserva a mesma lista en `ADMIN_EMAILS`.
+1. Configura o segredo `XESTION_PASSWORD` en Cloudflare (ver punto 3).
+2. Os endpoints `GET`/`PATCH` de `/api/solicitudes` e `GET` de `/api/referendo-censo` comproban ese mesmo contrasinal na cabeceira `Authorization`. Non se debe protexer `/api/solicitudes` completo porque o `POST` é público.
+3. O navegador reutiliza automaticamente o contrasinal xa introducido en `/xestion/*` para esas chamadas, ao ser o mesmo dominio.
 
-O endpoint GET comproba ademais a cabeceira `Cf-Access-Authenticated-User-Email`. Non se debe protexer `/api/solicitudes` completo porque o POST é público.
-
-Recoméndase crear unha segunda aplicación Access para `/admin/*`, limitada ás persoas editoras. O callback `/api/callback` debe quedar fóra desa regra para completar OAuth.
+`/admin/*` (Decap CMS) segue usando OAuth de GitHub, sen relación con isto.
 
 Antes de abrir os formularios ao público, crea regras de rate limiting para `POST /api/solicitudes` e `POST /api/martes-en-loita`. Se aparece spam sostido, o seguinte paso é engadir Cloudflare Turnstile; non se activa por defecto para non introducir outra credencial e dependencia sen unha decisión operativa.
 

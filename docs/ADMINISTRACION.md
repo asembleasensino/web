@@ -71,15 +71,14 @@ Configura:
 - `GOOGLE_APPS_SCRIPT_SECRET`: segredo compartido co script;
 - instala `apps-script/MartesEnLoita.gs` e configura como carpeta raíz `accions/martes_loita/imaxes/imaxes`.
 
-O script valida que a data sexa martes, crea ou reutiliza a carpeta `AAAA-MM-DD` e garda dentro a fotografía como `Centro-Concello.ext`. Se xa existe, engade un número ao nome.
+O script valida que a data sexa martes, crea ou reutiliza a carpeta `AAAA-MM-DD` e garda dentro a fotografía como `Centro - Concello.ext` (mantendo acentos e eñes, para o guión de Instagram). Se xa existe, engade un número ao nome.
 
 ## Configuración externa obrigatoria antes de publicar
 
 - crear a OAuth App de GitHub e cargar as credenciais;
 - crear e vincular o KV `SOLICITUDES`;
-- establecer `ADMIN_EMAILS` como lista de correos separados por comas;
+- establecer `XESTION_PASSWORD` (contrasinal compartido para `/xestion/*`, ver punto 6 de DESPREGE_CLOUDFLARE.md);
 - configurar Resend para as notificacións por correo;
-- protexer `/xestion/*` con Cloudflare Access;
 - configurar R2 e o webhook de Google Drive.
 
 Consulta `DESPREGE_CLOUDFLARE.md` para o procedemento completo e `FLUXO_EDITORIAL.md` para a guía de uso.

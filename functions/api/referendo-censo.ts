@@ -1,6 +1,6 @@
 interface Env {
   CENSO_REFERENDO?: KVNamespace;
-  ADMIN_EMAILS?: string;
+  XESTION_PASSWORD?: string;
 }
 
 function normalizeEmail(value: string) {
@@ -8,12 +8,19 @@ function normalizeEmail(value: string) {
 }
 
 function canAdminister(request: Request, env: Env) {
-  const email = request.headers.get("Cf-Access-Authenticated-User-Email")?.toLocaleLowerCase();
-  const allowed = (env.ADMIN_EMAILS || "")
-    .split(",")
-    .map((item) => item.trim().toLocaleLowerCase())
-    .filter(Boolean);
-  return Boolean(email && allowed.includes(email));
+  // Xestión de acceso propia (sen Cloudflare Access): un contrasinal
+  // compartido, enviado como autenticación HTTP básica.
+  if (!env.XESTION_PASSWORD) return false;
+  const header = request.headers.get("Authorization");
+  if (!header || !header.startsWith("Basic ")) return false;
+  let decoded: string;
+  try {
+    decoded = atob(header.slice(6));
+  } catch {
+    return false;
+  }
+  const password = decoded.includes(":") ? decoded.slice(decoded.indexOf(":") + 1) : decoded;
+  return password === env.XESTION_PASSWORD;
 }
 
 export const onRequestGet: PagesFunction<Env> = async ({ request, env }) => {
