@@ -17,7 +17,7 @@ Tras un curso histórico en canto a mobilizacións, comezaremos 2026/2027 no pun
 
 Con ese obxectivo, tal como se acordou na pasada **Asemblea Xeral do 25 de xuño**, cómpre pensar e decidir como nos imos organizar internamente. Temos que definir entre todas as diferentes funcións, roles, tarefas e relacións dos distintos espazos que foron agromando de xeito espontáneo e improvisado baixo o paraugas deste movemento asambleario. Por iso, o **26 de setembro** celebraremos unha **Xornada de Organización aberta a todo o profesorado**.
 
-Para facilitar o traballo de reflexión colectiva, o Grupo de Traballo de Organización, propoñemos traballar a partir dunha **táboa** –que se achega ao final desta mensaxe en forma de enlace– como documento guía. Cada asemblea de centro completará os ocos baleiros coa súa proposta, previamente debatida. Aquí tedes unha captura de pantalla da táboa para que entendades rapidamente a idea:
+Para facilitar o traballo de reflexión colectiva, o Grupo de Traballo de Organización, propoñemos traballar a partir dunha **táboa** –que se achega ao final desta mensaxe en forma de enlace– como documento guía. Cada asemblea de centro completará os ocos baleiros coa súa proposta, previamente debatida. ![Aquí](https://drive.google.com/file/d/1tBh1NsuQPruYQAY6tc3pkppoi9FtRS1T/view?usp=sharing) tedes unha captura de pantalla da táboa para que entendades rapidamente a idea:
 
 Propoñémosvos tamén o seguinte calendario para chegar a esa data con todo o traballo previo feito e poder así aproveitar ao máximo á Xornada.
 
