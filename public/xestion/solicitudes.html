@@ -33,8 +33,19 @@
       const escapeHtml = (value = "") => String(value).replace(/[&<>"']/g, (character) => ({
         "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#039;"
       })[character]);
-      fetch("/api/solicitudes")
+
+      function xestionAuthHeader() {
+        let password = sessionStorage.getItem("aaep-xestion-password");
+        if (password === null) {
+          password = window.prompt("Contrasinal de xestión:") || "";
+          sessionStorage.setItem("aaep-xestion-password", password);
+        }
+        return "Basic " + btoa(":" + password);
+      }
+
+      fetch("/api/solicitudes", { headers: { Authorization: xestionAuthHeader() } })
         .then((response) => {
+          if (response.status === 401) sessionStorage.removeItem("aaep-xestion-password");
           if (!response.ok) throw new Error("Acceso non autorizado");
           return response.json();
         })
@@ -70,7 +81,7 @@
         button.disabled = true;
         const response = await fetch("/api/solicitudes", {
           method: "PATCH",
-          headers: { "content-type": "application/json" },
+          headers: { "content-type": "application/json", Authorization: xestionAuthHeader() },
           body: JSON.stringify({ id: button.dataset.id, estado: button.dataset.state }),
         });
         if (response.ok) location.reload();

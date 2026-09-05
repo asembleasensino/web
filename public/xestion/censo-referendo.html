@@ -44,8 +44,18 @@
 
       let inscricions = [];
 
-      fetch("/api/referendo-censo")
+      function xestionAuthHeader() {
+        let password = sessionStorage.getItem("aaep-xestion-password");
+        if (password === null) {
+          password = window.prompt("Contrasinal de xestión:") || "";
+          sessionStorage.setItem("aaep-xestion-password", password);
+        }
+        return "Basic " + btoa(":" + password);
+      }
+
+      fetch("/api/referendo-censo", { headers: { Authorization: xestionAuthHeader() } })
         .then((response) => {
+          if (response.status === 401) sessionStorage.removeItem("aaep-xestion-password");
           if (!response.ok) throw new Error("Acceso non autorizado");
           return response.json();
         })

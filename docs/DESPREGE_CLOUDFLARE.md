@@ -93,11 +93,11 @@ Un fallo de correo non perde a solicitude: queda gardada en KV e rexístrase o e
 
 ## 6. Acceso a /xestion/
 
-Cloudflare Access esixe ter un método de pago rexistrado mesmo no plan gratuíto, así que este proxecto non o usa para `/xestion/*`. En troques, `functions/xestion/_middleware.ts` protexe todo o que hai baixo esa ruta cun contrasinal compartido (autenticación HTTP básica): calquera petición sen el recibe `401` e o navegador pide usuario e contrasinal (o usuario non se comproba, só o contrasinal).
+Cloudflare Access esixe ter un método de pago rexistrado mesmo no plan gratuíto, así que este proxecto non o usa para `/xestion/*`. En troques, a protección real vive nos propios endpoints da API (non nas páxinas estáticas, que non conteñen datos por si mesmas):
 
 1. Configura o segredo `XESTION_PASSWORD` en Cloudflare (ver punto 3).
-2. Os endpoints `GET`/`PATCH` de `/api/solicitudes` e `GET` de `/api/referendo-censo` comproban ese mesmo contrasinal na cabeceira `Authorization`. Non se debe protexer `/api/solicitudes` completo porque o `POST` é público.
-3. O navegador reutiliza automaticamente o contrasinal xa introducido en `/xestion/*` para esas chamadas, ao ser o mesmo dominio.
+2. Os endpoints `GET`/`PATCH` de `/api/solicitudes` e `GET` de `/api/referendo-censo` esixen ese contrasinal na cabeceira `Authorization` (autenticación HTTP básica); sen el, ou con outro distinto, responden `401`. Non se debe protexer `/api/solicitudes` completo porque o `POST` é público.
+3. As páxinas `public/xestion/solicitudes.html` e `public/xestion/censo-referendo.html` piden ese contrasinal cun `prompt()` de JavaScript a primeira vez, gárdano en `sessionStorage` (só nesa pestana, mentres estea aberta) e engádeno como cabeceira `Authorization` en cada petición. Non se depende de que o navegador reenvíe só a autenticación HTTP nativa, xa que ese comportamento non é fiable en todos os navegadores.
 
 `/admin/*` (Decap CMS) segue usando OAuth de GitHub, sen relación con isto.
 
