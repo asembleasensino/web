@@ -2,6 +2,7 @@
 import BaseLayout from "../layouts/BaseLayout.astro";
 import AssemblyMap from "../components/AssemblyMap.astro";
 import ActivationForm from "../components/ActivationForm.astro";
+import ArrowIcon from "../components/ArrowIcon.astro";
 import { actualidadeUrl, formatDate, getActualidade, isType } from "../lib/content";
 import home from "../data/home.json";
 
@@ -141,7 +142,7 @@ const convocatorias = actualidade
               <h3 class:list={["font-extrabold", index === 0 ? "text-2xl" : "text-lg"]}>{evento.data.title}</h3>
               <p class="mt-1 text-sm text-ink/55">{evento.data.eventLocation || formatDate(evento.data.eventDate!)}</p>
             </div>
-            <span aria-hidden="true" class="text-2xl">↗</span>
+            <ArrowIcon direction="up-right" aria-hidden="true" class="h-6 w-6" />
           </a>
         ))}
       </div>

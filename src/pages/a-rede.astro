@@ -2,6 +2,7 @@
 import BaseLayout from "../layouts/BaseLayout.astro";
 import rede from "../data/rede.json";
 import { site } from "../config/site";
+import ArrowIcon from "../components/ArrowIcon.astro";
 ---
 
 <BaseLayout title={`A rede · ${site.shortName}`}>
@@ -32,7 +33,7 @@ import { site } from "../config/site";
           <article class="grid gap-3 border-t border-paper/25 py-5 last:border-b sm:grid-cols-[minmax(0,1fr)_auto] sm:items-center sm:gap-5">
             <h3 class="text-xl font-bold">{grupo.nome}</h3>
             <div class="flex flex-wrap gap-x-5 gap-y-2 text-xs font-bold uppercase tracking-wider text-paper/65">
-              {grupo.whatsapp ? <a class="text-paper" href={grupo.whatsapp}>WhatsApp ↗</a> : <span>Ligazón pendente</span>}
+              {grupo.whatsapp ? <a class="text-paper inline-flex items-center gap-1.5" href={grupo.whatsapp}>WhatsApp <ArrowIcon direction="up-right" /></a> : <span>Ligazón pendente</span>}
             </div>
           </article>
         ))}

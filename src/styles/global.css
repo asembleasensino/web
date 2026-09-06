@@ -65,6 +65,29 @@ input[type="file"] {
   overflow: hidden;
 }
 
+/*
+ * input[type=date]: en Safari de iOS o control nativo pode impor un ancho
+ * mínimo propio (para caber "dd/mm/aaaa" + a icona nativa) que ignora o
+ * `width: 100%`, e o campo acaba vendose máis ancho ca o resto do
+ * formulario. Quitamos por completo a aparencia nativa (nós xa debuxamos
+ * a nosa propia icona de calendario ao carón) para que o ancho o controle
+ * só o noso CSS, coma calquera outro campo de texto.
+ */
+.date-input-reset {
+  -webkit-appearance: none;
+  appearance: none;
+  background: none;
+}
+.date-input-reset::-webkit-calendar-picker-indicator {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  opacity: 0;
+  cursor: pointer;
+}
+
 button,
 a {
   overflow-wrap: break-word;

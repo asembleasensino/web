@@ -1,6 +1,7 @@
 ---
 import images from "../data/martes-gallery.json";
 import { martesEnLoitaEdition } from "../config/site";
+import ArrowIcon from "./ArrowIcon.astro";
 ---
 
 <section class="overflow-hidden border-t border-ink/20 py-20 md:py-28">
@@ -23,8 +24,8 @@ import { martesEnLoitaEdition } from "../config/site";
     <div class="mb-5 flex items-center justify-between px-4 md:px-8">
       <p class="text-xs font-black uppercase tracking-wider text-ink/50"><span id="gallery-position">01</span> / {String(images.length).padStart(2, "0")}</p>
       <div class="flex gap-2">
-        <button class="focus-ring grid h-11 w-11 place-items-center rounded-[4px] border border-ink text-xl disabled:opacity-30" id="gallery-prev" type="button" aria-label="Fotografía anterior">←</button>
-        <button class="focus-ring grid h-11 w-11 place-items-center rounded-[4px] bg-ink text-xl text-paper disabled:opacity-30" id="gallery-next" type="button" aria-label="Fotografía seguinte">→</button>
+        <button class="focus-ring grid h-11 w-11 place-items-center rounded-[4px] border border-ink text-xl disabled:opacity-30" id="gallery-prev" type="button" aria-label="Fotografía anterior"><ArrowIcon direction="left" class="h-5 w-5" /></button>
+        <button class="focus-ring grid h-11 w-11 place-items-center rounded-[4px] bg-ink text-xl text-paper disabled:opacity-30" id="gallery-next" type="button" aria-label="Fotografía seguinte"><ArrowIcon direction="right" class="h-5 w-5" /></button>
       </div>
     </div>
     <div id="martes-gallery" class="scrollbar-hidden flex snap-x snap-mandatory gap-3 overflow-x-auto px-4 pb-4 md:gap-5 md:px-8">
