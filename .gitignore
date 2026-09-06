@@ -56,6 +56,10 @@ pnpm-debug.log*
 *.swp
 *~
 
+# Ficheiros que a app de escritorio de Claude garda localmente
+# (copia local dos ficheiros entregados no chat; non forman parte do sitio)
+/Claude outputs/
+
 # Sistema operativo e editores
 .DS_Store
 ._*
