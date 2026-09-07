@@ -60,11 +60,12 @@ collections:
         required: false
         hint: "Só para infografías tipo 'reparto de horas por categorías'. Deixa baleiro para un material normal."
         fields:
-          - { label: Total de horas, name: totalHoras, widget: number, value_type: float }
+          - { label: Total de horas, name: totalHoras, widget: number, value_type: float, required: false }
           - { label: Nota do total, name: totalNota, widget: string, required: false, hint: "Por exemplo: 28 horas de presenza no centro + 9,5 horas sen presenza obrigada" }
           - label: Categorías
             name: categorias
             widget: list
+            required: false
             summary: "{{fields.nome}} — {{fields.horas}} h"
             fields:
               - { label: Nome, name: nome, widget: string, hint: "Por exemplo: Carácter lectivo" }

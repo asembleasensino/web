@@ -56,7 +56,19 @@ const materiais = defineCollection({
     driveUrl: z.url().optional(),
     fonteTitulo: z.string().optional(),
     fonteUrl: z.url().optional(),
-    desglose: desgloseSchema.optional(),
+    // O widget "object" de Decap CMS non impide gardar esta sección a
+    // medias (por exemplo, só "Total de horas" cuberto, sen ningunha
+    // "Categoría") cando se toca sen chegar a completala -- típico nun
+    // material que xa ten a súa propia páxina (`href`) e non necesita
+    // desglose ningún. Tratamos ese caso coma se non houbese desglose, en
+    // vez de facer fallar toda a build por un dato incompleto e non usado.
+    desglose: z.preprocess((value) => {
+      const categorias = (value as { categorias?: unknown } | null | undefined)?.categorias;
+      if (value && typeof value === "object" && !(Array.isArray(categorias) && categorias.length > 0)) {
+        return undefined;
+      }
+      return value;
+    }, desgloseSchema.optional()),
     image: z.string().optional(),
     imageAlt: z.string().optional(),
     featured: z.boolean().default(false),
