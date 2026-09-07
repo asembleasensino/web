@@ -21,7 +21,7 @@ fonteUrl: https://www.edu.xunta.gal/portal/sites/web/files/resolucion_instrucion
 featured: false
 draft: false
 desglose:
-  totalHoras: 0
+  totalHoras: ""
 ---
 
 Esta ficha resume o apartado primeiro da resolución. Para casos individuais ou organización do centro, debe contrastarse sempre co texto completo e coas instrucións que correspondan.
