@@ -80,6 +80,11 @@ for (const [collectionName, expectedOptions] of Object.entries(contentTypes)) {
   if (!Array.isArray(expectedOptions) || expectedOptions.some((item) => typeof item !== "string" || !item.trim())) {
     fail(`src/data/content-types.json: ${collectionName} debe ser unha lista de textos non baleiros`);
   }
+  // Non todas as claves de content-types.json son coleccións de Decap: algunhas
+  // (p.ex. "gruposDeTraballo") son só listas de referencia cos valores
+  // suxeridos dun campo doutra colección (como `materiais.grupo`), sen
+  // colección propia que comprobar aquí.
+  if (!collectionNames.has(collectionName)) continue;
   const collection = (decap.collections || []).find((item) => item.name === collectionName);
   const typeField = collection?.fields?.find((field) => field.name === "type");
   if (typeField?.widget !== "string") {
