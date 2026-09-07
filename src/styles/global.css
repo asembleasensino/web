@@ -8,6 +8,12 @@
   --color-green: #355a2c;
   --font-display: "Arial Narrow", "Helvetica Neue Condensed", "Roboto Condensed", sans-serif;
   --font-sans: Inter, "Helvetica Neue", Arial, sans-serif;
+  /* Sombra dura "de tarxeta impresa" (sen desenfoque), en dous tamaños.
+     Antes cada sitio escribía o seu propio valor solto (3px nun, 4px
+     noutro) -- agora é unha escala de dous chanzos con nome, en vez de
+     dous números soltos que parecían un descoido. */
+  --shadow-hard-sm: 3px 3px 0 rgb(37 35 33 / .16);
+  --shadow-hard: 4px 4px 0 rgb(37 35 33 / .16);
 }
 
 :root {
@@ -19,6 +25,38 @@
   --rule-hair: color-mix(in srgb, var(--color-ink) 22%, transparent);
   --rule-strong: color-mix(in srgb, var(--color-ink) 72%, transparent);
   --paper-fibre: color-mix(in srgb, var(--color-ink) 4%, transparent);
+
+  /*
+   * Escala de tamaños dos titulares "display", de menor a maior. Antes
+   * cada .type-* de embaixo traía o seu propio clamp() solto (18 clases,
+   * moitas moi próximas entre si pero case nunca literalmente
+   * reutilizadas). Os dous pares que xa eran idénticos -- editorial-section
+   * / step-number, e display-section / footer-claim -- comparten agora un
+   * só valor (step-05 e step-09). O resto NON se fusionou aínda tendo
+   * máximos moi próximos: a velocidade de crecemento (o vw) está afinada a
+   * propósito segundo onde vive cada titular -- por exemplo step-01
+   * (card-title) medra amodo (2vw) porque vive dentro de tarxetas
+   * estreitas, mentres que step-03 (intro-statement), con case o mesmo
+   * tamaño máximo, vive a toda anchura. Forzalos ao mesmo valor podería
+   * reproducir o mesmo desbordamento que xa arranxamos nas páxinas de
+   * horario.
+   */
+  --text-step-01: clamp(1.5rem, 2vw, 1.875rem);   /* type-card-title */
+  --text-step-02: clamp(1.875rem, 3vw, 2.5rem);   /* type-list-title-lg */
+  --text-step-03: clamp(1.5rem, 5vw, 2.5rem);     /* type-intro-statement */
+  --text-step-04: clamp(2.25rem, 4vw, 3rem);      /* type-material-feature */
+  --text-step-05: clamp(2.25rem, 7vw, 3.75rem);   /* type-editorial-section, type-step-number */
+  --text-step-06: clamp(2.25rem, 4.5vw, 4.5rem);  /* type-feature-title */
+  --text-step-07: clamp(2.25rem, 5vw, 5.25rem);   /* type-index-feature-title */
+  --text-step-08: clamp(2.5rem, 6vw, 5.75rem);    /* type-article-title */
+  --text-step-09: clamp(3rem, 8vw, 4.5rem);       /* type-display-section, type-footer-claim */
+  --text-step-10: clamp(3.75rem, 10vw, 6rem);     /* type-display-section-lg */
+  --text-step-11: clamp(3rem, 7vw, 7rem);         /* type-material-title */
+  --text-step-12: clamp(3rem, 8vw, 7.5rem);       /* type-content-page-title */
+  --text-step-13: clamp(3.5rem, 12vw, 10rem);     /* type-page-actualidade */
+  --text-step-14: clamp(4rem, 10vw, 10.5rem);     /* type-home-hero */
+  --text-step-15: clamp(4.25rem, 10vw, 9rem);     /* type-page-short */
+  --text-step-16: clamp(4.75rem, 12vw, 10rem);    /* type-page-materiais */
 }
 
 html {
@@ -132,75 +170,75 @@ h3 {
 }
 
 .type-home-hero {
-  font-size: clamp(4rem, 10vw, 10.5rem);
+  font-size: var(--text-step-14);
 }
 
 .type-page-actualidade {
-  font-size: clamp(3.5rem, 12vw, 10rem);
+  font-size: var(--text-step-13);
 }
 
 .type-page-materiais {
-  font-size: clamp(4.75rem, 12vw, 10rem);
+  font-size: var(--text-step-16);
 }
 
 .type-page-short {
-  font-size: clamp(4.25rem, 10vw, 9rem);
+  font-size: var(--text-step-15);
 }
 
 .type-article-title {
-  font-size: clamp(2.5rem, 6vw, 5.75rem);
+  font-size: var(--text-step-08);
 }
 
 .type-content-page-title {
-  font-size: clamp(3rem, 8vw, 7.5rem);
+  font-size: var(--text-step-12);
 }
 
 .type-material-title {
-  font-size: clamp(3rem, 7vw, 7rem);
+  font-size: var(--text-step-11);
 }
 
 .type-feature-title {
-  font-size: clamp(2.25rem, 4.5vw, 4.5rem);
+  font-size: var(--text-step-06);
 }
 
 .type-index-feature-title {
-  font-size: clamp(2.25rem, 5vw, 5.25rem);
+  font-size: var(--text-step-07);
 }
 
 .type-display-section {
-  font-size: clamp(3rem, 8vw, 4.5rem);
+  font-size: var(--text-step-09);
 }
 
 .type-display-section-lg {
-  font-size: clamp(3.75rem, 10vw, 6rem);
+  font-size: var(--text-step-10);
 }
 
 .type-footer-claim {
-  font-size: clamp(3rem, 8vw, 4.5rem);
+  font-size: var(--text-step-09);
 }
 
 .type-editorial-section {
-  font-size: clamp(2.25rem, 7vw, 3.75rem);
+  font-size: var(--text-step-05);
 }
 
 .type-card-title {
-  font-size: clamp(1.5rem, 2vw, 1.875rem);
+  font-size: var(--text-step-01);
 }
 
 .type-step-number {
-  font-size: clamp(2.25rem, 7vw, 3.75rem);
+  font-size: var(--text-step-05);
 }
 
 .type-list-title-lg {
-  font-size: clamp(1.875rem, 3vw, 2.5rem);
+  font-size: var(--text-step-02);
 }
 
 .type-intro-statement {
-  font-size: clamp(1.5rem, 5vw, 2.5rem);
+  font-size: var(--text-step-03);
 }
 
 .type-material-feature {
-  font-size: clamp(2.25rem, 4vw, 3rem);
+  font-size: var(--text-step-04);
 }
 
 .eyebrow {
@@ -237,7 +275,7 @@ h3 {
   border-radius: 4px;
   background: var(--color-paper);
   color: var(--color-ink);
-  box-shadow: 4px 4px 0 rgb(37 35 33 / .16);
+  box-shadow: var(--shadow-hard);
 }
 
 .leaflet-popup-content { margin: 1rem; min-width: 210px; }
