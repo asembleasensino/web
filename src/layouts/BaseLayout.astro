@@ -1,6 +1,7 @@
 ---
 import "../styles/global.css";
 import SiteNavigation from "../components/SiteNavigation.astro";
+import BrandMark from "../components/BrandMark.astro";
 import { currentYear, site } from "../config/site";
 
 interface Props {
@@ -39,7 +40,7 @@ const {
     <header class="border-b border-ink/20 bg-paper">
       <div class="mx-auto flex max-w-[1500px] items-center justify-between px-4 py-4 md:px-8">
         <a href="/" class="focus-ring flex items-center gap-3 no-underline" aria-label={`${site.shortName}, portada`}>
-          <span class="grid h-9 w-9 place-items-center rounded-[4px] bg-ink text-sm font-black text-paper">AA</span>
+          <BrandMark class="h-9 w-9" />
           <span class="max-w-44 text-[11px] font-extrabold uppercase leading-[1.05] tracking-[.1em]">
             {site.brandLines.map((line) => <>{line}<br /></>)}
           </span>

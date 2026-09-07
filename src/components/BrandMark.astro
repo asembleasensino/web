@@ -1,0 +1,19 @@
+---
+// A icona oficial da AAEP (o símbolo "A" nun cadrado, co acento vermello
+// "en punto"): a mesma marca usada coma favicon e nas redes sociais. Ver
+// o paquete de identidade visual do equipo (01_LOGOS-OFICIAIS/icona/).
+// Substitúe o antigo texto "AA" que facía de icona na cabeceira.
+interface Props {
+  class?: string;
+}
+const { class: className = "" } = Astro.props;
+---
+
+<svg aria-hidden="true" viewBox="0 0 64 64" class:list={["shrink-0", className]}>
+  <rect width="64" height="64" rx="7" fill="var(--color-ink)" />
+  <path
+    d="M13 47 25 16h14l12 31H39l-2-7H26l-2 7H13Zm16-17h5l-2-8h-1l-2 8Z"
+    fill="var(--color-paper)"
+  />
+  <rect x="47" y="11" width="7" height="7" fill="var(--color-red)" />
+</svg>
