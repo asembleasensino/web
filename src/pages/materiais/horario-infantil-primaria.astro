@@ -8,7 +8,7 @@ const description = "Resumo visual e comprobador interactivo do horario semanal 
 ---
 
 <BaseLayout title={title} description={description}>
-<article class="page">  <div class="topline"> <div class="edition">Información · Curso 2026/27</div> <div class="meta">Educación infantil e educación primaria</div> </div>  <section class="hero"> <div> <h1 class="display">Horario<br>infantil e primaria</h1> </div>  <div class="hero-copy"> <div class="kicker">Como se configura a xornada semanal</div> <p class="intro"> Resumo visual da <strong> <a class="norm-link"
+<article class="page">  <section class="hero"> <div> <h1 class="display">Horario<br>infantil e primaria</h1> </div>  <div class="hero-copy"> <div class="kicker">Como se configura a xornada semanal</div> <p class="intro"> Resumo visual da <strong> <a class="norm-link"
              href="https://www.edu.xunta.gal/portal/sites/web/files/resolucion_instrucions_xornada_de_traballo_docente_2026_2027_sin.pdf"
              target="_blank"
              rel="noopener noreferrer">Resolución do 16 de xuño de 2026</a> </strong> para o persoal docente que imparte educación infantil e educación primaria.
@@ -50,22 +50,6 @@ const description = "Resumo visual e comprobador interactivo do horario semanal 
       padding:34px 0 84px;
     }
 
-    .topline{
-      display:flex;
-      justify-content:space-between;
-      align-items:center;
-      gap:20px;
-      padding-bottom:18px;
-      border-bottom:1px solid var(--line);
-      margin-bottom:42px;
-      font-size:.76rem;
-      text-transform:uppercase;
-      letter-spacing:.12em;
-      font-weight:800;
-    }
-
-    .topline .edition{color:var(--red)}
-    .topline .meta{color:var(--muted)}
 
     .hero{
       display:grid;
@@ -787,7 +771,6 @@ const description = "Resumo visual e comprobador interactivo do horario semanal 
 
     @media(max-width:620px){
       .page{width:min(100% - 24px,var(--max));padding-top:18px}
-      .topline{margin-bottom:28px}
       h1{font-size:clamp(4.2rem,21vw,7rem)}
       .field-grid,.summary-grid{grid-template-columns:1fr}
       .sim-head,.sim-form,.sim-result{padding-left:20px;padding-right:20px}
