@@ -47,6 +47,7 @@ collections:
       - { label: Resumo, name: summary, widget: text }
       - { label: Etiquetas, name: tags, widget: list, required: false }
       - { label: Ligazón pública de Google Drive, name: driveUrl, widget: string, required: false, pattern: ['^https://drive\.google\.com/.+', "Debe ser unha ligazón pública de Google Drive"], hint: "Opcional. En Drive: Compartir → Acceso xeral → Calquera persoa coa ligazón → Lector." }
+      - { label: "Páxina propia (só uso técnico)", name: href, widget: string, required: false, hint: "NON editar sen falar antes co equipo técnico. Só para ferramentas interactivas feitas a medida (por exemplo, un comprobador de horario) que teñen a súa propia páxina programada. Deixa baleiro para calquera material normal: se se indica, a tarxeta e a busca en /materiais/ enlazan aquí en vez de xerar a ficha automática." }
       - { label: Fonte legal ou normativa (título), name: fonteTitulo, widget: string, required: false, hint: "Opcional, para citar de onde sae a información. Por exemplo: Resolución do 16 de xuño de 2026..." }
       - { label: Fonte legal ou normativa (ligazón ao DOG ou outra fonte oficial), name: fonteUrl, widget: string, required: false }
       - { label: Imaxe de cabeceira, name: image, widget: image, required: false }

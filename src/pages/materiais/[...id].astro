@@ -6,7 +6,9 @@ import { site } from "../../config/site";
 import ArrowIcon from "../../components/ArrowIcon.astro";
 
 export async function getStaticPaths() {
-  const entries = await getCollection("materiais", ({ data }) => !data.draft);
+  // As entradas con `href` propio (páxinas feitas a medida) non xeran páxina
+  // xenérica aquí: xa teñen a súa propia ruta Astro.
+  const entries = await getCollection("materiais", ({ data }) => !data.draft && !data.href);
   return entries.map((entry) => ({
     params: { id: entry.id.replace(/\.(md|mdx)$/i, "") },
     props: { entry },

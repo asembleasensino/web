@@ -54,5 +54,8 @@ export function actualidadeUrl(entry: ActualidadeEntry) {
 }
 
 export function materialUrl(entry: MaterialEntry) {
-  return `/materiais/${entrySlug(entry)}/`;
+  // Algúns materiais (ferramentas interactivas feitas a medida, non xerables
+  // desde o esquema xenérico) apuntan a unha páxina Astro propia en vez de
+  // á páxina xenérica desta colección. Ver `href` en content.config.ts.
+  return entry.data.href || `/materiais/${entrySlug(entry)}/`;
 }
