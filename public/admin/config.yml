@@ -42,15 +42,44 @@ collections:
     fields:
       - { label: Título, name: title, widget: string }
       - { label: Data de publicación, name: date, widget: datetime }
-      - { label: Tipo, name: type, widget: string, default: Recurso, hint: "Valores recomendados: Modelo, Recurso, Guía, Documento legal, Cartaz ou Presentación. Se engades un tipo novo, anótao tamén en “Tipos de contido”." }
+      - { label: Tipo, name: type, widget: string, default: Recurso, hint: "Valores recomendados: Modelo, Recurso, Guía, Documento legal, Infografía, Cartaz ou Presentación. Se engades un tipo novo, anótao tamén en “Tipos de contido”." }
+      - { label: Grupo de traballo, name: grupo, widget: string, required: false, hint: "Quen o elaborou, se procede (por exemplo: Información). Deixa baleiro se non pertence a ningún grupo en concreto." }
       - { label: Resumo, name: summary, widget: text }
       - { label: Etiquetas, name: tags, widget: list, required: false }
-      - { label: Ligazón pública de Google Drive, name: driveUrl, widget: string, pattern: ['^https://drive\.google\.com/.+', "Debe ser unha ligazón pública de Google Drive"], hint: "En Drive: Compartir → Acceso xeral → Calquera persoa coa ligazón → Lector." }
+      - { label: Ligazón pública de Google Drive, name: driveUrl, widget: string, required: false, pattern: ['^https://drive\.google\.com/.+', "Debe ser unha ligazón pública de Google Drive"], hint: "Opcional. En Drive: Compartir → Acceso xeral → Calquera persoa coa ligazón → Lector." }
+      - { label: Fonte legal ou normativa (título), name: fonteTitulo, widget: string, required: false, hint: "Opcional, para citar de onde sae a información. Por exemplo: Resolución do 16 de xuño de 2026..." }
+      - { label: Fonte legal ou normativa (ligazón ao DOG ou outra fonte oficial), name: fonteUrl, widget: string, required: false }
       - { label: Imaxe de cabeceira, name: image, widget: image, required: false }
       - { label: Texto alternativo da imaxe, name: imageAlt, widget: string, required: false, hint: "Describe o que se ve na imaxe para persoas que usan lector de pantalla. Deixa baleiro só se a imaxe é puramente decorativa." }
       - { label: Destacar, name: featured, widget: boolean, default: false, required: false }
       - { label: Borrador técnico, name: draft, widget: boolean, default: false, required: false }
-      - { label: Descrición, name: body, widget: markdown }
+      - label: Desglose de horas (opcional, para infografías)
+        name: desglose
+        widget: object
+        required: false
+        hint: "Só para infografías tipo 'reparto de horas por categorías'. Deixa baleiro para un material normal."
+        fields:
+          - { label: Total de horas, name: totalHoras, widget: number, value_type: float }
+          - { label: Nota do total, name: totalNota, widget: string, required: false, hint: "Por exemplo: 28 horas de presenza no centro + 9,5 horas sen presenza obrigada" }
+          - label: Categorías
+            name: categorias
+            widget: list
+            summary: "{{fields.nome}} — {{fields.horas}} h"
+            fields:
+              - { label: Nome, name: nome, widget: string, hint: "Por exemplo: Carácter lectivo" }
+              - { label: Horas, name: horas, widget: number, value_type: float }
+              - { label: Require presenza no centro, name: presenza, widget: boolean, default: true }
+              - { label: Funcións / a que se dedican, name: funcions, widget: list, field: { label: Función, name: value, widget: string } }
+          - { label: Regra práctica, name: reglaPractica, widget: text, required: false }
+          - label: Notas adicionais
+            name: notas
+            widget: list
+            required: false
+            summary: "{{fields.titulo}}"
+            fields:
+              - { label: Título, name: titulo, widget: string }
+              - { label: Texto, name: texto, widget: text }
+      - { label: Descrición / corpo adicional, name: body, widget: markdown, required: false, hint: "Texto libre opcional (por exemplo, contexto extra ou referencias). Nas infografías amósase debaixo do desglose." }
 
   - name: paxinas
     label: Páxinas
@@ -179,3 +208,9 @@ collections:
             summary: "{{fields.value}}"
             field: { label: Tipo, name: value, widget: string }
             hint: "Lista de referencia para que o equipo use categorías coherentes nos materiais."
+          - label: Grupos de traballo
+            name: gruposDeTraballo
+            widget: list
+            summary: "{{fields.value}}"
+            field: { label: Grupo, name: value, widget: string }
+            hint: "Lista de referencia dos grupos de traballo que poden asinar un material (por exemplo: Información)."

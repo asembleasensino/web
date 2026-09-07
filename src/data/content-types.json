@@ -1,4 +1,21 @@
 {
-  "actualidade": ["Nova", "Comunicado", "Convocatoria", "Tribuna docente", "Crónica"],
-  "materiais": ["Modelo", "Recurso", "Guía", "Documento legal", "Cartaz", "Presentación"]
+  "actualidade": [
+    "Nova",
+    "Comunicado",
+    "Convocatoria",
+    "Tribuna docente",
+    "Crónica"
+  ],
+  "materiais": [
+    "Modelo",
+    "Recurso",
+    "Guía",
+    "Documento legal",
+    "Cartaz",
+    "Presentación",
+    "Infografía"
+  ],
+  "gruposDeTraballo": [
+    "Información"
+  ]
 }

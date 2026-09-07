@@ -39,6 +39,12 @@ export function formatDate(date: Date, options: Intl.DateTimeFormatOptions = {})
   }).format(date);
 }
 
+// En galego (coma en castelán) o separador decimal é a coma, non o punto:
+// "9,5", non "9.5". toLocaleString("gl-ES") encárgase diso.
+export function formatHoras(value: number) {
+  return value.toLocaleString("gl-ES", { maximumFractionDigits: 1 });
+}
+
 export function entrySlug(entry: { id: string }) {
   return entry.id.replace(/\.(md|mdx)$/i, "");
 }
