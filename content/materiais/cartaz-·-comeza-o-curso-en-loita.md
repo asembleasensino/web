@@ -7,6 +7,7 @@ summary: Comparte a información das asembleas, participa nas accións e anima o
   profesorado a organizarse por unhas condicións laborais dignas e un ensino
   público de calidade.
 driveUrl: https://drive.google.com/drive/folders/1lVX5jlL25c9ZWPsF5NFUVAiXP2654J0z?usp=drive_link
+image: /uploads/comeza-loita.jpeg
 featured: false
 draft: false
 desglose:
