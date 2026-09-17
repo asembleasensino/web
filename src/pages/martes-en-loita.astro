@@ -79,7 +79,7 @@ const centrosJson = JSON.stringify(centros).replace(/</g, "\\u003c");
           <input class="mt-1 accent-green" type="checkbox" name="autorizacion" value="confirmed" required />
           <span>Declaro que podo facilitar esta fotografía á AAEP para o seu arquivo e posible publicación nas súas canles, nas condicións indicadas no <a class="underline decoration-green underline-offset-2" href="/aviso-legal/" target="_blank" rel="noopener">aviso de privacidade</a>.</span>
         </label>
-        <button class="focus-ring justify-self-start rounded-[4px] bg-ink px-6 py-4 text-xs font-black uppercase tracking-wider text-paper" type="submit">Enviar fotografía</button>
+        <button class="focus-ring justify-self-start rounded-[4px] bg-ink px-6 py-4 text-xs font-black uppercase tracking-wider text-paper disabled:cursor-wait disabled:opacity-60" type="submit" data-idle-label="Enviar fotografía" data-loading-label="Subindo a imaxe…">Enviar fotografía</button>
         <p id="martes-status" class="hidden text-sm font-bold" role="status"></p>
       </form>
     </div>
@@ -139,8 +139,10 @@ const centrosJson = JSON.stringify(centros).replace(/</g, "\\u003c");
       validateTuesday();
       dateInput.reportValidity();
     });
+    let isSubmitting = false;
     form?.addEventListener("submit", async (event) => {
       event.preventDefault();
+      if (isSubmitting) return;
       if (!centreCode?.value) {
         centreSearch?.setCustomValidity("Selecciona un centro da lista.");
         centreSearch?.reportValidity();
@@ -151,8 +153,17 @@ const centrosJson = JSON.stringify(centros).replace(/</g, "\\u003c");
         dateInput?.reportValidity();
         return;
       }
-      const button = form.querySelector<HTMLButtonElement>("button");
-      if (button) button.disabled = true;
+      const button = form.querySelector<HTMLButtonElement>('button[type="submit"]');
+      isSubmitting = true;
+      form.setAttribute("aria-busy", "true");
+      if (button) {
+        button.disabled = true;
+        button.textContent = button.dataset.loadingLabel || "Subindo a imaxe…";
+      }
+      if (status) {
+        status.textContent = "Subindo a imaxe. Pode tardar uns segundos; non peches esta páxina nin premas outra vez.";
+        status.classList.remove("hidden");
+      }
       try {
         const response = await fetch(form.action, { method: "POST", body: new FormData(form) });
         if (!response.ok) throw new Error();
@@ -170,7 +181,12 @@ const centrosJson = JSON.stringify(centros).replace(/</g, "\\u003c");
           status.classList.remove("hidden");
         }
       } finally {
-        if (button) button.disabled = false;
+        isSubmitting = false;
+        form.removeAttribute("aria-busy");
+        if (button) {
+          button.disabled = false;
+          button.textContent = button.dataset.idleLabel || "Enviar fotografía";
+        }
       }
     });
   </script>
