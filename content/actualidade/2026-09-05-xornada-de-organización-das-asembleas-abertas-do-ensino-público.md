@@ -10,12 +10,12 @@ summary: O 26 de setembro celebraremos en Santiago de Compostela unha Xornada de
 image: /uploads/whatsapp-image-2026-09-01-at-17.21.59.jpeg
 featured: true
 eventDate: 2026-09-26T10:30:00.000+02:00
-eventLocation: Santiago de Compostela (en breve publicarase o lugar concreto)
+eventLocation: Centro Cívico Romaño-Vista Alegre (Santiago de Compostela)
 draft: false
 ---
 Tras un curso histórico en canto a mobilizacións, comezaremos 2026/2027 no punto que o deixamos. Pensando, compartindo e loitando xuntos. As Asembleas Abertas do Ensino Público poden e deben seguir servindo como ferramenta para conseguir mellorar a situación da educación pública.
 
-Con ese obxectivo, tal como se acordou na pasada **Asemblea Xeral do 25 de xuño**, cómpre pensar e decidir como nos imos organizar internamente. Temos que definir entre todas as diferentes funcións, roles, tarefas e relacións dos distintos espazos que foron agromando de xeito espontáneo e improvisado baixo o paraugas deste movemento. Por iso, o **26 de setembro** celebraremos unha **Xornada de Organización aberta a todo o profesorado**.
+Con ese obxectivo, tal como se acordou na pasada **Asemblea Xeral do 25 de xuño**, cómpre pensar e decidir como nos imos organizar internamente. Temos que definir entre todas as diferentes funcións, roles, tarefas e relacións dos distintos espazos que foron agromando de xeito espontáneo e improvisado baixo o paraugas deste movemento. Por iso, o **26 de setembro** celebraremos unha **Xornada de Organización aberta a todo o profesorado no [Centro Cívico Romaño-Vista Alegre](https://maps.app.goo.gl/kj2bdh3jCeXd7ztGA).**
 
 Para facilitar o traballo de reflexión colectiva, o Grupo de Traballo de Organización, propoñemos traballar a partir dunha **táboa** –que se achega ao final desta mensaxe en forma de enlace– como documento guía. Cada asemblea de centro completará os ocos baleiros coa súa proposta, previamente debatida. Máis abaixo tedes a ligazón á táboa para que entendades rapidamente a idea.
 
