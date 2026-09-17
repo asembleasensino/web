@@ -7,7 +7,7 @@ summary: O 26 de setembro celebraremos en Santiago de Compostela unha Xornada de
   funcionamento, os roles e os espazos das Asembleas Abertas do Ensino Público.
   Antes desa data, cada asemblea de centro poderá debater e enviar as súas
   propostas.
-image: /uploads/whatsapp-image-2026-09-01-at-17.21.59.jpeg
+image: ""
 featured: true
 eventDate: 2026-09-26T10:30:00.000+02:00
 eventLocation: Centro Cívico Romaño-Vista Alegre (Santiago de Compostela)
@@ -43,3 +43,7 @@ O **26 de setembro** temos pois unha cita imprescindíbel na que as asembleas do
 Este é o cartafol para subir as táboas de centros e comarcas:
 
 [Cartafol para subir as táboas de centros e comarcas](https://drive.google.com/drive/folders/1im4FaTTf1dtrLDy-XZoE7d1nzoWBQrTo?usp=share_link)
+
+### Post de Instagram
+
+[Preme aquí para ver o cartaz en Instagram](https://www.instagram.com/p/Dc8eokvgv7X/?utm_source=ig_web_copy_link&stkn=MzRlODBiNWFlZA==)
