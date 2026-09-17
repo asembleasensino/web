@@ -43,3 +43,7 @@ O **26 de setembro** temos pois unha cita imprescindíbel na que as asembleas do
 Este é o cartafol para subir as táboas de centros e comarcas:
 
 [Cartafol para subir as táboas de centros e comarcas](https://drive.google.com/drive/folders/1im4FaTTf1dtrLDy-XZoE7d1nzoWBQrTo?usp=share_link)
+
+### Post de Instagram
+
+[Preme aquí para ver o cartaz en Instagram](https://www.instagram.com/p/Dc8eokvgv7X/?utm_source=ig_web_copy_link&stkn=MzRlODBiNWFlZA==)
