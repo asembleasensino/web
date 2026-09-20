@@ -13,7 +13,7 @@ eventDate: 2026-09-26T10:30:00.000+02:00
 eventLocation: Centro Cívico Romaño-Vista Alegre (Santiago de Compostela)
 draft: false
 ---
-[![Cartaz das Xornadas de Organización](/uploads/xornadas-organizacion-cartaz-rrss.jpg)](/uploads/xornadas-organizacion-cartaz-print.jpg)
+[![Cartaz das Xornadas de Organización](/uploads/xornadas-organizacion-cartaz-rrss.jpg)](https://drive.google.com/file/d/18C21zEumN_SCaBLORo5azzkiWFKnRipJ/view?usp=sharing)
 
 Tras un curso histórico en canto a mobilizacións, comezaremos 2026/2027 no punto que o deixamos. Pensando, compartindo e loitando xuntos. As Asembleas Abertas do Ensino Público poden e deben seguir servindo como ferramenta para conseguir mellorar a situación da educación pública.
 
