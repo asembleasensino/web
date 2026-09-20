@@ -13,6 +13,8 @@ eventDate: 2026-09-26T10:30:00.000+02:00
 eventLocation: Centro Cívico Romaño-Vista Alegre (Santiago de Compostela)
 draft: false
 ---
+[![Cartaz das Xornadas de Organización](/uploads/xornadas-organizacion-cartaz-rrss.jpg)](/uploads/xornadas-organizacion-cartaz-print.jpg)
+
 Tras un curso histórico en canto a mobilizacións, comezaremos 2026/2027 no punto que o deixamos. Pensando, compartindo e loitando xuntos. As Asembleas Abertas do Ensino Público poden e deben seguir servindo como ferramenta para conseguir mellorar a situación da educación pública.
 
 Con ese obxectivo, tal como se acordou na pasada **Asemblea Xeral do 25 de xuño**, cómpre pensar e decidir como nos imos organizar internamente. Temos que definir entre todas as diferentes funcións, roles, tarefas e relacións dos distintos espazos que foron agromando de xeito espontáneo e improvisado baixo o paraugas deste movemento. Por iso, o **26 de setembro** celebraremos unha **Xornada de Organización aberta a todo o profesorado no [Centro Cívico Romaño-Vista Alegre](https://maps.app.goo.gl/kj2bdh3jCeXd7ztGA).**
@@ -47,5 +49,3 @@ Este é o cartafol para subir as táboas de centros e comarcas:
 ### Post de Instagram
 
 [Preme aquí para ver o cartaz en Instagram](https://www.instagram.com/p/Dc8eokvgv7X/?utm_source=ig_web_copy_link&stkn=MzRlODBiNWFlZA==)
-
-![Cartaz das Xornadas de Organización](/uploads/xornadas-organizacion-cartaz-rrss.jpg)
