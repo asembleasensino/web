@@ -47,3 +47,5 @@ Este é o cartafol para subir as táboas de centros e comarcas:
 ### Post de Instagram
 
 [Preme aquí para ver o cartaz en Instagram](https://www.instagram.com/p/Dc8eokvgv7X/?utm_source=ig_web_copy_link&stkn=MzRlODBiNWFlZA==)
+
+![Cartaz das Xornadas de Organización](/uploads/xornadas-organizacion-cartaz-rrss.jpg)
