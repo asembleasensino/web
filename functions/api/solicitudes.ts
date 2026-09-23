@@ -22,6 +22,7 @@ async function notifyByEmail(env: Env, payload: {
   centroCodigo: string;
   nome: string;
   email: string;
+  telefono: string;
   mensaxe: string;
 }) {
   if (!env.RESEND_API_KEY) return;
@@ -44,6 +45,7 @@ async function notifyByEmail(env: Env, payload: {
         <p><strong>Centro:</strong> ${escapeHtml(payload.centro)} (${escapeHtml(payload.centroCodigo)})</p>
         <p><strong>Persoa:</strong> ${escapeHtml(payload.nome)}</p>
         <p><strong>Correo:</strong> ${escapeHtml(payload.email)}</p>
+        ${payload.telefono ? `<p><strong>Teléfono:</strong> ${escapeHtml(payload.telefono)}</p>` : ""}
         ${payload.mensaxe ? `<p><strong>Mensaxe:</strong><br>${escapeHtml(payload.mensaxe)}</p>` : ""}
         <p>A solicitude tamén quedou gardada no panel privado.</p>
       `,
@@ -97,6 +99,7 @@ export const onRequestPost: PagesFunction<Env> = async ({ request, env }) => {
   const centroCodigo = String(form.get("centroCodigo") ?? "").trim();
   const nome = String(form.get("nome") ?? "").trim();
   const email = String(form.get("email") ?? "").trim();
+  const telefono = String(form.get("telefono") ?? "").trim();
   const mensaxe = String(form.get("mensaxe") ?? "").trim();
   const consent = String(form.get("consent") ?? "");
 
@@ -106,6 +109,8 @@ export const onRequestPost: PagesFunction<Env> = async ({ request, env }) => {
     || !nome || nome.length > 150
     || !email || email.length > 254
     || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)
+    || telefono.length > 30
+    || (telefono && !/^[\d\s+().-]+$/.test(telefono))
     || mensaxe.length > 5000
     || consent !== "accepted"
   ) {
@@ -119,6 +124,7 @@ export const onRequestPost: PagesFunction<Env> = async ({ request, env }) => {
     centroCodigo,
     nome,
     email,
+    telefono,
     mensaxe,
     estado: "pendente_validacion",
     privacyVersion: "2026-09-01",

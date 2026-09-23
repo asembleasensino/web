@@ -47,6 +47,10 @@ const centrosJson = JSON.stringify(centrosDisponibles).replace(/</g, "\\u003c");
         </div>
       </div>
       <div>
+        <label class="mb-2 block text-xs font-bold" for="telefono">Número de teléfono <span class="font-normal text-ink/50">(opcional)</span></label>
+        <input class="focus-ring w-full rounded-[4px] border border-ink/30 bg-transparent px-4 py-3" id="telefono" name="telefono" type="tel" autocomplete="tel" />
+      </div>
+      <div>
         <label class="mb-2 block text-xs font-bold" for="mensaxe">Cóntanos o necesario <span class="font-normal text-ink/50">(opcional)</span></label>
         <textarea class="focus-ring min-h-28 w-full resize-y rounded-[4px] border border-ink/30 bg-transparent px-4 py-3" id="mensaxe" name="mensaxe"></textarea>
       </div>

@@ -186,7 +186,7 @@
 
       function matchesQuery(item) {
         if (!query) return true;
-        const haystack = `${item.centro} ${item.centroCodigo} ${item.nome} ${item.email}`.toLocaleLowerCase();
+        const haystack = `${item.centro} ${item.centroCodigo} ${item.nome} ${item.email} ${item.telefono || ""}`.toLocaleLowerCase();
         return haystack.includes(query);
       }
 
@@ -219,7 +219,7 @@
               <span class="pill ${item.estado}">${STATUS_LABEL[item.estado] || item.estado}</span>
             </div>
             <div class="card-meta">
-              ${escapeHtml(item.nome)} · <a href="mailto:${encodeURIComponent(item.email)}">${escapeHtml(item.email)}</a>
+              ${escapeHtml(item.nome)} · <a href="mailto:${encodeURIComponent(item.email)}">${escapeHtml(item.email)}</a>${item.telefono ? ` · <a href="tel:${encodeURIComponent(item.telefono)}">${escapeHtml(item.telefono)}</a>` : ""}
               <span class="when">${new Date(item.createdAt).toLocaleString("gl")}</span>
             </div>
             ${item.mensaxe ? `<div class="card-msg">${escapeHtml(item.mensaxe)}</div>` : ""}
