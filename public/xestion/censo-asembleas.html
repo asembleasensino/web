@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Censo do referendo · Xestión AAEP</title>
+    <title>Censo de asembleas · Xestión AAEP</title>
     <style>
       @import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap");
 
@@ -14,6 +14,8 @@
         --red: #c94a42;
         --green: #355a2c;
         --green-bg: rgba(53, 90, 44, 0.1);
+        --grey: #6f6c66;
+        --grey-bg: rgba(111, 108, 102, 0.12);
         --line: rgba(37, 35, 33, 0.14);
         --line-strong: rgba(37, 35, 33, 0.28);
         --shadow: 3px 3px 0 rgba(37, 35, 33, 0.12);
@@ -33,7 +35,7 @@
         background: var(--paper); border-bottom: 1px solid var(--line);
       }
       .topbar-inner {
-        max-width: 1080px; margin: 0 auto; padding: 18px 20px;
+        max-width: 1200px; margin: 0 auto; padding: 18px 20px;
         display: flex; align-items: center; gap: 16px; flex-wrap: wrap;
       }
       .badge {
@@ -41,14 +43,14 @@
         background: var(--ink); color: var(--paper); font-weight: 800; font-size: 0.7rem; flex-shrink: 0;
       }
       .topbar h1 { font-family: var(--font-display); font-stretch: condensed; font-size: 1.5rem; margin: 0; letter-spacing: -0.01em; }
-      .topbar .links { margin-left: auto; display: flex; gap: 16px; align-items: center; font-size: 0.78rem; font-weight: 700; }
+      .topbar .links { margin-left: auto; display: flex; gap: 16px; align-items: center; font-size: 0.78rem; font-weight: 700; flex-wrap: wrap; }
       .topbar a { color: var(--ink); }
       .topbar button.link {
         appearance: none; background: none; border: 0; padding: 0; font: inherit; font-weight: 700; color: var(--ink); opacity: 0.55; cursor: pointer;
       }
       .topbar button.link:hover { opacity: 1; text-decoration: underline; }
 
-      .wrap { max-width: 1080px; margin: 0 auto; padding: 28px 20px 90px; }
+      .wrap { max-width: 1200px; margin: 0 auto; padding: 28px 20px 90px; }
 
       .controls { display: flex; flex-wrap: wrap; gap: 14px; align-items: center; justify-content: space-between; margin-bottom: 22px; }
       .count-badge {
@@ -73,6 +75,8 @@
       }
       button.export:hover { background: var(--red); border-color: var(--red); }
       button.export:disabled { opacity: 0.4; cursor: default; background: var(--paper-raised); color: var(--ink); }
+      button.export.secondary { background: var(--paper-raised); color: var(--ink); }
+      button.export.secondary:hover { background: var(--ink); color: var(--paper); border-color: var(--ink); }
 
       .status-msg { padding: 40px 0; text-align: center; color: color-mix(in srgb, var(--ink) 55%, transparent); font-size: 0.95rem; }
       .status-msg.error { color: var(--red); font-weight: 700; }
@@ -90,12 +94,15 @@
       tbody tr:last-child td { border-bottom: 0; }
       tbody tr:hover { background: rgba(37, 35, 33, 0.03); }
       td a { color: var(--ink); font-weight: 600; }
-      .pill.inscrita {
+      td.codigo { font-variant-numeric: tabular-nums; color: color-mix(in srgb, var(--ink) 55%, transparent); }
+      td.contacto { white-space: normal; max-width: 260px; }
+      .pill {
         display: inline-flex; align-items: center; gap: 5px;
         font-size: 0.68rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.05em;
-        padding: 4px 10px; border-radius: 999px; background: var(--green-bg); color: var(--green);
+        padding: 4px 10px; border-radius: 999px;
       }
-      .when { font-size: 0.78rem; color: color-mix(in srgb, var(--ink) 55%, transparent); }
+      .pill.activa { background: var(--green-bg); color: var(--green); }
+      .pill.creacion { background: var(--grey-bg); color: var(--grey); }
 
       @media (max-width: 560px) {
         .controls { flex-direction: column; align-items: stretch; }
@@ -107,11 +114,11 @@
     <div class="topbar">
       <div class="topbar-inner">
         <span class="badge">AA</span>
-        <h1>Censo do referendo</h1>
+        <h1>Censo de asembleas</h1>
         <div class="links">
-          <a href="/referendo/">Ver a páxina pública →</a>
+          <a href="/admin/#/collections/configuracion/entries/asembleas">Xestionar asembleas →</a>
           <a href="/xestion/solicitudes.html">Solicitudes →</a>
-          <a href="/xestion/censo-asembleas.html">Censo de asembleas →</a>
+          <a href="/xestion/censo-referendo.html">Censo do referendo →</a>
           <button type="button" class="link" id="forget-password">Esquecer contrasinal</button>
         </div>
       </div>
@@ -121,7 +128,8 @@
       <div class="controls">
         <div class="count-badge" id="count">Cargando…</div>
         <div class="controls-right">
-          <input type="search" id="search" class="search" placeholder="Buscar por correo…" />
+          <input type="search" id="search" class="search" placeholder="Buscar por centro, concello ou contacto…" />
+          <button type="button" class="export secondary" id="download-xlsx" disabled>Descargar XLSX</button>
           <button type="button" class="export" id="download-csv" disabled>Descargar CSV</button>
         </div>
       </div>
@@ -129,10 +137,13 @@
       <div id="content"><p class="status-msg">Cargando censo…</p></div>
     </div>
 
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js" defer></script>
     <script>
       const escapeHtml = (value = "") => String(value).replace(/[&<>"']/g, (character) => ({
         "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#039;"
       })[character]);
+
+      const ESTADO_LABEL = { activa: "Activa", creacion: "En creación" };
 
       function xestionAuthHeader() {
         let password = sessionStorage.getItem("aaep-xestion-password");
@@ -148,34 +159,40 @@
         location.reload();
       });
 
-      let inscricions = [];
+      let asembleas = [];
       let query = "";
 
       function render() {
-        const visible = inscricions.filter((item) => !query || item.email.toLocaleLowerCase().includes(query));
-        document.querySelector("#count").innerHTML = `<strong>${inscricions.length}</strong> ${inscricions.length === 1 ? "persoa inscrita" : "persoas inscritas"}`;
+        const normalizedQuery = query.toLocaleLowerCase("gl");
+        const visible = asembleas.filter((item) => {
+          if (!normalizedQuery) return true;
+          const haystack = `${item.codigo} ${item.nome} ${item.concello} ${item.contacto || ""}`.toLocaleLowerCase("gl");
+          return haystack.includes(normalizedQuery);
+        });
+        document.querySelector("#count").innerHTML = `<strong>${asembleas.length}</strong> ${asembleas.length === 1 ? "asemblea" : "asembleas"}`;
 
         const content = document.querySelector("#content");
-        if (!inscricions.length) {
-          content.innerHTML = `<p class="status-msg">Aínda non hai ninguén inscrito no censo.</p>`;
+        if (!asembleas.length) {
+          content.innerHTML = `<p class="status-msg">Aínda non hai ningunha asemblea rexistrada.</p>`;
           return;
         }
         if (!visible.length) {
-          content.innerHTML = `<p class="status-msg">Ningún correo coincide coa busca.</p>`;
+          content.innerHTML = `<p class="status-msg">Ningunha asemblea coincide coa busca.</p>`;
           return;
         }
 
         content.innerHTML = `
           <div class="table-wrap">
             <table>
-              <thead><tr><th>Correo</th><th>Estado</th><th>Inscrición</th><th>Última actualización</th></tr></thead>
+              <thead><tr><th>Código</th><th>Centro</th><th>Concello</th><th>Estado</th><th>Contacto</th></tr></thead>
               <tbody>
                 ${visible.map((item) => `
                   <tr>
-                    <td><a href="mailto:${encodeURIComponent(item.email)}">${escapeHtml(item.email)}</a></td>
-                    <td><span class="pill inscrita">Inscrita</span></td>
-                    <td class="when">${new Date(item.createdAt).toLocaleString("gl")}</td>
-                    <td class="when">${new Date(item.updatedAt).toLocaleString("gl")}</td>
+                    <td class="codigo">${escapeHtml(item.codigo)}</td>
+                    <td>${escapeHtml(item.nome)}</td>
+                    <td>${escapeHtml(item.concello)}</td>
+                    <td><span class="pill ${item.estado}">${ESTADO_LABEL[item.estado] || item.estado}</span></td>
+                    <td class="contacto">${item.contacto ? escapeHtml(item.contacto) : "—"}</td>
                   </tr>
                 `).join("")}
               </tbody>
@@ -185,38 +202,67 @@
       }
 
       document.querySelector("#search").addEventListener("input", (event) => {
-        query = event.target.value.trim().toLocaleLowerCase();
+        query = event.target.value.trim();
         render();
       });
 
-      fetch("/api/referendo-censo", { headers: { Authorization: xestionAuthHeader() } })
+      fetch("/api/asembleas", { headers: { Authorization: xestionAuthHeader() } })
         .then((response) => {
           if (response.status === 401) sessionStorage.removeItem("aaep-xestion-password");
           if (!response.ok) throw new Error("Acceso non autorizado");
           return response.json();
         })
-        .then(({ inscricions: data }) => {
-          inscricions = data || [];
+        .then(({ asembleas: data }) => {
+          asembleas = data || [];
           render();
-          document.querySelector("#download-csv").disabled = !inscricions.length;
+          document.querySelector("#download-csv").disabled = !asembleas.length;
+          document.querySelector("#download-xlsx").disabled = !asembleas.length;
         })
         .catch((error) => {
           document.querySelector("#count").textContent = "";
           document.querySelector("#content").innerHTML = `<p class="status-msg error">${escapeHtml(error.message)}. Recarga a páxina para volver escribir o contrasinal.</p>`;
         });
 
+      function exportRows() {
+        return asembleas.map((item) => ({
+          codigo: item.codigo,
+          nome: item.nome,
+          concello: item.concello,
+          estado: ESTADO_LABEL[item.estado] || item.estado,
+          contacto: item.contacto || "",
+        }));
+      }
+
       document.querySelector("#download-csv").addEventListener("click", () => {
-        const header = "correo,inscricion,actualizacion\n";
-        const body = inscricions.map((item) => [item.email, item.createdAt, item.updatedAt].join(",")).join("\n");
+        const header = "codigo,nome,concello,estado,contacto\n";
+        const escapeCsv = (value) => `"${String(value).replace(/"/g, '""')}"`;
+        const body = exportRows()
+          .map((row) => [row.codigo, row.nome, row.concello, row.estado, row.contacto].map(escapeCsv).join(","))
+          .join("\n");
         const blob = new Blob([header + body], { type: "text/csv;charset=utf-8" });
         const url = URL.createObjectURL(blob);
         const link = document.createElement("a");
         link.href = url;
-        link.download = `censo-referendo-${new Date().toISOString().slice(0, 10)}.csv`;
+        link.download = `censo-asembleas-${new Date().toISOString().slice(0, 10)}.csv`;
         document.body.appendChild(link);
         link.click();
         link.remove();
         URL.revokeObjectURL(url);
+      });
+
+      document.querySelector("#download-xlsx").addEventListener("click", () => {
+        if (typeof XLSX === "undefined") {
+          window.alert("Non foi posible cargar a libraría de Excel. Comproba a conexión e vólveo intentar.");
+          return;
+        }
+        const sheet = XLSX.utils.json_to_sheet(exportRows(), {
+          header: ["codigo", "nome", "concello", "estado", "contacto"],
+        });
+        XLSX.utils.sheet_add_aoa(sheet, [["Código", "Centro", "Concello", "Estado", "Contacto"]], { origin: "A1" });
+        sheet["!cols"] = [{ wch: 12 }, { wch: 38 }, { wch: 20 }, { wch: 12 }, { wch: 28 }];
+        const workbook = XLSX.utils.book_new();
+        XLSX.utils.book_append_sheet(workbook, sheet, "Asembleas");
+        XLSX.writeFile(workbook, `censo-asembleas-${new Date().toISOString().slice(0, 10)}.xlsx`);
       });
     </script>
   </body>
