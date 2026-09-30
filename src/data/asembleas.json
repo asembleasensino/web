@@ -623,6 +623,18 @@
       "nome": "CEIP Plurilingüe de Belesar",
       "concello": "Baiona",
       "estado": "activa"
+    },
+    {
+      "codigo": "15010812",
+      "nome": "IES Virxe do Mar",
+      "concello": "Noia",
+      "estado": "activa"
+    },
+    {
+      "codigo": "15026418",
+      "nome": "IES Terra de Soneira",
+      "concello": "Vimianzo",
+      "estado": "activa"
     }
   ]
 }
