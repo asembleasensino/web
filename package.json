@@ -20,7 +20,7 @@
   "dependencies": {
     "@astrojs/check": "^0.9.10",
     "@astrojs/sitemap": "^3.7.3",
-    "@cloudflare/workers-types": "^4.20260617.1",
+    "@cloudflare/workers-types": "^5.20260829.1",
     "@tailwindcss/vite": "^4.1.0",
     "astro": "^7.2.9",
     "leaflet": "^1.9.4",
