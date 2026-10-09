@@ -1,5 +1,6 @@
 ---
 import BaseLayout from "../../layouts/BaseLayout.astro";
+import ArrowIcon from "../../components/ArrowIcon.astro";
 import { site } from "../../config/site";
 
 const title = `Decálogo · 10 medidas para mellorar o ensino público · Materiais · ${site.shortName}`;
@@ -25,6 +26,13 @@ const medidas = [
       <div class="lg:col-span-3">
         <span class="eyebrow text-green">Infografía</span>
         <p class="mt-4 text-sm text-ink/50">9 de outubro de 2026</p>
+        <a
+          href="/uploads/decalogo-10-medidas-ensino-publico.pdf"
+          download="decalogo-10-medidas-ensino-publico.pdf"
+          class="mt-6 inline-flex items-center gap-1.5 text-xs font-bold text-ink/55 underline decoration-ink/25 underline-offset-4 hover:text-red hover:decoration-red"
+        >
+          Descargar en PDF <ArrowIcon direction="up-right" />
+        </a>
       </div>
       <div class="lg:col-span-9">
         <h1 class="type-material-title max-w-5xl font-extrabold leading-[.94] tracking-[-.05em]">
