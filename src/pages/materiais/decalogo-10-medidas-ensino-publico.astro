@@ -1,0 +1,54 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import { site } from "../../config/site";
+
+const title = `Decálogo · 10 medidas para mellorar o ensino público · Materiais · ${site.shortName}`;
+const description = "As dez medidas que reivindican as Asembleas Abertas do Ensino Público para mellorar o ensino público.";
+
+const medidas = [
+  "Persoal docente suficiente e horarios que recollan o tempo de coordinación e xestión.",
+  "Incorporación de novos perfís profesionais necesarios nos centros educativos.",
+  "Mellora das condicións laborais e dignificación da profesión docente.",
+  "Infraestruturas dignas e mantemento preventivo.",
+  "Servizos de benestar do alumnado.",
+  "Ratios dignas e inclusión real.",
+  "FP digna e itinerarios formativos de calidade.",
+  "Gratuidade real e igualdade de oportunidades.",
+  "Autonomía pedagóxica e redución da burocracia.",
+  "Compromisos verificables da administración.",
+];
+---
+
+<BaseLayout title={title} description={description}>
+  <article>
+    <header class="mx-auto grid max-w-[1500px] gap-10 px-4 pb-16 pt-16 md:px-8 md:pb-24 md:pt-24 lg:grid-cols-12">
+      <div class="lg:col-span-3">
+        <span class="eyebrow text-green">Infografía</span>
+        <p class="mt-4 text-sm text-ink/50">9 de outubro de 2026</p>
+      </div>
+      <div class="lg:col-span-9">
+        <h1 class="type-material-title max-w-5xl font-extrabold leading-[.94] tracking-[-.05em]">
+          <span class="text-red">10</span> medidas para mellorar o ensino público
+        </h1>
+        <p class="mt-8 max-w-3xl text-xl leading-relaxed text-ink/65">{description}</p>
+      </div>
+    </header>
+
+    <section class="border-t border-ink/20">
+      <div class="mx-auto max-w-[1500px] px-4 py-16 md:px-8 md:py-20">
+        <ol class="grid border-b border-ink/20 sm:grid-cols-2">
+          {medidas.map((medida, index) => (
+            <li class="border-t border-ink/20 py-8 pr-6 sm:border-l sm:pl-8 sm:[&:nth-child(2n+1)]:border-l-0 sm:[&:nth-child(2n+1)]:pl-0">
+              <span class="display type-step-number text-red/35">{String(index + 1).padStart(2, "0")}</span>
+              <p class="type-card-title mt-3 max-w-md font-extrabold leading-tight">{medida}</p>
+            </li>
+          ))}
+        </ol>
+      </div>
+    </section>
+
+    <div class="mx-auto max-w-[1500px] px-4 py-16 md:px-8 md:py-24">
+      <a href="/materiais/" class="text-xs font-black uppercase tracking-wider underline decoration-green decoration-2 underline-offset-4">← Materiais</a>
+    </div>
+  </article>
+</BaseLayout>
