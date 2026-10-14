@@ -26,7 +26,7 @@ O kit recolle todo o necesario para pór en marcha unha asemblea de centro e con
 
 Para ler en pantalla e compartir en dixital.
 
-[![Portada do kit de inicio de asemblea de centro, versión en cor](/images/materiais/kit-inicio-portada-cor.jpg)](https://drive.google.com/file/d/1FKuOeQgrVDmkpJS9dhMNrJokySOsYKJJ/view?usp=sharing)
+[![Portada do kit de inicio de asemblea de centro, versión en cor](/uploads/kit-inicio-portada-cor.jpg)](https://drive.google.com/file/d/1FKuOeQgrVDmkpJS9dhMNrJokySOsYKJJ/view?usp=sharing)
 
 [Descargar o kit en cor (PDF)](https://drive.google.com/file/d/1FKuOeQgrVDmkpJS9dhMNrJokySOsYKJJ/view?usp=sharing)
 
