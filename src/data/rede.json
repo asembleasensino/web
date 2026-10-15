@@ -10,15 +10,18 @@
         "items": [
           {
             "nome": "Asembleas de centro",
-            "texto": "Espazo base de participación e toma de decisións do profesorado."
+            "texto": "Espazo base de participación e toma de decisións do profesorado.",
+            "funcion": "É o nivel máis próximo ao día a día de cada centro e o punto de partida da organización colectiva."
           },
           {
             "nome": "Asembleas territoriais",
-            "texto": "Espazo de posta en común dos centros de cada zona."
+            "texto": "Espazo de posta en común dos centros de cada zona.",
+            "funcion": "Permiten compartir información, problemas, propostas e acordos entre centros dunha mesma área territorial."
           },
           {
             "nome": "Asemblea xeral galega",
-            "texto": "Espazo de participación colectiva de todo o profesorado."
+            "texto": "Espazo de participación colectiva de todo o profesorado.",
+            "funcion": "É o ámbito común para o debate e a toma de decisións de alcance galego."
           }
         ]
       },
@@ -27,15 +30,18 @@
         "items": [
           {
             "nome": "Xunta de delegadas",
-            "texto": "Grupo telemático de comunicación directa entre as asembleas de centro e a coordinadora galega. Participan unha ou dúas persoas de cada centro."
+            "texto": "Grupo telemático de comunicación directa entre as asembleas de centro e a coordinadora galega. Participan unha ou dúas persoas de cada centro.",
+            "funcion": "Serve de canle estable para trasladar información, propostas e acordos entre os centros e a coordinación galega."
           },
           {
             "nome": "Coordinadora galega",
-            "texto": "Grupo de traballo permanente que permite a coordinación a nivel galego entre asembleas de centro, xunta de delegadas e asembleas territoriais, así como a realización de tarefas concretas."
+            "texto": "Grupo de traballo permanente que permite a coordinación a nivel galego entre asembleas de centro, xunta de delegadas e asembleas territoriais, así como a realización de tarefas concretas.",
+            "funcion": "Dá continuidade ao traballo entre asembleas e coordina tarefas concretas a nivel galego."
           },
           {
             "nome": "Grupos de traballo",
-            "texto": "Executar tarefas como: xestión da web e das redes sociais, o mapeo de Galicia e a creación de materiais."
+            "texto": "Executar tarefas como: xestión da web e das redes sociais, o mapeo de Galicia e a creación de materiais.",
+            "funcion": "Son equipos orientados a tarefas concretas, cunha función práctica e operativa."
           }
         ]
       }

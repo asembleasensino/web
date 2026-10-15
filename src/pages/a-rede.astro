@@ -3,6 +3,8 @@ import BaseLayout from "../layouts/BaseLayout.astro";
 import rede from "../data/rede.json";
 import { site } from "../config/site";
 import ArrowIcon from "../components/ArrowIcon.astro";
+
+const espazos = rede.organizacion?.grupos.flatMap((grupo) => grupo.items) ?? [];
 ---
 
 <BaseLayout title={`A rede · ${site.shortName}`}>
@@ -33,38 +35,28 @@ import ArrowIcon from "../components/ArrowIcon.astro";
           </a>
         )}
       </div>
-      <div class="overflow-x-auto border border-ink">
-        <table class="w-full min-w-[920px] table-fixed border-collapse text-left">
-          <thead>
-            <tr>
-              {rede.organizacion.grupos.map((grupo) => (
-                <th
-                  colspan={grupo.items.length}
-                  scope="colgroup"
-                  class="border border-ink bg-ink/5 px-5 py-4 text-sm font-extrabold uppercase tracking-wide text-red"
-                >
-                  {grupo.titulo}
-                </th>
-              ))}
-            </tr>
-            <tr>
-              {rede.organizacion.grupos.flatMap((grupo) => grupo.items).map((item) => (
-                <th scope="col" class="border border-ink bg-green px-5 py-4 text-xs font-extrabold uppercase tracking-wide text-paper">
-                  {item.nome}
-                </th>
-              ))}
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              {rede.organizacion.grupos.flatMap((grupo) => grupo.items).map((item) => (
-                <td class="border border-ink/25 px-5 py-6 align-top text-sm leading-relaxed text-ink/70">
-                  {item.texto}
-                </td>
-              ))}
-            </tr>
-          </tbody>
-        </table>
+
+      <p class="mb-5 text-xs font-bold text-ink/40 lg:hidden">Toca cada espazo para ver máis.</p>
+
+      <div class="scheme" id="rede-scheme">
+        {rede.organizacion.grupos.map((grupo) => (
+          <div class="scheme-label" style={`grid-column: span ${grupo.items.length} / span ${grupo.items.length};`}>
+            {grupo.titulo}
+          </div>
+        ))}
+        {espazos.map((item) => (
+          <article class="scheme-card" tabindex="0">
+            <div class="scheme-head">{item.nome}</div>
+            <div class="scheme-summary">{item.texto}</div>
+            <div class="scheme-extra">
+              <div>
+                <span class="eyebrow text-red">Función</span>
+                <p>{item.funcion}</p>
+              </div>
+            </div>
+            <span class="scheme-hint" aria-hidden="true">+</span>
+          </article>
+        ))}
       </div>
     </section>
   )}
@@ -103,3 +95,283 @@ import ArrowIcon from "../components/ArrowIcon.astro";
     </ol>
   </section>
 </BaseLayout>
+
+<style>
+  .scheme {
+    --line: color-mix(in srgb, var(--color-ink) 15%, transparent);
+    --muted: color-mix(in srgb, var(--color-ink) 55%, transparent);
+    --card: color-mix(in srgb, var(--color-ink) 2%, var(--color-paper));
+    --green-dark: color-mix(in srgb, var(--color-green) 78%, black);
+    display: grid;
+    grid-template-columns: repeat(6, minmax(0, 1fr));
+    gap: 10px;
+  }
+
+  .scheme-label {
+    min-height: 60px;
+    padding: 14px 18px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    border: 1px solid var(--line);
+    border-radius: 4px;
+    color: var(--color-red);
+    font-family: var(--font-display);
+    font-stretch: condensed;
+    text-transform: uppercase;
+    letter-spacing: -.01em;
+    font-weight: 900;
+    font-size: clamp(.85rem, 1.1vw, 1.05rem);
+  }
+
+  .scheme-card {
+    position: relative;
+    min-height: 300px;
+    background: var(--card);
+    border: 1px solid var(--line);
+    border-radius: 4px;
+    overflow: hidden;
+    cursor: pointer;
+    outline: none;
+    transition: transform .2s ease, box-shadow .2s ease, border-color .2s ease, opacity .2s ease;
+  }
+
+  .scheme.has-active .scheme-card:not(.is-active) { opacity: .5; }
+
+  .scheme-card:hover,
+  .scheme-card:focus-visible,
+  .scheme-card.is-active {
+    transform: translate(-3px, -3px);
+    border-color: var(--color-ink);
+    box-shadow: var(--shadow-hard);
+    z-index: 2;
+  }
+
+  .scheme-head {
+    min-height: 92px;
+    padding: 18px 16px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    background: var(--color-green);
+    color: var(--color-paper);
+    font-family: var(--font-display);
+    font-stretch: condensed;
+    text-transform: uppercase;
+    font-weight: 900;
+    line-height: 1.12;
+    letter-spacing: -.01em;
+    font-size: clamp(1rem, 1.4vw, 1.2rem);
+    transition: background .2s ease;
+  }
+
+  .scheme-card:hover .scheme-head,
+  .scheme-card:focus-visible .scheme-head,
+  .scheme-card.is-active .scheme-head {
+    background: var(--green-dark);
+  }
+
+  .scheme-summary {
+    padding: 22px 20px 20px;
+    text-align: center;
+    line-height: 1.55;
+    font-size: .92rem;
+    color: var(--muted);
+    transition: opacity .2s ease, transform .2s ease;
+  }
+
+  .scheme-extra {
+    position: absolute;
+    inset: 92px 0 0 0;
+    background: color-mix(in srgb, var(--color-paper) 97%, var(--color-ink));
+    padding: 26px 22px 24px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    opacity: 0;
+    transform: translateY(10px);
+    pointer-events: none;
+    transition: opacity .2s ease, transform .2s ease;
+  }
+
+  .scheme-extra > div { display: flex; flex-direction: column; gap: 10px; }
+
+  .scheme-extra p {
+    margin: 0;
+    font-size: .9rem;
+    line-height: 1.55;
+    text-align: left;
+    color: var(--color-ink);
+  }
+
+  .scheme-card:hover .scheme-extra,
+  .scheme-card:focus-visible .scheme-extra,
+  .scheme-card.is-active .scheme-extra {
+    opacity: 1;
+    transform: none;
+    pointer-events: auto;
+  }
+
+  .scheme-card:hover .scheme-summary,
+  .scheme-card:focus-visible .scheme-summary,
+  .scheme-card.is-active .scheme-summary {
+    opacity: 0;
+    transform: translateY(-4px);
+  }
+
+  .scheme-hint {
+    position: absolute;
+    right: 12px;
+    bottom: 10px;
+    width: 26px;
+    height: 26px;
+    border: 1px solid var(--line);
+    border-radius: 999px;
+    display: grid;
+    place-items: center;
+    color: var(--muted);
+    background: color-mix(in srgb, var(--color-paper) 70%, transparent);
+    font-size: .95rem;
+    font-weight: 700;
+    transition: transform .2s ease, border-color .2s ease, color .2s ease;
+    z-index: 3;
+  }
+
+  .scheme-card:hover .scheme-hint,
+  .scheme-card:focus-visible .scheme-hint,
+  .scheme-card.is-active .scheme-hint {
+    transform: rotate(45deg);
+    color: var(--color-paper);
+    border-color: var(--color-paper);
+  }
+
+  @media (max-width: 1024px) {
+    .scheme { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    .scheme-label { grid-column: 1 / -1 !important; }
+    .scheme-card { min-height: 260px; }
+  }
+
+  @media (max-width: 640px) {
+    .scheme { grid-template-columns: 1fr; gap: 8px; }
+
+    .scheme-label {
+      grid-column: 1 !important;
+      min-height: auto;
+      justify-content: flex-start;
+      text-align: left;
+      padding: 12px 16px;
+    }
+
+    .scheme-card {
+      min-height: 0;
+      transform: none !important;
+      box-shadow: none !important;
+    }
+
+    .scheme.has-active .scheme-card:not(.is-active) { opacity: 1; }
+
+    .scheme-head {
+      min-height: 0;
+      padding: 14px 44px 14px 16px;
+      justify-content: flex-start;
+      text-align: left;
+      font-size: 1rem;
+    }
+
+    .scheme-summary {
+      padding: 14px 44px 15px 16px;
+      text-align: left;
+    }
+
+    .scheme-extra {
+      position: static;
+      display: grid;
+      grid-template-rows: 0fr;
+      padding: 0 16px;
+      opacity: 1;
+      transform: none;
+      pointer-events: none;
+      background: color-mix(in srgb, var(--color-ink) 4%, var(--color-paper));
+      transition: grid-template-rows .25s ease, padding .25s ease;
+    }
+
+    .scheme-extra > div { overflow: hidden; }
+
+    .scheme-card.is-active .scheme-extra {
+      grid-template-rows: 1fr;
+      padding: 14px 16px;
+      pointer-events: auto;
+    }
+
+    .scheme-card.is-active .scheme-summary { opacity: 1; transform: none; }
+
+    .scheme-hint {
+      top: 12px;
+      right: 12px;
+      bottom: auto;
+      color: var(--color-paper);
+      border-color: color-mix(in srgb, var(--color-paper) 55%, transparent);
+      background: color-mix(in srgb, var(--color-paper) 15%, transparent);
+    }
+
+    .scheme-card.is-active .scheme-hint {
+      color: var(--color-paper);
+      border-color: color-mix(in srgb, var(--color-paper) 70%, transparent);
+    }
+  }
+
+  @media (hover: none) {
+    .scheme-card:hover .scheme-extra { opacity: 0; transform: translateY(10px); pointer-events: none; }
+    .scheme-card:hover .scheme-summary { opacity: 1; transform: none; }
+    .scheme-card:hover .scheme-head { background: var(--color-green); }
+    .scheme-card.is-active .scheme-extra { opacity: 1; transform: none; pointer-events: auto; }
+    .scheme-card.is-active .scheme-head { background: var(--green-dark); }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .scheme-card, .scheme-head, .scheme-summary, .scheme-extra, .scheme-hint { transition: none; }
+  }
+</style>
+
+<script>
+  const scheme = document.getElementById("rede-scheme");
+  const cards = scheme ? [...scheme.querySelectorAll<HTMLElement>(".scheme-card")] : [];
+  const mobileQuery = window.matchMedia("(max-width: 640px), (hover: none)");
+
+  function closeAll(except: HTMLElement | null = null) {
+    for (const card of cards) {
+      if (card !== except) card.classList.remove("is-active");
+    }
+    scheme?.classList.toggle("has-active", Boolean(except?.classList.contains("is-active")));
+  }
+
+  function toggle(card: HTMLElement) {
+    const opening = !card.classList.contains("is-active");
+    closeAll();
+    if (opening) {
+      card.classList.add("is-active");
+      scheme?.classList.add("has-active");
+    }
+  }
+
+  for (const card of cards) {
+    card.addEventListener("click", () => {
+      if (!mobileQuery.matches) return;
+      toggle(card);
+    });
+    card.addEventListener("keydown", (event) => {
+      if (event.key === "Enter" || event.key === " ") {
+        event.preventDefault();
+        toggle(card);
+      }
+    });
+  }
+
+  document.addEventListener("click", (event) => {
+    if (mobileQuery.matches && !(event.target as HTMLElement).closest(".scheme-card")) {
+      closeAll();
+    }
+  });
+</script>

@@ -186,6 +186,7 @@ collections:
                     fields:
                       - { label: Nome, name: nome, widget: string }
                       - { label: Descrición, name: texto, widget: text }
+                      - { label: "Función (texto ampliado, só visible ao premer/pasar por riba)", name: funcion, widget: text, required: false }
           - { label: Ligazón á comunidade de WhatsApp, name: comunidadeWhatsapp, widget: string, required: false }
           - { label: Texto sobre WhatsApp, name: textoWhatsapp, widget: text }
           - label: Grupos
