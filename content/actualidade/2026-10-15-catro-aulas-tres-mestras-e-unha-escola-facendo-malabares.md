@@ -5,7 +5,7 @@ type: Nova
 summary: A ANPA Magnolia denuncia a falta dunha mestra de apoio na EEI Vila
   Laura, onde o centro conta con 12 docentes de Infantil fronte ás 13 prazas
   recollidas no catálogo.
-featured: false
+featured: true
 eventDate: ""
 draft: false
 ---
