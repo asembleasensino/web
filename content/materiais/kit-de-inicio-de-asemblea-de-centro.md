@@ -5,6 +5,7 @@ type: Recurso
 summary: Kit inicial para montar asembleas de centro. Versión en PDF imprimíbel
   de alta calidade.
 driveUrl: https://drive.google.com/file/d/1FKuOeQgrVDmkpJS9dhMNrJokySOsYKJJ/view?usp=drive_link
+image: /uploads/kit-inicio-portada-cor.jpg
 featured: false
 draft: false
 ---
