@@ -22,6 +22,7 @@ interface Props {
 const { entry } = Astro.props;
 const { Content } = await render(entry);
 const canonical = new URL(materialUrl(entry), Astro.site);
+const ficheiroExt = entry.data.ficheiro?.split(".").pop()?.toUpperCase();
 ---
 
 <BaseLayout title={`${entry.data.title} · Materiais · ${site.shortName}`} description={entry.data.summary} canonical={canonical}>
@@ -44,6 +45,11 @@ const canonical = new URL(materialUrl(entry), Astro.site);
         {entry.data.driveUrl && (
           <a class="mt-10 inline-flex items-center gap-2 rounded-[4px] bg-green px-6 py-4 text-xs font-black uppercase tracking-wider text-paper" href={entry.data.driveUrl} target="_blank" rel="noopener noreferrer">
             Abrir ou descargar en Drive <ArrowIcon direction="up-right" />
+          </a>
+        )}
+        {entry.data.ficheiro && (
+          <a class="mt-10 inline-flex items-center gap-2 rounded-[4px] bg-green px-6 py-4 text-xs font-black uppercase tracking-wider text-paper" href={entry.data.ficheiro} download>
+            Descargar{ficheiroExt ? ` ${ficheiroExt}` : ""} <ArrowIcon direction="down" />
           </a>
         )}
       </div>

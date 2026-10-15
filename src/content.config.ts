@@ -54,6 +54,9 @@ const materiais = defineCollection({
     // de xerar a páxina xenérica desta colección.
     href: z.string().optional(),
     driveUrl: z.url().optional(),
+    // Para un ficheiro descargábel aloxado na propia web (PDF, DOCX...), a
+    // diferenza de driveUrl que é sempre unha ligazón externa a Drive.
+    ficheiro: z.string().optional(),
     fonteTitulo: z.string().optional(),
     fonteUrl: z.url().optional(),
     // O widget "object" de Decap CMS non impide gardar esta sección a
