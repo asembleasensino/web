@@ -14,6 +14,7 @@ fonteTitulo: Resolución do 16 de xuño de 2026, conxunta da Dirección Xeral de
   instrucións sobre a xornada semanal do persoal docente no curso académico
   2026/27
 fonteUrl: https://www.edu.xunta.gal/portal/sites/web/files/resolucion_instrucions_xornada_de_traballo_docente_2026_2027_sin.pdf
+image: /uploads/captura-de-pantalla-2026-10-15-a-las-14.41.07.png
 featured: false
 draft: false
 ---
