@@ -1,6 +1,7 @@
 # Dependencias e saídas xeradas
 node_modules/
 dist/
+dist-preview*.zip
 .astro/
 .vite/
 .cache/
