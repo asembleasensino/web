@@ -19,6 +19,27 @@ import ArrowIcon from "../components/ArrowIcon.astro";
     </div>
   </section>
 
+  {rede.organigrama && (
+    <section class="mx-auto max-w-[1500px] border-t border-ink/20 px-4 py-16 md:px-8 md:py-20">
+      <div class="mb-8 flex flex-wrap items-end justify-between gap-4">
+        <h2 class="type-list-title-lg display max-w-xl">Como se organiza a rede</h2>
+        <a
+          href={rede.organigrama}
+          download
+          class="inline-flex items-center gap-1.5 text-xs font-bold text-ink/55 underline decoration-ink/25 underline-offset-4 hover:text-red hover:decoration-red"
+        >
+          Descargar imaxe <ArrowIcon direction="up-right" />
+        </a>
+      </div>
+      <img
+        src={rede.organigrama}
+        alt={rede.organigramaAlt || ""}
+        class="w-full rounded-[4px] border border-ink/15"
+        loading="lazy"
+      />
+    </section>
+  )}
+
   <section class="bg-ink text-paper">
     <div class="mx-auto grid max-w-[1500px] gap-14 px-4 py-20 md:px-8 md:py-28 lg:grid-cols-12">
       <div class="lg:col-span-5">

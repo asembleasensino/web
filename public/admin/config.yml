@@ -165,6 +165,8 @@ collections:
         fields:
           - { label: Título introdutorio, name: titulo, widget: string }
           - { label: Introdución, name: introducion, widget: text }
+          - { label: Esquema de funcionamento (imaxe), name: organigrama, widget: image, required: false, hint: "Esquema ou organigrama dos espazos da rede. Amósase en '/a-rede/' con botón de descarga." }
+          - { label: Texto alternativo do esquema, name: organigramaAlt, widget: string, required: false, hint: "Describe o contido do esquema para persoas que usan lector de pantalla." }
           - { label: Ligazón á comunidade de WhatsApp, name: comunidadeWhatsapp, widget: string, required: false }
           - { label: Texto sobre WhatsApp, name: textoWhatsapp, widget: text }
           - label: Grupos
