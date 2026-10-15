@@ -5,6 +5,10 @@ type: Modelo
 summary: Cartaz en PDF editable para convocar unha asemblea de centro
   aberta a todo o profesorado, cos datos en branco para completar.
 ficheiro: /uploads/modelo-cartaz-convocatoria-asemblea.pdf
+image: /uploads/modelo-cartaz-convocatoria-asemblea-caratula.jpg
+imageAlt: Cartaz de convocatoria de asemblea de centro, co título "Asemblea
+  de centro" en grande e os campos centro, data, hora, lugar e orde do día en
+  branco.
 featured: true
 draft: false
 ---

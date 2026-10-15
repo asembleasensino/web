@@ -6,6 +6,9 @@ summary: Modelo en branco para tomar acta nunha asemblea de centro ou
   territorial, coa orde do día, os temas tratados, os acordos e a próxima
   reunión.
 ficheiro: /uploads/modelo-acta-asemblea.docx
+image: /uploads/modelo-acta-asemblea-caratula.jpg
+imageAlt: Modelo de acta de reunión en branco, cos campos centro, data, hora,
+  lugar e orde do día, e un espazo para os temas tratados.
 featured: true
 draft: false
 ---
