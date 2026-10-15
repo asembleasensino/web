@@ -5,6 +5,7 @@ type: Nova
 summary: A ANPA Magnolia denuncia a falta dunha mestra de apoio na EEI Vila
   Laura, onde o centro conta con 12 docentes de Infantil fronte ás 13 prazas
   recollidas no catálogo.
+image: /uploads/11362709.avif
 featured: true
 eventDate: ""
 draft: false
@@ -19,13 +20,13 @@ As crianzas estiveron supervisadas en todo momento. As mestras fixeron o que pui
 
 Esa mesma mañá, unha crianza que regresaba do médico tivo que esperar na porta porque **tampouco había persoal dispoñible para recibila.**
 
-> **Non foi unha situación excepcional. Foi un día normal no que xurdiron dous imprevistos normais. E iso é precisamente o preocupante.**
+**Non foi unha situación excepcional. Foi un día normal no que xurdiron dous imprevistos normais. E iso é precisamente o preocupante.**
 
 En Vila Laura temos dez aulas. O catálogo do centro recolle **trece docentes de Infantil, pero somos doce. Falta unha mestra de apoio.**
 
 Levamos máis dun mes reclamándoa. E o pasado martes, nunha reunión con responsables de Educación, volvéronnos falar de reorganizar horarios, gardas e recursos.
 
-> **Pero ningunha reorganización converte doce persoas en trece.**
+**Pero ningunha reorganización converte doce persoas en trece.**
 
 Saímos daquela reunión cunha preocupación aínda maior: segundo se nos trasladou, **insistir en cubrir esa praza podería supoñer perder recursos de Pedagoxía Terapéutica, Audición e Linguaxe ou mesmo orientación.**
 
@@ -43,7 +44,7 @@ Porque o que hoxe pasou en Vila Laura podería pasar mañá noutro centro. E por
 
 Somos familias. Non somos expertas en cuadrantes nin en horarios docentes. **Pero sabemos contar.**
 
-> **13 son 13. Non pedimos máis. Non aceptamos menos.**
+**13 son 13. Non pedimos máis. Non aceptamos menos.**
 
-**ANPA Magnolia Vila Laura**  
+**[ANPA Magnolia Vila Laura](https://www.instagram.com/anpa.magnolia.vilalaura/)**  
 *Familias que suman – Xuntas en Vila Laura*
