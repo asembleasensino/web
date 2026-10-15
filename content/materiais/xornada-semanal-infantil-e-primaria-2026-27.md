@@ -6,11 +6,6 @@ grupo: Información
 summary: Resumo visual da distribución das 37,5 horas semanais do persoal
   docente que imparte educación infantil e educación primaria, segundo a
   Resolución do 16 de xuño de 2026 para o curso académico 2026/27.
-tags:
-  - xornada laboral
-  - infantil
-  - primaria
-  - 2026/27
 href: /materiais/horario-infantil-primaria/
 fonteTitulo: Resolución do 16 de xuño de 2026, conxunta da Dirección Xeral de
   Centros e Recursos Humanos, da Dirección Xeral de Innovación e Ordenación

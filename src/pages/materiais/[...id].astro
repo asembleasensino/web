@@ -120,9 +120,6 @@ const ficheiroExt = entry.data.ficheiro?.split(".").pop()?.toUpperCase();
       <a href="/materiais/" class="text-xs font-black uppercase tracking-wider underline decoration-green decoration-2 underline-offset-4 lg:col-span-3">← Materiais</a>
       <div class="content-body lg:col-span-8">
         <Content />
-        {entry.data.tags.length > 0 && (
-          <p class="mt-12 border-t border-ink/20 pt-5 text-xs text-ink/50">{entry.data.tags.join(" · ")}</p>
-        )}
       </div>
     </div>
   </article>

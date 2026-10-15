@@ -47,7 +47,6 @@ const materiais = defineCollection({
     type: z.string().min(1),
     grupo: z.string().optional(),
     summary: z.string(),
-    tags: z.array(z.string()).default([]),
     // Para materiais que non son unha ficha+PDF nin encaixan no "desglose"
     // xenérico (por exemplo, unha ferramenta interactiva feita a medida):
     // se se indica, a tarxeta e a busca en /materiais/ enlazan aquí en vez

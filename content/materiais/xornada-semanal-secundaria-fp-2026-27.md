@@ -7,11 +7,6 @@ summary: Resumo visual da distribución da xornada semanal e comprobador
   interactivo do horario para o profesorado de secundaria, bacharelato, FP,
   adultos, artísticas, idiomas e deportivas, segundo a Resolución do 16 de xuño
   de 2026 para o curso académico 2026/27.
-tags:
-  - xornada laboral
-  - secundaria
-  - fp
-  - 2026/27
 href: /materiais/horario-secundaria-fp/
 fonteTitulo: Resolución do 16 de xuño de 2026, conxunta da Dirección Xeral de
   Centros e Recursos Humanos, da Dirección Xeral de Innovación e Ordenación
