@@ -3,8 +3,6 @@ import BaseLayout from "../layouts/BaseLayout.astro";
 import rede from "../data/rede.json";
 import { site } from "../config/site";
 import ArrowIcon from "../components/ArrowIcon.astro";
-
-const espazos = rede.organizacion?.grupos.flatMap((grupo) => grupo.items) ?? [];
 ---
 
 <BaseLayout title={`A rede · ${site.shortName}`}>
@@ -36,26 +34,39 @@ const espazos = rede.organizacion?.grupos.flatMap((grupo) => grupo.items) ?? [];
         )}
       </div>
 
-      <p class="mb-5 text-xs font-bold text-ink/40 lg:hidden">Toca cada espazo para ver máis.</p>
+      <p class="mb-5 text-xs font-bold text-ink/40 lg:hidden">Toca cada cabeceira para pregar o grupo e cada espazo para ver máis.</p>
 
-      <div class="scheme" id="rede-scheme">
-        {rede.organizacion.grupos.map((grupo) => (
-          <div class="scheme-label" style={`grid-column: span ${grupo.items.length} / span ${grupo.items.length};`}>
-            {grupo.titulo}
-          </div>
-        ))}
-        {espazos.map((item) => (
-          <article class="scheme-card" tabindex="0">
-            <div class="scheme-head">{item.nome}</div>
-            <div class="scheme-summary">{item.texto}</div>
-            <div class="scheme-extra">
-              <div>
-                <span class="eyebrow text-red">Función</span>
-                <p>{item.funcion}</p>
+      <div class="redezone" id="rede-scheme">
+        {rede.organizacion.grupos.map((grupo, groupIndex) => (
+          <section class="redegroup">
+            <button
+              type="button"
+              class="redegroup-toggle"
+              aria-expanded="true"
+              aria-controls={`rede-grupo-${groupIndex}`}
+            >
+              <span class="redegroup-title">{grupo.titulo}</span>
+              <span class="redegroup-meta">{grupo.items.length === 1 ? "1 espazo" : `${grupo.items.length} espazos`}</span>
+              <ArrowIcon direction="down" class="redegroup-chevron" />
+            </button>
+            <div class="redegroup-panel" id={`rede-grupo-${groupIndex}`}>
+              <div class="redegroup-grid">
+                {grupo.items.map((item) => (
+                  <article class="scheme-card" tabindex="0">
+                    <div class="scheme-head">{item.nome}</div>
+                    <div class="scheme-summary">{item.texto}</div>
+                    <div class="scheme-extra">
+                      <div>
+                        <span class="eyebrow text-red">Función</span>
+                        <p>{item.funcion}</p>
+                      </div>
+                    </div>
+                    <span class="scheme-hint" aria-hidden="true">+</span>
+                  </article>
+                ))}
               </div>
             </div>
-            <span class="scheme-hint" aria-hidden="true">+</span>
-          </article>
+          </section>
         ))}
       </div>
     </section>
@@ -97,37 +108,101 @@ const espazos = rede.organizacion?.grupos.flatMap((grupo) => grupo.items) ?? [];
 </BaseLayout>
 
 <style>
-  .scheme {
+  .redezone {
     --line: color-mix(in srgb, var(--color-ink) 15%, transparent);
     --muted: color-mix(in srgb, var(--color-ink) 55%, transparent);
     --card: color-mix(in srgb, var(--color-ink) 2%, var(--color-paper));
     --green-dark: color-mix(in srgb, var(--color-green) 78%, black);
-    display: grid;
-    grid-template-columns: repeat(6, minmax(0, 1fr));
-    gap: 10px;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
   }
 
-  .scheme-label {
-    min-height: 60px;
-    padding: 14px 18px;
+  .redegroup-toggle {
     display: flex;
+    width: 100%;
     align-items: center;
-    justify-content: center;
-    text-align: center;
-    border: 1px solid var(--line);
+    gap: 16px;
+    border: none;
     border-radius: 4px;
-    color: var(--color-red);
+    background: var(--color-ink);
+    color: var(--color-paper);
+    padding: 20px 22px;
+    text-align: left;
+    cursor: pointer;
+    box-shadow: var(--shadow-hard-sm);
+    transition: transform .15s ease, box-shadow .15s ease;
+  }
+
+  .redegroup-toggle:hover,
+  .redegroup-toggle:focus-visible {
+    transform: translate(-2px, -2px);
+    box-shadow: var(--shadow-hard);
+  }
+
+  .redegroup-toggle:focus-visible {
+    outline: 2px solid var(--color-paper);
+    outline-offset: 3px;
+  }
+
+  .redegroup-title {
+    flex: 1;
     font-family: var(--font-display);
     font-stretch: condensed;
     text-transform: uppercase;
     letter-spacing: -.01em;
     font-weight: 900;
-    font-size: clamp(.85rem, 1.1vw, 1.05rem);
+    line-height: 1.1;
+    font-size: clamp(1.1rem, 1.9vw, 1.55rem);
+  }
+
+  .redegroup-meta {
+    font-size: .68rem;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: .05em;
+    color: color-mix(in srgb, var(--color-paper) 55%, transparent);
+    white-space: nowrap;
+  }
+
+  .redegroup-chevron {
+    flex-shrink: 0;
+    width: 1.1em;
+    height: 1.1em;
+    transition: transform .25s ease, color .15s ease;
+  }
+
+  .redegroup-toggle:hover .redegroup-chevron,
+  .redegroup-toggle:focus-visible .redegroup-chevron {
+    color: var(--color-red);
+  }
+
+  .redegroup.is-collapsed .redegroup-chevron {
+    transform: rotate(-90deg);
+  }
+
+  .redegroup-panel {
+    display: grid;
+    grid-template-rows: 1fr;
+    transition: grid-template-rows .3s ease;
+  }
+
+  .redegroup.is-collapsed .redegroup-panel {
+    grid-template-rows: 0fr;
+  }
+
+  .redegroup-grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 10px;
+    padding-top: 14px;
+    overflow: hidden;
+    min-height: 0;
   }
 
   .scheme-card {
     position: relative;
-    min-height: 300px;
+    min-height: 280px;
     background: var(--card);
     border: 1px solid var(--line);
     border-radius: 4px;
@@ -137,7 +212,7 @@ const espazos = rede.organizacion?.grupos.flatMap((grupo) => grupo.items) ?? [];
     transition: transform .2s ease, box-shadow .2s ease, border-color .2s ease, opacity .2s ease;
   }
 
-  .scheme.has-active .scheme-card:not(.is-active) { opacity: .5; }
+  .redezone.has-active .scheme-card:not(.is-active) { opacity: .5; }
 
   .scheme-card:hover,
   .scheme-card:focus-visible,
@@ -149,8 +224,8 @@ const espazos = rede.organizacion?.grupos.flatMap((grupo) => grupo.items) ?? [];
   }
 
   .scheme-head {
-    min-height: 92px;
-    padding: 18px 16px;
+    min-height: 88px;
+    padding: 16px 16px;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -174,7 +249,7 @@ const espazos = rede.organizacion?.grupos.flatMap((grupo) => grupo.items) ?? [];
   }
 
   .scheme-summary {
-    padding: 22px 20px 20px;
+    padding: 20px 20px 20px;
     text-align: center;
     line-height: 1.55;
     font-size: .92rem;
@@ -184,9 +259,9 @@ const espazos = rede.organizacion?.grupos.flatMap((grupo) => grupo.items) ?? [];
 
   .scheme-extra {
     position: absolute;
-    inset: 92px 0 0 0;
+    inset: 88px 0 0 0;
     background: color-mix(in srgb, var(--color-paper) 97%, var(--color-ink));
-    padding: 26px 22px 24px;
+    padding: 24px 22px 22px;
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -248,20 +323,18 @@ const espazos = rede.organizacion?.grupos.flatMap((grupo) => grupo.items) ?? [];
   }
 
   @media (max-width: 1024px) {
-    .scheme { grid-template-columns: repeat(2, minmax(0, 1fr)); }
-    .scheme-label { grid-column: 1 / -1 !important; }
-    .scheme-card { min-height: 260px; }
+    .redegroup-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    .scheme-card { min-height: 250px; }
   }
 
   @media (max-width: 640px) {
-    .scheme { grid-template-columns: 1fr; gap: 8px; }
+    .redegroup-toggle { padding: 16px 16px; gap: 12px; }
+    .redegroup-meta { display: none; }
 
-    .scheme-label {
-      grid-column: 1 !important;
-      min-height: auto;
-      justify-content: flex-start;
-      text-align: left;
-      padding: 12px 16px;
+    .redegroup-grid {
+      grid-template-columns: 1fr;
+      gap: 8px;
+      padding-top: 8px;
     }
 
     .scheme-card {
@@ -270,7 +343,7 @@ const espazos = rede.organizacion?.grupos.flatMap((grupo) => grupo.items) ?? [];
       box-shadow: none !important;
     }
 
-    .scheme.has-active .scheme-card:not(.is-active) { opacity: 1; }
+    .redezone.has-active .scheme-card:not(.is-active) { opacity: 1; }
 
     .scheme-head {
       min-height: 0;
@@ -328,10 +401,12 @@ const espazos = rede.organizacion?.grupos.flatMap((grupo) => grupo.items) ?? [];
     .scheme-card:hover .scheme-head { background: var(--color-green); }
     .scheme-card.is-active .scheme-extra { opacity: 1; transform: none; pointer-events: auto; }
     .scheme-card.is-active .scheme-head { background: var(--green-dark); }
+    .redegroup-toggle:hover { transform: none; box-shadow: var(--shadow-hard-sm); }
   }
 
   @media (prefers-reduced-motion: reduce) {
-    .scheme-card, .scheme-head, .scheme-summary, .scheme-extra, .scheme-hint { transition: none; }
+    .scheme-card, .scheme-head, .scheme-summary, .scheme-extra, .scheme-hint,
+    .redegroup-toggle, .redegroup-chevron, .redegroup-panel { transition: none; }
   }
 </style>
 
@@ -340,16 +415,16 @@ const espazos = rede.organizacion?.grupos.flatMap((grupo) => grupo.items) ?? [];
   const cards = scheme ? [...scheme.querySelectorAll<HTMLElement>(".scheme-card")] : [];
   const mobileQuery = window.matchMedia("(max-width: 640px), (hover: none)");
 
-  function closeAll(except: HTMLElement | null = null) {
+  function closeAllCards(except: HTMLElement | null = null) {
     for (const card of cards) {
       if (card !== except) card.classList.remove("is-active");
     }
     scheme?.classList.toggle("has-active", Boolean(except?.classList.contains("is-active")));
   }
 
-  function toggle(card: HTMLElement) {
+  function toggleCard(card: HTMLElement) {
     const opening = !card.classList.contains("is-active");
-    closeAll();
+    closeAllCards();
     if (opening) {
       card.classList.add("is-active");
       scheme?.classList.add("has-active");
@@ -359,19 +434,28 @@ const espazos = rede.organizacion?.grupos.flatMap((grupo) => grupo.items) ?? [];
   for (const card of cards) {
     card.addEventListener("click", () => {
       if (!mobileQuery.matches) return;
-      toggle(card);
+      toggleCard(card);
     });
     card.addEventListener("keydown", (event) => {
       if (event.key === "Enter" || event.key === " ") {
         event.preventDefault();
-        toggle(card);
+        toggleCard(card);
       }
     });
   }
 
   document.addEventListener("click", (event) => {
     if (mobileQuery.matches && !(event.target as HTMLElement).closest(".scheme-card")) {
-      closeAll();
+      closeAllCards();
     }
   });
+
+  const groups = scheme ? [...scheme.querySelectorAll<HTMLElement>(".redegroup")] : [];
+  for (const group of groups) {
+    const toggle = group.querySelector<HTMLElement>(".redegroup-toggle");
+    toggle?.addEventListener("click", () => {
+      const collapsed = group.classList.toggle("is-collapsed");
+      toggle.setAttribute("aria-expanded", String(!collapsed));
+    });
+  }
 </script>

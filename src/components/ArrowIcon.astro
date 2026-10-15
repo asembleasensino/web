@@ -3,7 +3,7 @@
 // substitución dos caracteres Unicode (→, ↗, ←) que en iOS se renderizan
 // coma un emoji de cores en vez de coma un símbolo de texto.
 interface Props {
-  direction?: "right" | "left" | "up-right";
+  direction?: "right" | "left" | "up-right" | "down";
   class?: string;
 }
 const { direction = "right", class: className = "" } = Astro.props;
@@ -21,6 +21,17 @@ const rotation = direction === "left" ? " rotate-180" : "";
     stroke-linejoin="round"
     class:list={["inline-block h-[1em] w-[1em] align-[-0.1em]", className]}
   ><line x1="7" y1="17" x2="17" y2="7" /><polyline points="8 7 17 7 17 16" /></svg>
+) : direction === "down" ? (
+  <svg
+    aria-hidden="true"
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    stroke-width="2"
+    stroke-linecap="round"
+    stroke-linejoin="round"
+    class:list={["inline-block h-[1em] w-[1em] align-[-0.1em]", className]}
+  ><polyline points="6 9 12 16 18 9" /></svg>
 ) : (
   <svg
     aria-hidden="true"
