@@ -165,8 +165,27 @@ collections:
         fields:
           - { label: Título introdutorio, name: titulo, widget: string }
           - { label: Introdución, name: introducion, widget: text }
-          - { label: Esquema de funcionamento (imaxe), name: organigrama, widget: image, required: false, hint: "Esquema ou organigrama dos espazos da rede. Amósase en '/a-rede/' con botón de descarga." }
-          - { label: Texto alternativo do esquema, name: organigramaAlt, widget: string, required: false, hint: "Describe o contido do esquema para persoas que usan lector de pantalla." }
+          - label: Esquema "Como se organiza a rede"
+            name: organizacion
+            widget: object
+            required: false
+            hint: "Esquema dos espazos da rede, renderizado coma HTML (non coma imaxe) en '/a-rede/'."
+            fields:
+              - { label: Título da sección, name: titulo, widget: string }
+              - { label: PDF descargable do esquema, name: pdf, widget: file, required: false, hint: "Versión en PDF para quen queira descargar o esquema." }
+              - label: Grupos de espazos
+                name: grupos
+                widget: list
+                summary: "{{fields.titulo}}"
+                fields:
+                  - { label: Título do grupo, name: titulo, widget: string, hint: "Por exemplo: Espazos asemblearios" }
+                  - label: Espazos
+                    name: items
+                    widget: list
+                    summary: "{{fields.nome}}"
+                    fields:
+                      - { label: Nome, name: nome, widget: string }
+                      - { label: Descrición, name: texto, widget: text }
           - { label: Ligazón á comunidade de WhatsApp, name: comunidadeWhatsapp, widget: string, required: false }
           - { label: Texto sobre WhatsApp, name: textoWhatsapp, widget: text }
           - label: Grupos

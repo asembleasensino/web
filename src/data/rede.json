@@ -1,8 +1,46 @@
 {
   "titulo": "Unha rede aberta, autónoma e coordinada",
   "introducion": "Asembleas Abertas do Ensino Público nace da organización directa das traballadoras e traballadores nos centros. Cada asemblea decide con autonomía e comparte coa rede información, recursos e capacidade de acción.",
-  "organigrama": "/uploads/esquema-funcionamento-rede.jpg",
-  "organigramaAlt": "Esquema dos espazos de funcionamento da rede: espazos asemblearios (asembleas de centro, asembleas territoriais, asemblea xeral galega) e espazos de comunicación, coordinación e traballo (xunta de delegadas, coordinadora galega e grupos de traballo).",
+  "organizacion": {
+    "titulo": "Como se organiza a rede",
+    "pdf": "/uploads/esquema-funcionamento-rede.pdf",
+    "grupos": [
+      {
+        "titulo": "Espazos asemblearios",
+        "items": [
+          {
+            "nome": "Asembleas de centro",
+            "texto": "Espazo base de participación e toma de decisións do profesorado."
+          },
+          {
+            "nome": "Asembleas territoriais",
+            "texto": "Espazo de posta en común dos centros de cada zona."
+          },
+          {
+            "nome": "Asemblea xeral galega",
+            "texto": "Espazo de participación colectiva de todo o profesorado."
+          }
+        ]
+      },
+      {
+        "titulo": "Espazos de comunicación, coordinación e traballo",
+        "items": [
+          {
+            "nome": "Xunta de delegadas",
+            "texto": "Grupo telemático de comunicación directa entre as asembleas de centro e a coordinadora galega. Participan unha ou dúas persoas de cada centro."
+          },
+          {
+            "nome": "Coordinadora galega",
+            "texto": "Grupo de traballo permanente que permite a coordinación a nivel galego entre asembleas de centro, xunta de delegadas e asembleas territoriais, así como a realización de tarefas concretas."
+          },
+          {
+            "nome": "Grupos de traballo",
+            "texto": "Executar tarefas como: xestión da web e das redes sociais, o mapeo de Galicia e a creación de materiais."
+          }
+        ]
+      }
+    ]
+  },
   "comunidadeWhatsapp": "",
   "textoWhatsapp": "A comunidade de WhatsApp reúne os grupos territoriais e de traballo da rede. As ligazóns de acceso publícanse e actualízanse nesta páxina.",
   "grupos": [
