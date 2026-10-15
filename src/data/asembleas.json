@@ -635,6 +635,18 @@
       "nome": "IES Terra de Soneira",
       "concello": "Vimianzo",
       "estado": "activa"
+    },
+    {
+      "codigo": "15012730",
+      "nome": "IES Camilo José Cela",
+      "concello": "Padrón",
+      "estado": "activa"
+    },
+    {
+      "codigo": "15026704",
+      "nome": "IES David Buján",
+      "concello": "Cambre",
+      "estado": "activa"
     }
   ]
 }

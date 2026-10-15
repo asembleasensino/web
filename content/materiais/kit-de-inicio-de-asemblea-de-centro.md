@@ -34,7 +34,7 @@ Para ler en pantalla e compartir en dixital.
 
 En branco e negro e preparada como folleto A5: 3 follas A4 que, dobradas á metade, dan un folleto de 12 páxinas.
 
-[![Portada do kit de inicio de asemblea de centro, versión imprimíbel en branco e negro](/images/materiais/kit-inicio-portada-imprimible.jpg)](https://drive.google.com/file/d/1kwHQF7R532OpUh3bVq9mnPZ3Yn_jYae7/view?usp=sharing)
+[![Portada do kit de inicio de asemblea de centro, versión imprimíbel en branco e negro](/uploads/kit-inicio-portada-imprimible.jpg)](https://drive.google.com/file/d/1kwHQF7R532OpUh3bVq9mnPZ3Yn_jYae7/view?usp=sharing)
 
 [Descargar o kit imprimíbel (PDF)](https://drive.google.com/file/d/1kwHQF7R532OpUh3bVq9mnPZ3Yn_jYae7/view?usp=sharing)
 
