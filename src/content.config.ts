@@ -12,7 +12,14 @@ const actualidade = defineCollection({
     image: z.string().optional(),
     imageAlt: z.string().optional(),
     featured: z.boolean().default(false),
-    eventDate: z.coerce.date().optional(),
+    // O widget de data "Data do evento" (eventDate) é opcional, pero o
+    // compoñente de Decap CMS garda "" (cadea baleira) cando non se toca,
+    // en vez de omitir a clave. z.coerce.date() falla ao converter "" --
+    // .optional() só acepta a AUSENCIA do valor, non un valor baleiro que
+    // falla ao converterse -- e isto rompía a build (ver "desglose" máis
+    // arriba para o mesmo problema noutro campo). Tratamos "" coma ausencia
+    // de valor.
+    eventDate: z.preprocess((value) => (value === "" ? undefined : value), z.coerce.date().optional()),
     eventLocation: z.string().optional(),
     draft: z.boolean().default(false),
   }),
