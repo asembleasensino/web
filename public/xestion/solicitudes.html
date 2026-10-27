@@ -90,6 +90,8 @@
       .pill.en_contacto { background: var(--amber-bg); color: var(--amber); }
       .pill.resolta { background: var(--green-bg); color: var(--green); }
       .pill.arquivada { background: rgba(37, 35, 33, 0.08); color: color-mix(in srgb, var(--ink) 60%, transparent); }
+      .pill.no-mapa { background: var(--green-bg); color: var(--green); }
+      .status-note { margin: 0; font-size: 0.78rem; font-weight: 700; color: color-mix(in srgb, var(--ink) 60%, transparent); }
 
       .card-meta { font-size: 0.85rem; }
       .card-meta a { color: var(--ink); }
@@ -123,6 +125,7 @@
           <a href="/xestion/censo-referendo.html">Censo do referendo →</a>
           <a href="/xestion/censo-asembleas.html">Censo de asembleas →</a>
           <button type="button" class="link" id="forget-password">Esquecer contrasinal</button>
+          <button type="button" class="link" id="forget-github">Esquecer sesión de GitHub</button>
         </div>
       </div>
     </div>
@@ -167,6 +170,11 @@
         location.reload();
       });
 
+      document.querySelector("#forget-github").addEventListener("click", () => {
+        sessionStorage.removeItem("aaep-github-token");
+        alert("Esquecida a sesión de GitHub. A próxima vez que deas de alta algo no mapa pedirásela outra vez.");
+      });
+
       let solicitudes = [];
       let activeTab = "pendentes";
       let query = "";
@@ -179,6 +187,10 @@
         } else if (item.estado === "en_contacto") {
           buttons.push({ state: "resolta", label: "Marcar resolta", cls: "primary" });
           buttons.push({ state: "arquivada", label: "Arquivar", cls: "quiet" });
+        } else if (item.estado === "resolta") {
+          buttons.push({ action: "mapa", label: "Dar de alta no mapa", cls: "primary" });
+          buttons.push({ state: "arquivada", label: "Arquivar sen engadir ao mapa", cls: "quiet" });
+          buttons.push({ state: "en_contacto", label: "Reabrir", cls: "quiet" });
         } else {
           buttons.push({ state: "pendente_validacion", label: "Reabrir", cls: "quiet" });
         }
@@ -218,6 +230,7 @@
                 <span class="codigo">Código ${escapeHtml(item.centroCodigo)}</span>
               </div>
               <span class="pill ${item.estado}">${STATUS_LABEL[item.estado] || item.estado}</span>
+              ${item.noMapa ? '<span class="pill no-mapa">No mapa</span>' : ""}
             </div>
             <div class="card-meta">
               ${escapeHtml(item.nome)} · <a href="mailto:${encodeURIComponent(item.email)}">${escapeHtml(item.email)}</a>${item.telefono ? ` · <a href="tel:${encodeURIComponent(item.telefono)}">${escapeHtml(item.telefono)}</a>` : ""}
@@ -225,7 +238,7 @@
             </div>
             ${item.mensaxe ? `<div class="card-msg">${escapeHtml(item.mensaxe)}</div>` : ""}
             <div class="actions">
-              ${actionsFor(item).map((btn) => `<button type="button" class="${btn.cls}" data-state="${btn.state}">${btn.label}</button>`).join("")}
+              ${actionsFor(item).map((btn) => `<button type="button" class="${btn.cls}" ${btn.action ? `data-action="${btn.action}"` : `data-state="${btn.state}"`}>${btn.label}</button>`).join("")}
             </div>
           </article>
         `).join("")}</div>`;
@@ -244,21 +257,206 @@
         render();
       });
 
+      // --- Dar de alta no mapa ---------------------------------------
+      // Engade o centro a src/data/asembleas.json coma asemblea activa
+      // (sen datos de contacto) facendo un commit real en GitHub, para
+      // non ter que pasar polo CMS. Reutiliza o mesmo OAuth de GitHub que
+      // xa usa o CMS (/api/auth + /api/callback): a primeira vez abre
+      // unha xanela de login de GitHub; despois, o token gárdase na
+      // sesión do navegador e os commits quedan feitos coma a persoa que
+      // iniciou sesión.
+      const GITHUB_REPO = "asembleasensino/web";
+      const GITHUB_FILE_PATH = "src/data/asembleas.json";
+
+      function base64ToUtf8(base64) {
+        const binary = atob(base64.replace(/\n/g, ""));
+        const bytes = Uint8Array.from(binary, (char) => char.charCodeAt(0));
+        return new TextDecoder("utf-8").decode(bytes);
+      }
+
+      function utf8ToBase64(text) {
+        const bytes = new TextEncoder().encode(text);
+        let binary = "";
+        bytes.forEach((byte) => { binary += String.fromCharCode(byte); });
+        return btoa(binary);
+      }
+
+      function requestGithubToken() {
+        return new Promise((resolve, reject) => {
+          const popup = window.open("/api/auth", "github-oauth", "width=600,height=720");
+          if (!popup) {
+            reject(new Error("O navegador bloqueou a xanela de acceso a GitHub. Permite as xanelas emerxentes e téntao outra vez."));
+            return;
+          }
+          let settled = false;
+          const closeCheck = setInterval(() => {
+            if (popup.closed && !settled) {
+              cleanup();
+              reject(new Error("Pechaches a xanela de autorización de GitHub antes de rematar."));
+            }
+          }, 500);
+          function cleanup() {
+            window.removeEventListener("message", onMessage);
+            clearInterval(closeCheck);
+          }
+          function onMessage(event) {
+            if (event.origin !== window.location.origin || typeof event.data !== "string") return;
+            if (event.data === "authorizing:github") {
+              // Parte do protocolo de autorización do CMS, que reutilizamos
+              // tal cal: confirmamos a recepción para que a xanela emerxente
+              // nos envíe o resultado real.
+              popup.postMessage(event.data, event.origin);
+              return;
+            }
+            const match = event.data.match(/^authorization:github:(success|error):(.+)$/s);
+            if (!match) return;
+            settled = true;
+            cleanup();
+            const [, status, jsonPart] = match;
+            if (status === "success") {
+              try {
+                const { token } = JSON.parse(jsonPart);
+                sessionStorage.setItem("aaep-github-token", token);
+                resolve(token);
+              } catch {
+                reject(new Error("Resposta de GitHub inesperada."));
+              }
+            } else {
+              let message = "Autorización de GitHub cancelada ou fallida.";
+              try { message = JSON.parse(jsonPart).message || message; } catch {}
+              reject(new Error(message));
+            }
+          }
+          window.addEventListener("message", onMessage);
+        });
+      }
+
+      function ensureGithubToken() {
+        const stored = sessionStorage.getItem("aaep-github-token");
+        return stored ? Promise.resolve(stored) : requestGithubToken();
+      }
+
+      async function githubRequest(path, token, options = {}) {
+        return fetch(`https://api.github.com/repos/${GITHUB_REPO}${path}`, {
+          ...options,
+          headers: {
+            Authorization: `Bearer ${token}`,
+            Accept: "application/vnd.github+json",
+            "X-GitHub-Api-Version": "2022-11-28",
+            ...(options.headers || {}),
+          },
+        });
+      }
+
+      async function engadirCentroAoMapa(centro) {
+        let token = await ensureGithubToken();
+
+        async function tentar(retried) {
+          let getResponse = await githubRequest(`/contents/${GITHUB_FILE_PATH}`, token);
+          if (getResponse.status === 401 && !retried) {
+            sessionStorage.removeItem("aaep-github-token");
+            token = await requestGithubToken();
+            return tentar(true);
+          }
+          if (!getResponse.ok) throw new Error(`GitHub respondeu ${getResponse.status} ao ler o ficheiro.`);
+          const fileData = await getResponse.json();
+          const current = JSON.parse(base64ToUtf8(fileData.content));
+          const list = current.asembleas || [];
+          const index = list.findIndex((entry) => entry.codigo === centro.codigo);
+          if (index >= 0) {
+            list[index] = { ...list[index], nome: centro.nome, concello: centro.concello, estado: "activa" };
+          } else {
+            list.push({ codigo: centro.codigo, nome: centro.nome, concello: centro.concello, estado: "activa" });
+          }
+          current.asembleas = list;
+
+          const putResponse = await githubRequest(`/contents/${GITHUB_FILE_PATH}`, token, {
+            method: "PUT",
+            headers: { "content-type": "application/json" },
+            body: JSON.stringify({
+              message: `Dar de alta no mapa: ${centro.nome} (${centro.codigo})`,
+              content: utf8ToBase64(JSON.stringify(current, null, 2) + "\n"),
+              sha: fileData.sha,
+              branch: "main",
+            }),
+          });
+          if (putResponse.status === 401 && !retried) {
+            sessionStorage.removeItem("aaep-github-token");
+            token = await requestGithubToken();
+            return tentar(true);
+          }
+          if (putResponse.status === 409 && !retried) {
+            // Alguén editou o ficheiro á vez: volvemos ler e tentalo unha vez máis.
+            return tentar(true);
+          }
+          if (!putResponse.ok) {
+            const body = await putResponse.json().catch(() => ({}));
+            throw new Error(body.message || `GitHub respondeu ${putResponse.status} ao gardar.`);
+          }
+        }
+
+        await tentar(false);
+      }
+
+      async function patchSolicitude(id, extra) {
+        const response = await fetch("/api/solicitudes", {
+          method: "PATCH",
+          headers: { "content-type": "application/json", Authorization: xestionAuthHeader() },
+          body: JSON.stringify({ id, ...extra }),
+        });
+        if (!response.ok) throw new Error("Non foi posible actualizar a solicitude.");
+      }
+
+      async function handleDarDeAltaNoMapa(item, card, statusNote) {
+        const centroResponse = await fetch(`/api/centro?codigo=${encodeURIComponent(item.centroCodigo)}`, {
+          headers: { Authorization: xestionAuthHeader() },
+        });
+        if (!centroResponse.ok) throw new Error("Non se atopou o centro no catálogo de centros.");
+        const { centro } = await centroResponse.json();
+
+        if (centro.estado !== "activa") {
+          statusNote.textContent = "Gardando en GitHub…";
+          await engadirCentroAoMapa(centro);
+        }
+        statusNote.textContent = "Arquivando a solicitude…";
+        await patchSolicitude(item.id, { estado: "arquivada", noMapa: true });
+        item.estado = "arquivada";
+        item.noMapa = true;
+      }
+
       document.querySelector("#list").addEventListener("click", async (event) => {
-        const button = event.target.closest("button[data-state]");
+        const button = event.target.closest("button[data-state], button[data-action]");
         if (!button) return;
         const card = button.closest("article[data-id]");
         const id = card.dataset.id;
+        const item = solicitudes.find((s) => s.id === id);
+        if (!item) return;
+
+        if (button.dataset.action === "mapa") {
+          const confirmed = window.confirm(
+            `Dar de alta "${item.centro}" no mapa coma asemblea activa?\n\nIsto fai un commit no repositorio (sen datos de contacto) e tarda un par de minutos en verse no mapa.`
+          );
+          if (!confirmed) return;
+          card.querySelectorAll("button").forEach((btn) => (btn.disabled = true));
+          const statusNote = document.createElement("p");
+          statusNote.className = "status-note";
+          statusNote.textContent = "Comprobando o centro…";
+          card.appendChild(statusNote);
+          try {
+            await handleDarDeAltaNoMapa(item, card, statusNote);
+            render();
+          } catch (error) {
+            statusNote.remove();
+            card.querySelectorAll("button").forEach((btn) => (btn.disabled = false));
+            alert(`Non foi posible dar de alta no mapa: ${error.message}`);
+          }
+          return;
+        }
+
         card.querySelectorAll("button").forEach((btn) => (btn.disabled = true));
         try {
-          const response = await fetch("/api/solicitudes", {
-            method: "PATCH",
-            headers: { "content-type": "application/json", Authorization: xestionAuthHeader() },
-            body: JSON.stringify({ id, estado: button.dataset.state }),
-          });
-          if (!response.ok) throw new Error();
-          const item = solicitudes.find((s) => s.id === id);
-          if (item) item.estado = button.dataset.state;
+          await patchSolicitude(id, { estado: button.dataset.state });
+          item.estado = button.dataset.state;
           render();
         } catch {
           card.querySelectorAll("button").forEach((btn) => (btn.disabled = false));

@@ -154,8 +154,8 @@ export const onRequestPatch: PagesFunction<Env> = async ({ request, env }) => {
     return Response.json({ ok: false, error: "Almacenamento non configurado" }, { status: 503 });
   }
 
-  const body: { id?: string; estado?: string } = await request
-    .json<{ id?: string; estado?: string }>()
+  const body: { id?: string; estado?: string; noMapa?: boolean } = await request
+    .json<{ id?: string; estado?: string; noMapa?: boolean }>()
     .catch(() => ({}));
   const allowedStates = ["pendente_validacion", "en_contacto", "resolta", "arquivada"];
   if (!body.id || !body.estado || !allowedStates.includes(body.estado)) {
@@ -171,6 +171,10 @@ export const onRequestPatch: PagesFunction<Env> = async ({ request, env }) => {
   await env.SOLICITUDES.put(key, JSON.stringify({
     ...existing,
     estado: body.estado,
+    // noMapa só se marca, nunca se desmarca por aquí: unha vez dada de
+    // alta a asemblea no mapa, esa marca queda coma rexistro histórico
+    // aínda que a solicitude se reabra ou arquive de novo máis adiante.
+    ...(body.noMapa ? { noMapa: true, noMapaEn: new Date().toISOString() } : {}),
     updatedAt: new Date().toISOString(),
   }));
   return Response.json({ ok: true });
