@@ -647,6 +647,12 @@
       "nome": "IES David Buján",
       "concello": "Cambre",
       "estado": "activa"
+    },
+    {
+      "codigo": "15014957",
+      "nome": "CPI de San Sadurniño",
+      "concello": "San Sadurniño",
+      "estado": "activa"
     }
   ]
 }
