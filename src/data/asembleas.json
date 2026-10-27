@@ -653,6 +653,12 @@
       "nome": "CPI de San Sadurniño",
       "concello": "San Sadurniño",
       "estado": "activa"
+    },
+    {
+      "codigo": "36019669",
+      "nome": "IES Armando Cotarelo Valledor",
+      "concello": "Vilagarcía de Arousa",
+      "estado": "activa"
     }
   ]
 }
