@@ -665,6 +665,12 @@
       "nome": "CEIP Plurilingüe Sobreira-Valadares",
       "concello": "Vigo",
       "estado": "activa"
+    },
+    {
+      "codigo": "36020362",
+      "nome": "IES Plurilingüe de Valga",
+      "concello": "Valga",
+      "estado": "activa"
     }
   ]
 }
