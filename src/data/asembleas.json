@@ -659,6 +659,12 @@
       "nome": "IES Armando Cotarelo Valledor",
       "concello": "Vilagarcía de Arousa",
       "estado": "activa"
+    },
+    {
+      "codigo": "36015810",
+      "nome": "CEIP Plurilingüe Sobreira-Valadares",
+      "concello": "Vigo",
+      "estado": "activa"
     }
   ]
 }
