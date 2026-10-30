@@ -5,13 +5,14 @@ const errors = [];
 const fail = (message) => errors.push(message);
 const readJson = async (path) => JSON.parse(await readFile(path, "utf8"));
 
-const [site, home, rede, centrosData, asembleasData, aliases, contentTypes, decap] = await Promise.all([
+const [site, home, rede, centrosData, asembleasData, aliases, territoriosData, contentTypes, decap] = await Promise.all([
   readJson("src/data/site.json"),
   readJson("src/data/home.json"),
   readJson("src/data/rede.json"),
   readJson("src/data/centros.json"),
   readJson("src/data/asembleas.json"),
   readJson("src/data/comarcas-aliases.json"),
+  readJson("src/data/territorios.json"),
   readJson("src/data/content-types.json"),
   readFile("public/admin/config.yml", "utf8").then(parse),
 ]);
@@ -61,6 +62,33 @@ for (const [source, target] of Object.entries(aliases)) {
   }
 }
 
+// territorios.json agrupa os concellos nos territorios (intercentros) reais
+// polos que se organizan as asembleas, para o mapa. Un erro de escrita aquí
+// deixaría un concello sen agrupar en silencio, así que comprobamos que
+// cada concello mencionado existe de verdade no catálogo e que ningún
+// concello está asignado a dous territorios á vez (sería ambiguo).
+const concellosDoCatalogo = new Set(centrosData.centros.map((centro) => centro.concello));
+const territorioNomeados = new Set();
+const concelloAsignadoA = new Map();
+for (const territorio of territoriosData.territorios || []) {
+  if (!territorio.nome?.trim()) fail("src/data/territorios.json: territorio sen nome");
+  if (territorioNomeados.has(territorio.nome)) fail(`src/data/territorios.json: territorio duplicado "${territorio.nome}"`);
+  territorioNomeados.add(territorio.nome);
+  if (!Array.isArray(territorio.concellos) || territorio.concellos.length === 0) {
+    fail(`src/data/territorios.json: "${territorio.nome}" non ten concellos`);
+    continue;
+  }
+  for (const concello of territorio.concellos) {
+    if (!concellosDoCatalogo.has(concello)) {
+      fail(`src/data/territorios.json: "${territorio.nome}" menciona un concello que non existe no catálogo: "${concello}"`);
+    }
+    if (concelloAsignadoA.has(concello)) {
+      fail(`src/data/territorios.json: o concello "${concello}" está asignado a dous territorios ("${concelloAsignadoA.get(concello)}" e "${territorio.nome}")`);
+    }
+    concelloAsignadoA.set(concello, territorio.nome);
+  }
+}
+
 for (const field of ["site_domain", "base_url"]) {
   if (decap.backend?.[field] !== site.siteUrl) {
     fail(`public/admin/config.yml: backend.${field} non coincide con siteUrl`);
@@ -99,6 +127,7 @@ for (const requiredFile of [
   "src/data/home.json",
   "src/data/rede.json",
   "src/data/asembleas.json",
+  "src/data/territorios.json",
   "src/data/content-types.json",
 ]) {
   if (!editableConfigFiles.has(requiredFile)) {

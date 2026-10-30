@@ -1,0 +1,29 @@
+{
+  "territorios": [
+    {
+      "nome": "Intercentros Ferrolterra-Eume-Ortegal",
+      "concellos": ["Ferrol", "Neda"]
+    },
+    {
+      "nome": "Intercentros Coruña",
+      "concellos": ["A Coruña", "Arteixo", "Culleredo"]
+    },
+    {
+      "nome": "Intercentros Santiago",
+      "concellos": ["Santiago de Compostela", "Teo", "Ames", "Vedra", "Boqueixón"]
+    },
+    {
+      "nome": "Intercentros Morrazo",
+      "concellos": ["Cangas", "Moaña"]
+    },
+    {
+      "nome": "Intercentros Louriña",
+      "concellos": ["Mos", "O Porriño"]
+    },
+    {
+      "nome": "Intercentros Vigo",
+      "aliases": ["Intercentros Sur Ponte"],
+      "concellos": ["Vigo", "Redondela", "Vilaboa", "Pontevedra", "Tui", "Baiona", "Salceda de Caselas"]
+    }
+  ]
+}

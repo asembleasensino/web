@@ -216,6 +216,19 @@ collections:
                   - { label: En creación, value: creacion }
                   - { label: Activa, value: activa }
               - { label: Contacto público, name: contacto, widget: string, required: false }
+      - label: Territorios (intercentros) do mapa
+        name: territorios
+        file: src/data/territorios.json
+        hint: "Agrupación das asembleas por territorio (intercentros) real, que non ten por que coincidir coa comarca administrativa. Cada territorio é unha lista de concellos -- escribe o nome do concello exactamente como aparece no catálogo de centros (por exemplo \"A Coruña\", non \"Coruña\"). Un concello que non apareza en ningún territorio simplemente non se agrupa no mapa. Para que un territorio novo teña unha cor distinguible, engádeo ao FINAL da lista, non no medio."
+        fields:
+          - label: Territorios
+            name: territorios
+            widget: list
+            summary: "{{fields.nome}}"
+            fields:
+              - { label: Nome, name: nome, widget: string }
+              - { label: Outros nomes polos que se coñece (opcional), name: aliases, widget: list, required: false, field: { label: Nome alternativo, name: value, widget: string } }
+              - { label: Concellos, name: concellos, widget: list, field: { label: Concello, name: value, widget: string } }
       - label: Tipos de contido
         name: content_types
         file: src/data/content-types.json

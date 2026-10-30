@@ -1,5 +1,6 @@
 ---
 import { centros } from "../data/centros";
+import { territorios } from "../data/territorios";
 const tiposPrincipais = ["CEIP", "CPI", "IES", "CIFP", "EEI"];
 const todosOsTipos = [...new Set(centros.map((centro) => centro.tipo))].filter(Boolean);
 const tipos = [
@@ -51,7 +52,19 @@ const counts = {
           </div>
         </div>
 
-        <div class="mt-auto flex flex-wrap gap-x-5 gap-y-2 pt-10 text-[10px] uppercase tracking-wider text-paper/55">
+        {territorios.length > 0 && (
+          <div class="mt-8 border-t border-paper/20 pt-6">
+            <span class="text-[10px] uppercase tracking-wider text-paper/55">Territorios (intercentros)</span>
+            <ul class="mt-3 grid gap-1.5 text-[11px] text-paper/80">
+              {territorios.map((territorio) => <li>{territorio.nome}</li>)}
+            </ul>
+            <p class="mt-3 text-[10px] leading-relaxed text-paper/45">
+              Agrupación provisional por concellos -- pode cambiar. Pasa por riba dun territorio no mapa para velo enteiro.
+            </p>
+          </div>
+        )}
+
+        <div class="mt-auto flex flex-wrap gap-x-5 gap-y-2 pt-8 text-[10px] uppercase tracking-wider text-paper/55">
           <span class="flex items-center gap-2"><i class="h-2.5 w-2.5 rounded-full bg-green-600"></i> Activa</span>
           <span class="flex items-center gap-2"><i class="h-2.5 w-2.5 rounded-full bg-[#6f6c66]"></i> Resultado de busca</span>
         </div>
@@ -69,6 +82,7 @@ const counts = {
 <script>
   import L from "leaflet";
   import { centros } from "../data/centros";
+  import { territorioDoConcello } from "../data/territorios";
 
   type Estado = "activa" | "creacion" | "sen_asemblea";
   type Centro = (typeof centros)[number];
@@ -97,28 +111,64 @@ const counts = {
     const territoryPane = map.getPane("territories");
     if (territoryPane) {
       territoryPane.style.zIndex = "250";
-      territoryPane.style.pointerEvents = "none";
     }
 
     L.control.zoom({ position: "topright" }).addTo(map);
 
-    L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
-      attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>',
-      subdomains: "abc",
-      maxZoom: 19,
-    }).addTo(map);
+    // Sen fondo de OpenStreetMap a propósito: así Galiza debúxase só cos
+    // nosos propios datos (concellos agrupados por territorio), sen
+    // topónimos, mar nin posibilidade de navegar fóra do país.
+    //
+    // Sen paleta de cores nova a propósito (a guía de estilo pide evitar
+    // cores que non estean xa na marca): tódolos territorios usan o mesmo
+    // verde da marca (organización/comunidade), só o concello solto sen
+    // territorio queda nun gris neutro. Para distinguir un territorio do
+    // veciño, pasar por riba (ou premer) realza á vez tódolos concellos
+    // dese mesmo territorio.
+    const CONCELLO_SOLTO = { color: "#f2f0ec", weight: 1, opacity: 0.5, fillColor: "#c7c4bc", fillOpacity: 0.14 };
+    const TERRITORIO_BASE = { color: "#355a2c", weight: 1.1, opacity: 0.55, fillColor: "#355a2c", fillOpacity: 0.16 };
+    const TERRITORIO_REALZADO = { color: "#355a2c", weight: 2.2, opacity: 0.95, fillColor: "#355a2c", fillOpacity: 0.32 };
 
-    fetch("/data/comarcas.geojson")
+    const centrosActivosPorTerritorio = new Map<string, number>();
+    for (const centro of centros) {
+      if (centro.estado !== "activa" || !centro.territorio) continue;
+      centrosActivosPorTerritorio.set(centro.territorio, (centrosActivosPorTerritorio.get(centro.territorio) ?? 0) + 1);
+    }
+
+    // Capas de cada territorio, para poder realzalas tódas xuntas cando se
+    // pasa por riba de calquera concello que pertenza a ese territorio.
+    const capasPorTerritorio = new Map<string, L.Path[]>();
+
+    fetch("/data/concellos.geojson")
       .then((response) => response.json())
       .then((data) => L.geoJSON(data as GeoJSON.GeoJsonObject, {
         pane: "territories",
-        interactive: false,
-        style: {
-          color: "#252321",
-          weight: 1,
-          opacity: .42,
-          fillColor: "#f2f0ec",
-          fillOpacity: .12,
+        style: (feature) => {
+          const nomeConcello = feature?.properties?.CONCELLO as string | undefined;
+          const territorio = nomeConcello ? territorioDoConcello(nomeConcello) : undefined;
+          return territorio ? TERRITORIO_BASE : CONCELLO_SOLTO;
+        },
+        onEachFeature: (feature, layer) => {
+          const nomeConcello = feature?.properties?.CONCELLO as string | undefined;
+          const territorio = nomeConcello ? territorioDoConcello(nomeConcello) : undefined;
+          if (!territorio || !(layer instanceof L.Path)) return;
+
+          const grupo = capasPorTerritorio.get(territorio) ?? [];
+          grupo.push(layer);
+          capasPorTerritorio.set(territorio, grupo);
+
+          const numCentros = centrosActivosPorTerritorio.get(territorio) ?? 0;
+          layer.bindPopup(`
+            <p style="margin:0 0 .35rem;font-size:.65rem;font-weight:800;text-transform:uppercase;letter-spacing:.12em;color:#355a2c">Territorio</p>
+            <strong style="font-size:1rem;line-height:1.15">${territorio}</strong>
+            <p style="margin:.45rem 0 0;font-size:.78rem;color:#625f5a">${numCentros} ${numCentros === 1 ? "centro activo" : "centros activos"}</p>
+          `);
+
+          const realzar = () => grupo.forEach((capa) => capa.setStyle(TERRITORIO_REALZADO));
+          const atenuar = () => grupo.forEach((capa) => capa.setStyle(TERRITORIO_BASE));
+          layer.on("mouseover", realzar);
+          layer.on("mouseout", atenuar);
+          layer.on("popupclose", atenuar);
         },
       }).addTo(map))
       .catch(() => undefined);
