@@ -108,9 +108,13 @@ if (territorioField?.widget !== "select") {
       fail(`public/admin/config.yml: actualidade.territorio non inclúe o territorio "${nome}" (existe en territorios.json)`);
     }
   }
+  // "Nacional" e "Outro" non son territorios reais (non están nin deben
+  // estar en territorios.json) -- son as dúas opcións de comodín para algo
+  // que afecta a toda AAEP ou que non encaixa en ningún territorio.
+  const opcionsPermitidasFoiDosTerritorios = new Set(["Nacional", "Outro"]);
   for (const opcion of opcionsDoSelect) {
-    if (!territorioNomeados.has(opcion)) {
-      fail(`public/admin/config.yml: actualidade.territorio inclúe "${opcion}", que xa non existe en territorios.json`);
+    if (!territorioNomeados.has(opcion) && !opcionsPermitidasFoiDosTerritorios.has(opcion)) {
+      fail(`public/admin/config.yml: actualidade.territorio inclúe "${opcion}", que xa non existe en territorios.json nin é unha opción comodín coñecida (Nacional/Outro)`);
     }
   }
 }
@@ -177,13 +181,20 @@ for (const file of (await readdir("content/actualidade")).filter((name) => name.
   const frontmatterMatch = raw.match(/^---\r?\n([\s\S]*?)\r?\n---/);
   if (!frontmatterMatch) continue;
   const frontmatter = parse(frontmatterMatch[1]) || {};
-  if (isType(frontmatter.type, "Convocatoria") && frontmatter.territorio && !territorioNomeados.has(frontmatter.territorio)) {
-    fail(`content/actualidade/${file}: territorio "${frontmatter.territorio}" non existe en territorios.json`);
+  const opcionsPermitidasTerritorio = new Set(["Nacional", "Outro"]);
+  if (
+    frontmatter.territorio
+    && !territorioNomeados.has(frontmatter.territorio)
+    && !opcionsPermitidasTerritorio.has(frontmatter.territorio)
+  ) {
+    fail(`content/actualidade/${file}: territorio "${frontmatter.territorio}" non existe en territorios.json nin é "Nacional"/"Outro"`);
   }
-}
-
-function isType(value, expected) {
-  return String(value ?? "").trim().toLocaleLowerCase("gl") === expected.trim().toLocaleLowerCase("gl");
+  if (frontmatter.convocatoria && !frontmatter.territorio) {
+    fail(`content/actualidade/${file}: marcada coma convocatoria pero sen territorio (precísase para que apareza en /axenda filtrada por zona)`);
+  }
+  if (frontmatter.eventDateEnd && frontmatter.eventDate && new Date(frontmatter.eventDateEnd) < new Date(frontmatter.eventDate)) {
+    fail(`content/actualidade/${file}: a data de fin (eventDateEnd) é anterior á data de inicio (eventDate)`);
+  }
 }
 
 if (errors.length) {

@@ -2,15 +2,15 @@
 import { territorios } from "../data/territorios";
 import { site } from "../config/site";
 
-const nomesTerritorios = territorios.map((territorio) => territorio.nome);
+const nomesTerritorios = [...territorios.map((territorio) => territorio.nome), "Nacional", "Outro"];
 ---
 
 <section id="solicitar-convocatoria" class="bg-green text-paper">
   <div class="mx-auto grid max-w-[1500px] gap-10 px-4 py-16 md:px-8 md:py-24 lg:grid-cols-12 lg:gap-14">
     <div class="lg:col-span-5">
-      <h2 class="display type-display-section-lg max-w-2xl">Propón unha convocatoria</h2>
+      <h2 class="display type-display-section-lg max-w-2xl">Comunica unha convocatoria</h2>
       <p class="mt-8 max-w-lg text-lg leading-relaxed text-paper/80">
-        Calquera asemblea territorial ou de centro pode propor que un evento apareza aquí. Revisámolo e, se o aprobamos, publicámolo -- a proposta non aparece soa na axenda.
+        Calquera asemblea territorial ou de centro pode propor que un evento apareza aquí. Revisarémolo desde o GdT de Comunicación Dixital para posteriormente publicalo -- a proposta non aparece automaticamente na axenda.
       </p>
     </div>
     <form id="convocatoria-form" data-contact-email={site.email} class="grid gap-5 self-start bg-paper p-5 text-ink sm:p-8 lg:col-span-7" method="post" action="/api/solicitudes">
@@ -24,9 +24,13 @@ const nomesTerritorios = territorios.map((territorio) => territorio.nome);
           </select>
         </div>
         <div>
-          <label class="mb-2 block text-xs font-bold" for="convocatoria-data">Data e hora</label>
+          <label class="mb-2 block text-xs font-bold" for="convocatoria-data">Data e hora de inicio</label>
           <input class="focus-ring w-full rounded-[4px] border border-ink/30 bg-transparent px-4 py-3" id="convocatoria-data" name="data" type="datetime-local" required />
         </div>
+      </div>
+      <div>
+        <label class="mb-2 block text-xs font-bold" for="convocatoria-data-fin">Data e hora de fin <span class="font-normal text-ink/50">(opcional, só se dura máis dun intre)</span></label>
+        <input class="focus-ring w-full rounded-[4px] border border-ink/30 bg-transparent px-4 py-3" id="convocatoria-data-fin" name="dataFin" type="datetime-local" />
       </div>
       <div>
         <label class="mb-2 block text-xs font-bold" for="convocatoria-titulo">Título do evento</label>

@@ -2,6 +2,7 @@
 title: Xornada de Organización das Asembleas Abertas do Ensino Público
 date: 2026-09-05T21:51:00.000+02:00
 type: Convocatoria
+convocatoria: true
 summary: O 26 de setembro celebraremos en Santiago de Compostela unha Xornada de
   Organización aberta a todo o profesorado para definir colectivamente o
   funcionamento, os roles e os espazos das Asembleas Abertas do Ensino Público.

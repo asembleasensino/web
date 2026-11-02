@@ -36,6 +36,7 @@ type SolicitudeConvocatoria = {
   telefono: string;
   titulo: string;
   data: string;
+  dataFin: string;
   lugar: string;
   descricion: string;
 };
@@ -51,7 +52,7 @@ async function notifyByEmail(env: Env, payload: SolicitudeActivacion | Solicitud
         <h1>Nova proposta de convocatoria para a axenda</h1>
         <p><strong>Territorio:</strong> ${escapeHtml(payload.territorio)}</p>
         <p><strong>Título:</strong> ${escapeHtml(payload.titulo)}</p>
-        <p><strong>Data:</strong> ${escapeHtml(payload.data)}</p>
+        <p><strong>Data:</strong> ${escapeHtml(payload.data)}${payload.dataFin ? ` -- ${escapeHtml(payload.dataFin)}` : ""}</p>
         ${payload.lugar ? `<p><strong>Lugar:</strong> ${escapeHtml(payload.lugar)}</p>` : ""}
         <p><strong>Persoa:</strong> ${escapeHtml(payload.nome)}</p>
         <p><strong>Correo:</strong> ${escapeHtml(payload.email)}</p>
@@ -142,6 +143,7 @@ export const onRequestPost: PagesFunction<Env> = async ({ request, env }) => {
     const territorio = String(form.get("territorio") ?? "").trim();
     const titulo = String(form.get("titulo") ?? "").trim();
     const data = String(form.get("data") ?? "").trim();
+    const dataFin = String(form.get("dataFin") ?? "").trim();
     const lugar = String(form.get("lugar") ?? "").trim();
     const descricion = String(form.get("descricion") ?? "").trim();
 
@@ -149,6 +151,7 @@ export const onRequestPost: PagesFunction<Env> = async ({ request, env }) => {
       !territorio || territorio.length > 100
       || !titulo || titulo.length > 200
       || !data || Number.isNaN(Date.parse(data))
+      || (dataFin && (Number.isNaN(Date.parse(dataFin)) || Date.parse(dataFin) < Date.parse(data)))
       || lugar.length > 200
       || descricion.length > 2000
       || !nome || nome.length > 150
@@ -163,6 +166,7 @@ export const onRequestPost: PagesFunction<Env> = async ({ request, env }) => {
       territorio,
       titulo,
       data,
+      dataFin,
       lugar,
       descricion,
       nome,

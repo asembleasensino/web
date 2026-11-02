@@ -1,16 +1,18 @@
 ---
 import BaseLayout from "../../layouts/BaseLayout.astro";
 import SolicitudeConvocatoriaForm from "../../components/SolicitudeConvocatoriaForm.astro";
-import { actualidadeUrl, dataDaConvocatoria, formatDate, getConvocatorias } from "../../lib/content";
+import { actualidadeUrl, dataDaConvocatoria, dataFinDaConvocatoria, formatDiaBadge, formatRangoEvento, getConvocatorias } from "../../lib/content";
 import { corDoTerritorio, territorios } from "../../data/territorios";
 import { site } from "../../config/site";
 
 const universoTerritorios = territorios.map((territorio) => territorio.nome);
 const convocatorias = await getConvocatorias();
 const agora = new Date();
-const proximas = convocatorias.filter((entry) => dataDaConvocatoria(entry).getTime() >= agora.getTime());
+// Un evento de varios días segue en "próximas" mentres non remate o
+// último día, aínda que xa comezase (ver dataFinDaConvocatoria).
+const proximas = convocatorias.filter((entry) => dataFinDaConvocatoria(entry).getTime() >= agora.getTime());
 const pasadas = convocatorias
-  .filter((entry) => dataDaConvocatoria(entry).getTime() < agora.getTime())
+  .filter((entry) => dataFinDaConvocatoria(entry).getTime() < agora.getTime())
   .sort((a, b) => dataDaConvocatoria(b).getTime() - dataDaConvocatoria(a).getTime());
 
 const territoriosPresentes = [...new Set(convocatorias.map((entry) => entry.data.territorio).filter((valor): valor is string => Boolean(valor)))]
@@ -54,14 +56,14 @@ function icsDate(date: Date) {
       <div class="grid gap-5">
         {proximas.map((entry) => {
           const data = dataDaConvocatoria(entry);
+          const fin = entry.data.eventDateEnd;
           const cor = entry.data.territorio ? corDoTerritorio(entry.data.territorio, universoTerritorios) : "#252321";
-          const diaSemana = new Intl.DateTimeFormat("gl-ES", { weekday: "short", timeZone: "Europe/Madrid" }).format(data);
+          const badge = formatDiaBadge(data, fin);
           return (
             <article data-convocatoria data-territorio={entry.data.territorio || ""} class="convocatoria-card grid gap-5 border border-ink/20 bg-paper p-5 sm:grid-cols-[6.5rem_minmax(0,1fr)_auto] sm:items-center sm:p-6">
               <div class="flex items-center gap-4 sm:block sm:text-center">
-                <p class="text-[.65rem] font-black uppercase tracking-wider text-ink/45">{diaSemana}</p>
-                <p class="font-display text-4xl font-black leading-none" style={`color:${cor}`}>{new Intl.DateTimeFormat("gl-ES", { day: "2-digit", timeZone: "Europe/Madrid" }).format(data)}</p>
-                <p class="text-[.7rem] font-bold uppercase text-ink/55">{new Intl.DateTimeFormat("gl-ES", { month: "short", timeZone: "Europe/Madrid" }).format(data)}</p>
+                <p class="font-display text-3xl font-black leading-none" style={`color:${cor}`}>{badge.dia}</p>
+                <p class="text-[.7rem] font-bold uppercase text-ink/55">{badge.mes}</p>
               </div>
               <div class="min-w-0">
                 {entry.data.territorio && (
@@ -69,7 +71,7 @@ function icsDate(date: Date) {
                 )}
                 <h2 class="mt-2 text-lg font-extrabold leading-tight"><a href={actualidadeUrl(entry)} class="hover:text-red">{entry.data.title}</a></h2>
                 <p class="mt-2 text-sm text-ink/60">
-                  {formatDate(data, { hour: "2-digit", minute: "2-digit" })}
+                  {formatRangoEvento(data, fin)}
                   {entry.data.eventLocation ? ` · ${entry.data.eventLocation}` : ""}
                 </p>
               </div>
@@ -79,6 +81,7 @@ function icsDate(date: Date) {
                 data-uid={entry.id}
                 data-title={icsEscape(entry.data.title)}
                 data-start={icsDate(data)}
+                data-end={fin ? icsDate(fin) : ""}
                 data-location={icsEscape(entry.data.eventLocation || "")}
                 data-description={icsEscape(entry.data.summary || "")}
               >
@@ -102,7 +105,7 @@ function icsDate(date: Date) {
             const data = dataDaConvocatoria(entry);
             return (
               <article data-convocatoria data-territorio={entry.data.territorio || ""} class="convocatoria-card grid gap-2 border-b border-ink/15 py-4 opacity-70 sm:grid-cols-[9rem_minmax(0,1fr)] sm:items-baseline">
-                <p class="text-xs font-bold uppercase text-ink/50">{formatDate(data)}</p>
+                <p class="text-xs font-bold uppercase text-ink/50">{formatRangoEvento(data, entry.data.eventDateEnd)}</p>
                 <h3 class="text-sm font-bold"><a href={actualidadeUrl(entry)} class="hover:text-red">{entry.data.title}</a>{entry.data.territorio ? <span class="ml-2 text-xs font-normal text-ink/50">{entry.data.territorio}</span> : null}</h3>
               </article>
             );
@@ -138,15 +141,23 @@ function icsDate(date: Date) {
     // .ics dun só evento, xerado no propio navegador (sen backend nin
     // librería), coa mesma técnica que a exportación CSV do panel de
     // xestión. Sen hora de fin coñecida: por defecto dúas horas.
+    const toIcs = (date: Date) => date.toISOString().replace(/[-:]/g, "").replace(/\.\d{3}Z$/, "Z");
+
     document.querySelectorAll<HTMLButtonElement>(".ics-button").forEach((button) => {
       button.addEventListener("click", () => {
-        const { uid, title, start, location, description } = button.dataset;
+        const { uid, title, start, end: endRaw, location, description } = button.dataset;
         if (!start) return;
-        const startDate = new Date(
-          `${start.slice(0, 4)}-${start.slice(4, 6)}-${start.slice(6, 8)}T${start.slice(9, 11)}:${start.slice(11, 13)}:${start.slice(13, 15)}Z`,
-        );
-        const end = new Date(startDate.getTime() + 2 * 60 * 60 * 1000);
-        const toIcs = (date: Date) => date.toISOString().replace(/[-:]/g, "").replace(/\.\d{3}Z$/, "Z");
+        let end: string;
+        if (endRaw) {
+          // Evento con fin coñecido (varios días ou varias horas): úsase tal cal.
+          end = endRaw;
+        } else {
+          // Sen fin coñecido: por defecto dúas horas.
+          const startDate = new Date(
+            `${start.slice(0, 4)}-${start.slice(4, 6)}-${start.slice(6, 8)}T${start.slice(9, 11)}:${start.slice(11, 13)}:${start.slice(13, 15)}Z`,
+          );
+          end = toIcs(new Date(startDate.getTime() + 2 * 60 * 60 * 1000));
+        }
         const lines = [
           "BEGIN:VCALENDAR",
           "VERSION:2.0",
@@ -155,7 +166,7 @@ function icsDate(date: Date) {
           `UID:${uid}@asembleasensino.gal`,
           `DTSTAMP:${toIcs(new Date())}`,
           `DTSTART:${start}`,
-          `DTEND:${toIcs(end)}`,
+          `DTEND:${end}`,
           `SUMMARY:${title || ""}`,
           location ? `LOCATION:${location}` : "",
           description ? `DESCRIPTION:${description}` : "",

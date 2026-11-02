@@ -1,7 +1,7 @@
 ---
 import BaseLayout from "../../layouts/BaseLayout.astro";
 import ArticleCard from "../../components/ArticleCard.astro";
-import { actualidadeUrl, dataDaConvocatoria, formatDate, getActualidadeSenConvocatorias, getConvocatorias, isType } from "../../lib/content";
+import { actualidadeUrl, dataDaConvocatoria, dataFinDaConvocatoria, formatRangoEvento, getActualidadeSenConvocatorias, getConvocatorias, isType } from "../../lib/content";
 import { site } from "../../config/site";
 
 const artigos = await getActualidadeSenConvocatorias();
@@ -10,7 +10,7 @@ const hemeroteca = artigos.filter((artigo) => isType(artigo.data.seccion, "hemer
 
 const agora = new Date();
 const proximasConvocatorias = (await getConvocatorias())
-  .filter((entry) => dataDaConvocatoria(entry).getTime() >= agora.getTime())
+  .filter((entry) => dataFinDaConvocatoria(entry).getTime() >= agora.getTime())
   .slice(0, 4);
 ---
 <BaseLayout title={`Actualidade · ${site.shortName}`}>
@@ -27,7 +27,7 @@ const proximasConvocatorias = (await getConvocatorias())
       <div class="mt-5 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
         {proximasConvocatorias.map((entry) => (
           <a href={actualidadeUrl(entry)} class="block border border-ink/20 p-4 no-underline hover:border-ink">
-            <p class="text-[.65rem] font-black uppercase tracking-wider text-red">{formatDate(dataDaConvocatoria(entry))}</p>
+            <p class="text-[.65rem] font-black uppercase tracking-wider text-red">{formatRangoEvento(dataDaConvocatoria(entry), entry.data.eventDateEnd)}</p>
             <p class="mt-2 text-sm font-extrabold leading-snug">{entry.data.title}</p>
             {entry.data.territorio && <p class="mt-1 text-xs text-ink/50">{entry.data.territorio}</p>}
           </a>

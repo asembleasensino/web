@@ -20,13 +20,23 @@ const actualidade = defineCollection({
     // arriba para o mesmo problema noutro campo). Tratamos "" coma ausencia
     // de valor.
     eventDate: z.preprocess((value) => (value === "" ? undefined : value), z.coerce.date().optional()),
+    // Para eventos que duran máis dun intre (varios días, coma a votación
+    // do referendo, ou só varias horas o mesmo día): data e hora de fin,
+    // opcional. Se non se enche, o evento é un só momento (coma antes).
+    eventDateEnd: z.preprocess((value) => (value === "" ? undefined : value), z.coerce.date().optional()),
     eventLocation: z.string().optional(),
-    // Só se usa en entradas de tipo Convocatoria: o territorio (un dos
-    // nomes reais de src/data/territorios.json) ao que pertence, para que
-    // apareza en /axenda filtrada por ese territorio e coa mesma cor có
-    // mapa. É un "select" en Decap (non texto libre coma "type"), así que
-    // non debería chegar escrito distinto -- pero tratamos "" coma
-    // ausencia de valor polo mesmo motivo que eventDate.
+    // A FONTE DE VERDADE de se unha entrada é unha convocatoria (aparece en
+    // /axenda, usa territorio/eventDate, exclúese da grade de /actualidade)
+    // é ESTE booleano, non o campo "type". "type" segue sendo texto libre
+    // (deliberado, ver máis abaixo) e por iso un erro de escritura nel xa
+    // non rompe nada -- antes "Convocatoria" tiña que estar escrito exacto.
+    convocatoria: z.preprocess((value) => (value === "" ? undefined : value), z.boolean().default(false)),
+    // Só ten sentido cando convocatoria=true: o territorio (un dos nomes
+    // reais de src/data/territorios.json, ou "Nacional"/"Outro") ao que
+    // pertence, para que apareza en /axenda filtrada por ese territorio e
+    // coa mesma cor có mapa. É un "select" en Decap (non texto libre coma
+    // "type"), así que non debería chegar escrito distinto -- pero
+    // tratamos "" coma ausencia de valor polo mesmo motivo que eventDate.
     territorio: z.preprocess((value) => (value === "" ? undefined : value), z.string().optional()),
     // Distingue as dúas pestanas de /actualidade: contido propio de AAEP
     // fronte a prensa/mobilizacións externas recollidas na hemeroteca.
