@@ -1,29 +1,127 @@
 {
   "territorios": [
     {
-      "nome": "Intercentros Ferrolterra-Eume-Ortegal",
-      "concellos": ["Ferrol", "Neda"]
+      "nome": "A Coruña",
+      "concellos": [
+        "A Coruña",
+        "Cambre"
+      ]
     },
     {
-      "nome": "Intercentros Coruña",
-      "concellos": ["A Coruña", "Arteixo", "Culleredo"]
+      "nome": "A Louriña",
+      "concellos": [
+        "Mos",
+        "O Porriño"
+      ]
     },
     {
-      "nome": "Intercentros Santiago",
-      "concellos": ["Santiago de Compostela", "Teo", "Ames", "Vedra", "Boqueixón"]
+      "nome": "Baixo Miño/O Condado/Paradanta",
+      "concellos": [
+        "As Neves",
+        "O Rosal",
+        "Ponteareas",
+        "Salceda de Caselas",
+        "Salvaterra de Miño",
+        "Tui"
+      ]
     },
     {
-      "nome": "Intercentros Morrazo",
-      "concellos": ["Cangas", "Moaña"]
+      "nome": "Barbanza",
+      "concellos": [
+        "Ribeira"
+      ]
     },
     {
-      "nome": "Intercentros Louriña",
-      "concellos": ["Mos", "O Porriño"]
+      "nome": "Bergantiños-Costa da Morte",
+      "concellos": [
+        "A Laracha",
+        "Cabana de Bergantiños",
+        "Carballo",
+        "Cee",
+        "Coristanco",
+        "Laxe",
+        "Ponteceso",
+        "Vimianzo"
+      ]
     },
     {
-      "nome": "Intercentros Vigo",
-      "aliases": ["Intercentros Sur Ponte"],
-      "concellos": ["Vigo", "Redondela", "Vilaboa", "Pontevedra", "Tui", "Baiona", "Salceda de Caselas"]
+      "nome": "Compostela",
+      "concellos": [
+        "A Baña",
+        "Ames",
+        "Boqueixón",
+        "Brión",
+        "Negreira",
+        "O Pino",
+        "Ordes",
+        "Oroso",
+        "Padrón",
+        "Porto do Son",
+        "Santiago de Compostela",
+        "Teo",
+        "Touro",
+        "Val do Dubra",
+        "Valga",
+        "Vilagarcía de Arousa"
+      ]
+    },
+    {
+      "nome": "Deza/Compostela",
+      "concellos": [
+        "A Estrada"
+      ]
+    },
+    {
+      "nome": "Ferrolterra",
+      "concellos": [
+        "Fene",
+        "Ferrol",
+        "Narón",
+        "Neda",
+        "San Sadurniño"
+      ]
+    },
+    {
+      "nome": "Morrazo/Pontevedra Sur",
+      "concellos": [
+        "Bueu",
+        "Cangas",
+        "Moaña"
+      ]
+    },
+    {
+      "nome": "Muros/Compostela",
+      "concellos": [
+        "Muros"
+      ]
+    },
+    {
+      "nome": "Pontevedra/Pontevedra Sur",
+      "concellos": [
+        "Pontevedra"
+      ]
+    },
+    {
+      "nome": "Redondela/Pontevedra Sur",
+      "concellos": [
+        "Redondela",
+        "Soutomaior",
+        "Vilaboa"
+      ]
+    },
+    {
+      "nome": "Val Miñor/Pontevedra Sur",
+      "concellos": [
+        "Baiona"
+      ]
+    },
+    {
+      "nome": "Vigo/Pontevedra Sur",
+      "concellos": [
+        "Gondomar",
+        "Nigrán",
+        "Vigo"
+      ]
     }
   ]
 }
