@@ -1,0 +1,436 @@
+<!doctype html>
+<html lang="gl">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Coordinación · Xestión AAEP</title>
+    <style>
+      @import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap");
+
+      :root {
+        --ink: #252321;
+        --paper: #f2f0ec;
+        --paper-raised: #fbfaf8;
+        --red: #c94a42;
+        --red-bg: rgba(201, 74, 66, 0.1);
+        --green: #355a2c;
+        --green-bg: rgba(53, 90, 44, 0.1);
+        --amber: #a8722a;
+        --amber-bg: rgba(184, 134, 46, 0.14);
+        --line: rgba(37, 35, 33, 0.14);
+        --line-strong: rgba(37, 35, 33, 0.28);
+        --shadow: 3px 3px 0 rgba(37, 35, 33, 0.12);
+        --font-display: "Arial Narrow", "Helvetica Neue Condensed", "Roboto Condensed", sans-serif;
+        --font-sans: Inter, "Helvetica Neue", Arial, sans-serif;
+      }
+      * { box-sizing: border-box; }
+      body { margin: 0; font-family: var(--font-sans); background: var(--paper); color: var(--ink); line-height: 1.5; }
+      .topbar { position: sticky; top: 0; z-index: 10; background: var(--paper); border-bottom: 1px solid var(--line); }
+      .topbar-inner { max-width: 1080px; margin: 0 auto; padding: 18px 20px; display: flex; align-items: center; gap: 16px; flex-wrap: wrap; }
+      .badge { display: grid; place-items: center; width: 34px; height: 34px; border-radius: 4px; background: var(--ink); color: var(--paper); font-weight: 800; font-size: 0.7rem; flex-shrink: 0; }
+      .topbar h1 { font-family: var(--font-display); font-stretch: condensed; font-size: 1.5rem; margin: 0; letter-spacing: -0.01em; }
+      .topbar .links { margin-left: auto; display: flex; gap: 16px; align-items: center; font-size: 0.78rem; font-weight: 700; }
+      .topbar a { color: var(--ink); }
+      .topbar button.link { appearance: none; background: none; border: 0; padding: 0; font: inherit; font-weight: 700; color: var(--ink); opacity: 0.55; cursor: pointer; }
+      .topbar button.link:hover { opacity: 1; text-decoration: underline; }
+
+      .wrap { max-width: 1080px; margin: 0 auto; padding: 28px 20px 90px; }
+
+      .tabs { display: inline-flex; border: 1.5px solid var(--ink); border-radius: 4px; overflow: hidden; margin-bottom: 22px; }
+      .tabs button { appearance: none; border: 0; background: var(--paper-raised); color: var(--ink); padding: 9px 16px; font: inherit; font-weight: 700; font-size: 0.82rem; cursor: pointer; }
+      .tabs button + button { border-left: 1.5px solid var(--ink); }
+      .tabs button[aria-selected="true"] { background: var(--ink); color: var(--paper); }
+
+      .panel { display: none; }
+      .panel.active { display: block; }
+
+      .controls { display: flex; flex-wrap: wrap; gap: 14px; align-items: center; margin-bottom: 18px; }
+      .search, select, input[type="text"], textarea {
+        border: 1.5px solid var(--line-strong); border-radius: 4px; padding: 9px 12px;
+        font: inherit; font-size: 0.85rem; background: var(--paper-raised); color: var(--ink);
+      }
+      .search { flex: 1; min-width: 200px; max-width: 320px; }
+      .search:focus, select:focus, input:focus, textarea:focus { outline: 2px solid var(--ink); outline-offset: 1px; }
+
+      .status-msg { padding: 40px 0; text-align: center; color: color-mix(in srgb, var(--ink) 55%, transparent); font-size: 0.95rem; }
+      .status-msg.error { color: var(--red); font-weight: 700; }
+      .hint { font-size: 0.78rem; color: color-mix(in srgb, var(--ink) 55%, transparent); margin: -10px 0 18px; }
+
+      .list { display: grid; gap: 14px; }
+      .card { background: var(--paper-raised); border: 1px solid var(--line); border-radius: 5px; box-shadow: var(--shadow); padding: 18px 20px; display: grid; gap: 12px; }
+      .card-head { display: flex; flex-wrap: wrap; align-items: flex-start; justify-content: space-between; gap: 10px; }
+      .card-head h2 { margin: 0; font-size: 1.1rem; font-weight: 800; }
+      .card-head .meta { display: block; margin-top: 2px; font-size: 0.72rem; color: color-mix(in srgb, var(--ink) 55%, transparent); font-weight: 600; letter-spacing: 0.02em; }
+      .tags { display: flex; gap: 6px; flex-wrap: wrap; }
+      .pill { font-size: 0.68rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.05em; padding: 4px 10px; border-radius: 999px; white-space: nowrap; }
+      .pill.activa { background: var(--green-bg); color: var(--green); }
+      .pill.creacion { background: var(--amber-bg); color: var(--amber); }
+      .pill.sen_asemblea { background: rgba(37, 35, 33, 0.08); color: color-mix(in srgb, var(--ink) 60%, transparent); }
+      .pill.territorio { background: rgba(37, 35, 33, 0.08); color: var(--ink); }
+      .pill.nucleo { background: var(--red-bg); color: var(--red); }
+
+      .fields { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; }
+      .fields label { display: grid; gap: 4px; font-size: 0.72rem; font-weight: 700; color: color-mix(in srgb, var(--ink) 65%, transparent); }
+      .fields textarea { grid-column: 1 / -1; min-height: 52px; resize: vertical; font-family: inherit; }
+      @media (max-width: 640px) { .fields { grid-template-columns: 1fr; } }
+
+      .actions { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
+      .actions button { appearance: none; border: 1.5px solid var(--ink); background: transparent; color: var(--ink); padding: 7px 13px; font: inherit; font-size: 0.76rem; font-weight: 700; border-radius: 4px; cursor: pointer; }
+      .actions button:hover { background: var(--ink); color: var(--paper); }
+      .actions button:disabled { opacity: 0.4; cursor: default; background: none; color: var(--ink); }
+      .actions button.primary { background: var(--ink); color: var(--paper); }
+      .actions button.primary:hover { background: var(--green); border-color: var(--green); }
+      .actions button.quiet { border-color: var(--line-strong); opacity: 0.7; }
+      .actions button.quiet:hover { background: transparent; color: var(--ink); opacity: 1; text-decoration: underline; }
+      .status-note { margin: 0; font-size: 0.78rem; font-weight: 700; color: color-mix(in srgb, var(--ink) 60%, transparent); }
+
+      .mover-form { background: var(--paper-raised); border: 1px solid var(--line); border-radius: 5px; box-shadow: var(--shadow); padding: 18px 20px; display: grid; gap: 10px; margin-bottom: 22px; }
+      .mover-form h2 { margin: 0; font-size: 1rem; }
+      .mover-row { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; }
+      .mover-row select, .mover-row input { flex: 1; min-width: 160px; }
+
+      .territorio-card .concellos { font-size: 0.82rem; color: color-mix(in srgb, var(--ink) 65%, transparent); }
+      .rename-row { display: flex; gap: 8px; align-items: center; }
+      .rename-row input { flex: 1; }
+    </style>
+  </head>
+  <body>
+    <div class="topbar">
+      <div class="topbar-inner">
+        <span class="badge">AA</span>
+        <h1>Coordinación</h1>
+        <div class="links">
+          <a href="/xestion/solicitudes.html">Solicitudes →</a>
+          <button type="button" class="link" id="forget-password">Esquecer contrasinal</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="wrap">
+      <div class="tabs" role="tablist" aria-label="Sección">
+        <button type="button" role="tab" data-panel="centros" aria-selected="true">Centros</button>
+        <button type="button" role="tab" data-panel="territorios" aria-selected="false">Territorios</button>
+      </div>
+
+      <section id="panel-centros" class="panel active">
+        <div class="controls">
+          <input type="search" id="centros-search" class="search" placeholder="Buscar por nome, concello ou código…" />
+        </div>
+        <p class="hint">Por defecto só se amosan os centros con asemblea (activa ou en creación). Busca para atopar calquera outro centro do catálogo e activalo.</p>
+        <div id="centros-list"><p class="status-msg">Cargando centros…</p></div>
+      </section>
+
+      <section id="panel-territorios" class="panel">
+        <div class="mover-form">
+          <h2>Mover un concello a outro territorio</h2>
+          <p class="hint" style="margin:0">Move TÓDOLOS centros dese concello dunha vez (así funciona o mapa). Tarda un par de minutos en verse no mapa público.</p>
+          <div class="mover-row">
+            <select id="mover-concello"><option value="">Concello…</option></select>
+            <select id="mover-destino"><option value="">Territorio destino…</option><option value="__novo__">+ Crear territorio novo…</option></select>
+            <input type="text" id="mover-destino-novo" placeholder="Nome do territorio novo" style="display:none" />
+            <button type="button" class="primary" id="mover-boton" style="appearance:none;border:1.5px solid var(--ink);background:var(--ink);color:var(--paper);padding:9px 16px;font:inherit;font-size:0.82rem;font-weight:700;border-radius:4px;cursor:pointer">Mover</button>
+          </div>
+          <p class="status-note" id="mover-status"></p>
+        </div>
+        <div id="territorios-list"><p class="status-msg">Cargando territorios…</p></div>
+      </section>
+    </div>
+
+    <script>
+      const escapeHtml = (value = "") => String(value).replace(/[&<>"']/g, (character) => ({
+        "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#039;"
+      })[character]);
+
+      function xestionAuthHeader() {
+        let password = sessionStorage.getItem("aaep-xestion-password");
+        if (password === null) {
+          password = window.prompt("Contrasinal de xestión:") || "";
+          sessionStorage.setItem("aaep-xestion-password", password);
+        }
+        return "Basic " + btoa(":" + password);
+      }
+
+      document.querySelector("#forget-password").addEventListener("click", () => {
+        sessionStorage.removeItem("aaep-xestion-password");
+        location.reload();
+      });
+
+      document.querySelectorAll(".tabs button[role=tab]").forEach((tab) => {
+        tab.addEventListener("click", () => {
+          document.querySelectorAll(".tabs button[role=tab]").forEach((btn) => btn.setAttribute("aria-selected", String(btn === tab)));
+          document.querySelectorAll(".panel").forEach((panel) => panel.classList.toggle("active", panel.id === `panel-${tab.dataset.panel}`));
+        });
+      });
+
+      // ---------------------------------------------------------------
+      // Centros
+      // ---------------------------------------------------------------
+      let centros = [];
+      let centrosQuery = "";
+
+      const ESTADO_LABEL = { activa: "Activa", creacion: "En creación", sen_asemblea: "Sen asemblea" };
+
+      function matchesCentro(item) {
+        if (!centrosQuery) return item.estado !== "sen_asemblea";
+        const haystack = `${item.nome} ${item.concello} ${item.codigo}`.toLocaleLowerCase("gl");
+        return haystack.includes(centrosQuery);
+      }
+
+      function renderCentros() {
+        const visible = centros.filter(matchesCentro).slice(0, 200);
+        const list = document.querySelector("#centros-list");
+        if (!visible.length) {
+          list.innerHTML = `<p class="status-msg">${centrosQuery ? "Ningún centro coincide coa busca." : "Non hai centros con asemblea aínda."}</p>`;
+          return;
+        }
+        list.innerHTML = `<div class="list">${visible.map((item) => `
+          <article class="card" data-codigo="${escapeHtml(item.codigo)}">
+            <div class="card-head">
+              <div>
+                <h2>${escapeHtml(item.nome)}</h2>
+                <span class="meta">${escapeHtml(item.concello)} · ${escapeHtml(item.tipo || "")} · Código ${escapeHtml(item.codigo)}</span>
+              </div>
+              <div class="tags">
+                <span class="pill ${item.estado}">${ESTADO_LABEL[item.estado] || item.estado}</span>
+                ${item.territorio ? `<span class="pill ${item.nucleo ? "nucleo" : "territorio"}">${item.nucleo ? "Núcleo" : "Territorio"}: ${escapeHtml(item.territorio)}</span>` : ""}
+              </div>
+            </div>
+            <div class="fields">
+              <label>Persoa de contacto<input type="text" data-field="contacto" value="${escapeHtml(item.contacto)}" /></label>
+              <label>Responsable<input type="text" data-field="responsable" value="${escapeHtml(item.responsable)}" /></label>
+              <label>Representantes / outra info<input type="text" data-field="representantes" value="${escapeHtml(item.representantes)}" /></label>
+              <label>Notas<textarea data-field="notas">${escapeHtml(item.notas)}</textarea></label>
+            </div>
+            <div class="actions">
+              <button type="button" class="primary" data-action="gardar">Gardar</button>
+              ${item.estado === "sen_asemblea" ? `
+                <button type="button" data-action="activar">Activar no mapa</button>
+                <button type="button" class="quiet" data-action="creacion">Pór en creación</button>
+              ` : item.estado === "creacion" ? `<button type="button" data-action="activar">Activar no mapa</button>` : ""}
+            </div>
+          </article>
+        `).join("")}</div>`;
+        if (centros.filter(matchesCentro).length > visible.length) {
+          list.insertAdjacentHTML("beforeend", `<p class="hint">Hai máis resultados -- afina a busca para velos.</p>`);
+        }
+      }
+
+      async function gardarPrivadoCentro(codigo, campos) {
+        const response = await fetch("/api/coordinacion-centro", {
+          method: "PATCH",
+          headers: { "content-type": "application/json", Authorization: xestionAuthHeader() },
+          body: JSON.stringify({ codigo, ...campos }),
+        });
+        if (!response.ok) throw new Error("Non foi posible gardar.");
+      }
+
+      async function activarCentro(codigo, estado) {
+        const response = await fetch("/api/coordinacion-centro", {
+          method: "POST",
+          headers: { "content-type": "application/json", Authorization: xestionAuthHeader() },
+          body: JSON.stringify({ codigo, estado }),
+        });
+        if (!response.ok) {
+          const body = await response.json().catch(() => ({}));
+          throw new Error(body.error || "Non foi posible activar o centro.");
+        }
+      }
+
+      document.querySelector("#centros-list").addEventListener("click", async (event) => {
+        const button = event.target.closest("button[data-action]");
+        if (!button) return;
+        const card = button.closest("article[data-codigo]");
+        const codigo = card.dataset.codigo;
+        const item = centros.find((c) => c.codigo === codigo);
+        if (!item) return;
+        const buttons = card.querySelectorAll("button");
+
+        if (button.dataset.action === "gardar") {
+          const campos = {};
+          card.querySelectorAll("[data-field]").forEach((el) => { campos[el.dataset.field] = el.value; });
+          buttons.forEach((b) => (b.disabled = true));
+          try {
+            await gardarPrivadoCentro(codigo, campos);
+            Object.assign(item, campos);
+          } catch (error) {
+            alert(error.message);
+          } finally {
+            buttons.forEach((b) => (b.disabled = false));
+          }
+          return;
+        }
+
+        if (button.dataset.action === "activar" || button.dataset.action === "creacion") {
+          const estado = button.dataset.action === "activar" ? "activa" : "creacion";
+          const confirmado = window.confirm(
+            `${estado === "activa" ? "Activar" : "Pór en creación"} "${item.nome}" no mapa público?\n\nIsto fai un commit no repositorio (sen datos de contacto) e tarda un par de minutos en verse no mapa.`
+          );
+          if (!confirmado) return;
+          buttons.forEach((b) => (b.disabled = true));
+          const nota = document.createElement("p");
+          nota.className = "status-note";
+          nota.textContent = "Gardando en GitHub…";
+          card.appendChild(nota);
+          try {
+            await activarCentro(codigo, estado);
+            item.estado = estado;
+            renderCentros();
+          } catch (error) {
+            nota.remove();
+            buttons.forEach((b) => (b.disabled = false));
+            alert(error.message);
+          }
+        }
+      });
+
+      document.querySelector("#centros-search").addEventListener("input", (event) => {
+        centrosQuery = event.target.value.trim().toLocaleLowerCase("gl");
+        renderCentros();
+      });
+
+      fetch("/api/coordinacion-centros", { headers: { Authorization: xestionAuthHeader() } })
+        .then((response) => {
+          if (response.status === 401) sessionStorage.removeItem("aaep-xestion-password");
+          if (!response.ok) throw new Error("Acceso non autorizado");
+          return response.json();
+        })
+        .then(({ centros: data }) => {
+          centros = data || [];
+          renderCentros();
+          document.querySelector("#mover-concello").insertAdjacentHTML(
+            "beforeend",
+            [...new Set(centros.filter((c) => c.estado === "activa").map((c) => c.concello))]
+              .sort((a, b) => a.localeCompare(b, "gl"))
+              .map((concello) => `<option value="${escapeHtml(concello)}">${escapeHtml(concello)}</option>`)
+              .join("")
+          );
+        })
+        .catch((error) => {
+          document.querySelector("#centros-list").innerHTML = `<p class="status-msg error">${escapeHtml(error.message)}. Recarga a páxina para volver escribir o contrasinal.</p>`;
+        });
+
+      // ---------------------------------------------------------------
+      // Territorios
+      // ---------------------------------------------------------------
+      let territorios = [];
+
+      function renderTerritorios() {
+        const list = document.querySelector("#territorios-list");
+        if (!territorios.length) {
+          list.innerHTML = `<p class="status-msg">Aínda non hai territorios.</p>`;
+          return;
+        }
+        list.innerHTML = `<div class="list">${territorios.map((t) => `
+          <article class="card territorio-card" data-nome="${escapeHtml(t.nome)}">
+            <div class="card-head">
+              <div class="rename-row">
+                <input type="text" data-field="novoNome" value="${escapeHtml(t.nome)}" />
+                <button type="button" class="quiet" data-action="renomear" style="appearance:none;border:1.5px solid var(--line-strong);background:transparent;padding:7px 13px;font:inherit;font-size:0.76rem;font-weight:700;border-radius:4px;cursor:pointer">Renomear</button>
+              </div>
+            </div>
+            <p class="concellos">${t.concellos.map(escapeHtml).join(" · ")}</p>
+            <div class="fields">
+              <label>Contacto do territorio<input type="text" data-field="contacto" value="${escapeHtml(t.contacto)}" /></label>
+              <label>Notas<textarea data-field="notas">${escapeHtml(t.notas)}</textarea></label>
+            </div>
+            <div class="actions">
+              <button type="button" class="primary" data-action="gardar">Gardar</button>
+            </div>
+          </article>
+        `).join("")}</div>`;
+      }
+
+      async function patchTerritorio(body) {
+        const response = await fetch("/api/coordinacion-territorio", {
+          method: "PATCH",
+          headers: { "content-type": "application/json", Authorization: xestionAuthHeader() },
+          body: JSON.stringify(body),
+        });
+        if (!response.ok) {
+          const errBody = await response.json().catch(() => ({}));
+          throw new Error(errBody.error || "Non foi posible gardar.");
+        }
+      }
+
+      document.querySelector("#territorios-list").addEventListener("click", async (event) => {
+        const button = event.target.closest("button[data-action]");
+        if (!button) return;
+        const card = button.closest("article[data-nome]");
+        const nomeActual = card.dataset.nome;
+        const buttons = card.querySelectorAll("button");
+        buttons.forEach((b) => (b.disabled = true));
+        try {
+          if (button.dataset.action === "gardar") {
+            const contacto = card.querySelector('[data-field="contacto"]').value;
+            const notas = card.querySelector('[data-field="notas"]').value;
+            await patchTerritorio({ territorio: nomeActual, contacto, notas });
+          } else if (button.dataset.action === "renomear") {
+            const novoNome = card.querySelector('[data-field="novoNome"]').value.trim();
+            if (!novoNome || novoNome === nomeActual) return;
+            await patchTerritorio({ territorio: nomeActual, renomearA: novoNome });
+          }
+          await cargarTerritorios();
+        } catch (error) {
+          alert(error.message);
+        } finally {
+          buttons.forEach((b) => (b.disabled = false));
+        }
+      });
+
+      document.querySelector("#mover-destino").addEventListener("change", (event) => {
+        document.querySelector("#mover-destino-novo").style.display = event.target.value === "__novo__" ? "" : "none";
+      });
+
+      document.querySelector("#mover-boton").addEventListener("click", async () => {
+        const concello = document.querySelector("#mover-concello").value;
+        const destinoSelect = document.querySelector("#mover-destino").value;
+        const destinoNovo = document.querySelector("#mover-destino-novo").value.trim();
+        const destino = destinoSelect === "__novo__" ? destinoNovo : destinoSelect;
+        const status = document.querySelector("#mover-status");
+        if (!concello || !destino) {
+          status.textContent = "Escolle un concello e un territorio destino.";
+          return;
+        }
+        const boton = document.querySelector("#mover-boton");
+        boton.disabled = true;
+        status.textContent = "Gardando en GitHub…";
+        try {
+          await patchTerritorio({ territorio: destino, moverConcello: concello });
+          status.textContent = `Feito -- "${concello}" móvese a "${destino}". Tarda un par de minutos en verse no mapa.`;
+          await cargarTerritorios();
+        } catch (error) {
+          status.textContent = error.message;
+        } finally {
+          boton.disabled = false;
+        }
+      });
+
+      async function cargarTerritorios() {
+        const response = await fetch("/api/coordinacion-territorios", { headers: { Authorization: xestionAuthHeader() } });
+        if (!response.ok) throw new Error("Acceso non autorizado");
+        const data = await response.json();
+        territorios = data.territorios || [];
+        renderTerritorios();
+
+        const destinoSelect = document.querySelector("#mover-destino");
+        const seleccionActual = destinoSelect.value;
+        destinoSelect.innerHTML = `<option value="">Territorio destino…</option>` +
+          territorios.map((t) => `<option value="${escapeHtml(t.nome)}">${escapeHtml(t.nome)}</option>`).join("") +
+          `<option value="__novo__">+ Crear territorio novo…</option>`;
+        if ([...destinoSelect.options].some((o) => o.value === seleccionActual)) destinoSelect.value = seleccionActual;
+
+        const concelloSelect = document.querySelector("#mover-concello");
+        const concellosExistentes = new Set([...concelloSelect.options].map((o) => o.value).filter(Boolean));
+        (data.concellosSoltos || []).forEach((concello) => {
+          if (!concellosExistentes.has(concello)) {
+            concelloSelect.insertAdjacentHTML("beforeend", `<option value="${escapeHtml(concello)}">${escapeHtml(concello)} (solto)</option>`);
+          }
+        });
+      }
+
+      cargarTerritorios().catch((error) => {
+        document.querySelector("#territorios-list").innerHTML = `<p class="status-msg error">${escapeHtml(error.message)}.</p>`;
+      });
+    </script>
+  </body>
+</html>

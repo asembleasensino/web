@@ -4,6 +4,12 @@
   "pages_build_output_dir": "./dist",
   "kv_namespaces": [
     { "binding": "SOLICITUDES", "id": "3c4b931d9ecb4aef9dc3b4340086dbf3" },
-    { "binding": "CENSO_REFERENDO", "id": "9ebc73c936c4410ba95c750ee0e05633" }
+    { "binding": "CENSO_REFERENDO", "id": "9ebc73c936c4410ba95c750ee0e05633" },
+    // Datos privados do panel de coordinación (contacto/responsable/
+    // representantes/notas por centro e por territorio) -- nunca forman
+    // parte do repositorio de código. Substituír <ID> polo id real que
+    // devolve `wrangler kv namespace create COORDINACION` (ver README de
+    // despregue / mensaxe de Claude).
+    { "binding": "COORDINACION", "id": "<ID>" }
   ]
 }
