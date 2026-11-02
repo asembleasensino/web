@@ -89,6 +89,32 @@ for (const territorio of territoriosData.territorios || []) {
   }
 }
 
+// O select "territorio" de Convocatorias (public/admin/config.yml) duplica
+// á man os nomes de territorios.json (Decap non pode ler un JSON do
+// repositorio para construír as opcións dun select). Se alguén renomea,
+// funde ou crea un territorio sen actualizar as dúas listas, o filtro de
+// /axenda deixaría de recoñecer eses nomes en silencio -- por iso
+// comprobamos que coincidan exactamente.
+const actualidadeCollectionParaTerritorio = (decap.collections || []).find((item) => item.name === "actualidade");
+const territorioField = actualidadeCollectionParaTerritorio?.fields?.find((field) => field.name === "territorio");
+if (territorioField?.widget !== "select") {
+  fail("public/admin/config.yml: actualidade.territorio debe ser un select (para non admitir erros de escritura)");
+} else {
+  const opcionsDoSelect = new Set(
+    (territorioField.options || []).map((option) => (typeof option === "string" ? option : option.value)),
+  );
+  for (const nome of territorioNomeados) {
+    if (!opcionsDoSelect.has(nome)) {
+      fail(`public/admin/config.yml: actualidade.territorio non inclúe o territorio "${nome}" (existe en territorios.json)`);
+    }
+  }
+  for (const opcion of opcionsDoSelect) {
+    if (!territorioNomeados.has(opcion)) {
+      fail(`public/admin/config.yml: actualidade.territorio inclúe "${opcion}", que xa non existe en territorios.json`);
+    }
+  }
+}
+
 for (const field of ["site_domain", "base_url"]) {
   if (decap.backend?.[field] !== site.siteUrl) {
     fail(`public/admin/config.yml: backend.${field} non coincide con siteUrl`);
@@ -141,6 +167,23 @@ for (const directory of ["content/actualidade", "content/materiais", "content/pa
     if (/\s/.test(file)) fail(`${directory}/${file}: o nome non debe conter espazos`);
     if (!/\.(md|mdx)$/i.test(file)) fail(`${directory}/${file}: extensión de contido non admitida`);
   }
+}
+
+// O territorio dunha Convocatoria ten que coincidir exactamente cun nome
+// real de territorios.json -- un erro aquí deixaría esa convocatoria sen
+// aparecer en /axenda ao filtrar por zona, en silencio.
+for (const file of (await readdir("content/actualidade")).filter((name) => name.endsWith(".md") || name.endsWith(".mdx"))) {
+  const raw = await readFile(`content/actualidade/${file}`, "utf8");
+  const frontmatterMatch = raw.match(/^---\r?\n([\s\S]*?)\r?\n---/);
+  if (!frontmatterMatch) continue;
+  const frontmatter = parse(frontmatterMatch[1]) || {};
+  if (isType(frontmatter.type, "Convocatoria") && frontmatter.territorio && !territorioNomeados.has(frontmatter.territorio)) {
+    fail(`content/actualidade/${file}: territorio "${frontmatter.territorio}" non existe en territorios.json`);
+  }
+}
+
+function isType(value, expected) {
+  return String(value ?? "").trim().toLocaleLowerCase("gl") === expected.trim().toLocaleLowerCase("gl");
 }
 
 if (errors.length) {

@@ -1,0 +1,177 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import SolicitudeConvocatoriaForm from "../../components/SolicitudeConvocatoriaForm.astro";
+import { actualidadeUrl, dataDaConvocatoria, formatDate, getConvocatorias } from "../../lib/content";
+import { corDoTerritorio, territorios } from "../../data/territorios";
+import { site } from "../../config/site";
+
+const universoTerritorios = territorios.map((territorio) => territorio.nome);
+const convocatorias = await getConvocatorias();
+const agora = new Date();
+const proximas = convocatorias.filter((entry) => dataDaConvocatoria(entry).getTime() >= agora.getTime());
+const pasadas = convocatorias
+  .filter((entry) => dataDaConvocatoria(entry).getTime() < agora.getTime())
+  .sort((a, b) => dataDaConvocatoria(b).getTime() - dataDaConvocatoria(a).getTime());
+
+const territoriosPresentes = [...new Set(convocatorias.map((entry) => entry.data.territorio).filter((valor): valor is string => Boolean(valor)))]
+  .sort((a, b) => universoTerritorios.indexOf(a) - universoTerritorios.indexOf(b));
+
+function icsEscape(value: string) {
+  return value.replace(/\\/g, "\\\\").replace(/\n/g, "\\n").replace(/,/g, "\\,").replace(/;/g, "\\;");
+}
+
+function icsDate(date: Date) {
+  return date.toISOString().replace(/[-:]/g, "").replace(/\.\d{3}Z$/, "Z");
+}
+---
+<BaseLayout title={`Axenda · ${site.shortName}`} description="Próximas convocatorias das asembleas territoriais e das intercentros, por zona.">
+  <header class="mx-auto grid max-w-[1500px] gap-8 px-4 pb-12 pt-16 md:px-8 md:pb-20 md:pt-24 lg:grid-cols-12">
+    <div class="lg:col-span-8">
+      <h1 class="display type-page-short">Axenda</h1>
+    </div>
+    <p class="max-w-sm self-end text-lg leading-relaxed text-ink/65 lg:col-span-4">Convocatorias territoriais e das intercentros, por zona. Engádeas ao teu calendario cun clic.</p>
+  </header>
+
+  <section class="mx-auto max-w-[1500px] px-4 pb-20 md:px-8">
+    <div class="mb-10 grid gap-5 border-y border-ink/25 py-5 sm:grid-cols-[1fr_260px] sm:items-center">
+      <p class="text-sm text-ink/60">
+        {proximas.length > 0
+          ? `${proximas.length} ${proximas.length === 1 ? "convocatoria próxima" : "convocatorias próximas"}.`
+          : "Non hai convocatorias próximas publicadas por agora."}
+      </p>
+      <div>
+        <label for="axenda-territorio" class="sr-only">Filtrar por territorio</label>
+        <select id="axenda-territorio" class="focus-ring w-full border-0 bg-transparent px-0 py-2 text-sm text-ink/65">
+          <option value="">Todos os territorios</option>
+          {territoriosPresentes.map((nome) => <option value={nome}>{nome}</option>)}
+        </select>
+      </div>
+    </div>
+
+    <p id="axenda-empty" hidden class="border-y border-ink/25 py-10 text-lg font-bold text-ink/60">Non hai convocatorias dese territorio por agora.</p>
+
+    {proximas.length > 0 ? (
+      <div class="grid gap-5">
+        {proximas.map((entry) => {
+          const data = dataDaConvocatoria(entry);
+          const cor = entry.data.territorio ? corDoTerritorio(entry.data.territorio, universoTerritorios) : "#252321";
+          const diaSemana = new Intl.DateTimeFormat("gl-ES", { weekday: "short", timeZone: "Europe/Madrid" }).format(data);
+          return (
+            <article data-convocatoria data-territorio={entry.data.territorio || ""} class="convocatoria-card grid gap-5 border border-ink/20 bg-paper p-5 sm:grid-cols-[6.5rem_minmax(0,1fr)_auto] sm:items-center sm:p-6">
+              <div class="flex items-center gap-4 sm:block sm:text-center">
+                <p class="text-[.65rem] font-black uppercase tracking-wider text-ink/45">{diaSemana}</p>
+                <p class="font-display text-4xl font-black leading-none" style={`color:${cor}`}>{new Intl.DateTimeFormat("gl-ES", { day: "2-digit", timeZone: "Europe/Madrid" }).format(data)}</p>
+                <p class="text-[.7rem] font-bold uppercase text-ink/55">{new Intl.DateTimeFormat("gl-ES", { month: "short", timeZone: "Europe/Madrid" }).format(data)}</p>
+              </div>
+              <div class="min-w-0">
+                {entry.data.territorio && (
+                  <span class="eyebrow" style={`color:${cor}`}>{entry.data.territorio}</span>
+                )}
+                <h2 class="mt-2 text-lg font-extrabold leading-tight"><a href={actualidadeUrl(entry)} class="hover:text-red">{entry.data.title}</a></h2>
+                <p class="mt-2 text-sm text-ink/60">
+                  {formatDate(data, { hour: "2-digit", minute: "2-digit" })}
+                  {entry.data.eventLocation ? ` · ${entry.data.eventLocation}` : ""}
+                </p>
+              </div>
+              <button
+                type="button"
+                class="focus-ring ics-button justify-self-start whitespace-nowrap border border-ink px-4 py-2 text-xs font-black uppercase tracking-wider hover:bg-ink hover:text-paper sm:justify-self-end"
+                data-uid={entry.id}
+                data-title={icsEscape(entry.data.title)}
+                data-start={icsDate(data)}
+                data-location={icsEscape(entry.data.eventLocation || "")}
+                data-description={icsEscape(entry.data.summary || "")}
+              >
+                Engadir ao calendario
+              </button>
+            </article>
+          );
+        })}
+      </div>
+    ) : (
+      <div class="border-y border-ink py-16">
+        <p class="max-w-xl text-xl font-bold">As próximas convocatorias publicaranse aquí desde o panel editorial.</p>
+      </div>
+    )}
+
+    {pasadas.length > 0 && (
+      <details class="mt-16 border-t border-ink/25 pt-8">
+        <summary class="cursor-pointer text-sm font-black uppercase tracking-wider text-ink/55 hover:text-ink">Convocatorias pasadas ({pasadas.length})</summary>
+        <div class="mt-6 grid gap-4">
+          {pasadas.map((entry) => {
+            const data = dataDaConvocatoria(entry);
+            return (
+              <article data-convocatoria data-territorio={entry.data.territorio || ""} class="convocatoria-card grid gap-2 border-b border-ink/15 py-4 opacity-70 sm:grid-cols-[9rem_minmax(0,1fr)] sm:items-baseline">
+                <p class="text-xs font-bold uppercase text-ink/50">{formatDate(data)}</p>
+                <h3 class="text-sm font-bold"><a href={actualidadeUrl(entry)} class="hover:text-red">{entry.data.title}</a>{entry.data.territorio ? <span class="ml-2 text-xs font-normal text-ink/50">{entry.data.territorio}</span> : null}</h3>
+              </article>
+            );
+          })}
+        </div>
+      </details>
+    )}
+  </section>
+
+  <SolicitudeConvocatoriaForm />
+
+  <style>
+    .convocatoria-card.hidden { display: none; }
+  </style>
+
+  <script>
+    const select = document.querySelector<HTMLSelectElement>("#axenda-territorio");
+    const cards = [...document.querySelectorAll<HTMLElement>("[data-convocatoria]")];
+    const empty = document.querySelector<HTMLElement>("#axenda-empty");
+
+    function filter() {
+      const territorio = select?.value || "";
+      let visibleCount = 0;
+      for (const card of cards) {
+        const visible = !territorio || card.dataset.territorio === territorio;
+        card.classList.toggle("hidden", !visible);
+        if (visible) visibleCount += 1;
+      }
+      if (empty) empty.hidden = visibleCount > 0;
+    }
+    select?.addEventListener("change", filter);
+
+    // .ics dun só evento, xerado no propio navegador (sen backend nin
+    // librería), coa mesma técnica que a exportación CSV do panel de
+    // xestión. Sen hora de fin coñecida: por defecto dúas horas.
+    document.querySelectorAll<HTMLButtonElement>(".ics-button").forEach((button) => {
+      button.addEventListener("click", () => {
+        const { uid, title, start, location, description } = button.dataset;
+        if (!start) return;
+        const startDate = new Date(
+          `${start.slice(0, 4)}-${start.slice(4, 6)}-${start.slice(6, 8)}T${start.slice(9, 11)}:${start.slice(11, 13)}:${start.slice(13, 15)}Z`,
+        );
+        const end = new Date(startDate.getTime() + 2 * 60 * 60 * 1000);
+        const toIcs = (date: Date) => date.toISOString().replace(/[-:]/g, "").replace(/\.\d{3}Z$/, "Z");
+        const lines = [
+          "BEGIN:VCALENDAR",
+          "VERSION:2.0",
+          "PRODID:-//asembleasensino.gal//axenda//GL",
+          "BEGIN:VEVENT",
+          `UID:${uid}@asembleasensino.gal`,
+          `DTSTAMP:${toIcs(new Date())}`,
+          `DTSTART:${start}`,
+          `DTEND:${toIcs(end)}`,
+          `SUMMARY:${title || ""}`,
+          location ? `LOCATION:${location}` : "",
+          description ? `DESCRIPTION:${description}` : "",
+          "END:VEVENT",
+          "END:VCALENDAR",
+        ].filter(Boolean);
+        const blob = new Blob([lines.join("\r\n") + "\r\n"], { type: "text/calendar;charset=utf-8;" });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement("a");
+        a.href = url;
+        a.download = `convocatoria-${uid}.ics`;
+        document.body.appendChild(a);
+        a.click();
+        a.remove();
+        URL.revokeObjectURL(url);
+      });
+    });
+  </script>
+</BaseLayout>

@@ -1,0 +1,26 @@
+---
+import { actualidadeUrl, formatDate } from "../lib/content";
+import type { CollectionEntry } from "astro:content";
+
+interface Props {
+  entry: CollectionEntry<"actualidade">;
+  cor?: "red" | "ink";
+}
+
+const { entry, cor = "red" } = Astro.props;
+---
+<a href={actualidadeUrl(entry)} class="actualidade-card focus-ring block no-underline">
+  <div class="actualidade-visual" style={`background:color-mix(in srgb, var(--color-${cor}) 10%, var(--color-paper))`}>
+    {entry.data.image ? (
+      <img src={entry.data.image} alt={entry.data.imageAlt || ""} loading="lazy" />
+    ) : (
+      <span class="actualidade-visual-type" style={`color:var(--color-${cor})`} aria-hidden="true">{entry.data.type}</span>
+    )}
+  </div>
+  <div class="actualidade-body">
+    <span class="eyebrow" style={`color:var(--color-${cor})`}>{entry.data.type}</span>
+    <h2 class="actualidade-title line-clamp-2">{entry.data.title}</h2>
+    <p class="actualidade-summary line-clamp-3">{entry.data.summary}</p>
+    <p class="actualidade-date">{formatDate(entry.data.date)}</p>
+  </div>
+</a>

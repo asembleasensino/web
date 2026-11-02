@@ -132,11 +132,17 @@
 
     <div class="wrap">
       <div class="controls">
+        <div class="tabs" role="tablist" aria-label="Tipo de solicitude">
+          <button type="button" role="tab" data-tipo-tab="activacion" aria-selected="true">Activación de centros <span class="count" id="count-tipo-activacion"></span></button>
+          <button type="button" role="tab" data-tipo-tab="convocatoria" aria-selected="false">Convocatorias <span class="count" id="count-tipo-convocatoria"></span></button>
+        </div>
+      </div>
+      <div class="controls">
         <div class="tabs" role="tablist" aria-label="Filtrar solicitudes">
           <button type="button" role="tab" data-tab="pendentes" aria-selected="true">Pendentes <span class="count" id="count-pendentes"></span></button>
           <button type="button" role="tab" data-tab="atendidas" aria-selected="false">Atendidas <span class="count" id="count-atendidas"></span></button>
         </div>
-        <input type="search" id="search" class="search" placeholder="Buscar por centro, nome ou correo…" />
+        <input type="search" id="search" class="search" placeholder="Buscar…" />
       </div>
 
       <div id="list"><p class="status-msg">Cargando solicitudes…</p></div>
@@ -177,19 +183,25 @@
 
       let solicitudes = [];
       let activeTab = "pendentes";
+      let activeTipo = "activacion";
       let query = "";
+
+      function tipoDe(item) {
+        return item.tipo === "convocatoria" ? "convocatoria" : "activacion";
+      }
 
       function actionsFor(item) {
         const buttons = [];
+        const esConvocatoria = tipoDe(item) === "convocatoria";
         if (item.estado === "pendente_validacion") {
-          buttons.push({ state: "en_contacto", label: "Marcar en contacto", cls: "primary" });
-          buttons.push({ state: "arquivada", label: "Arquivar", cls: "quiet" });
+          buttons.push({ state: "en_contacto", label: "Marcar en revisión", cls: "primary" });
+          buttons.push({ state: "arquivada", label: esConvocatoria ? "Rexeitar" : "Arquivar", cls: "quiet" });
         } else if (item.estado === "en_contacto") {
-          buttons.push({ state: "resolta", label: "Marcar resolta", cls: "primary" });
-          buttons.push({ state: "arquivada", label: "Arquivar", cls: "quiet" });
+          buttons.push({ state: "resolta", label: esConvocatoria ? "Marcar publicada" : "Marcar resolta", cls: "primary" });
+          buttons.push({ state: "arquivada", label: esConvocatoria ? "Rexeitar" : "Arquivar", cls: "quiet" });
         } else if (item.estado === "resolta") {
-          buttons.push({ action: "mapa", label: "Dar de alta no mapa", cls: "primary" });
-          buttons.push({ state: "arquivada", label: "Arquivar sen engadir ao mapa", cls: "quiet" });
+          if (!esConvocatoria) buttons.push({ action: "mapa", label: "Dar de alta no mapa", cls: "primary" });
+          buttons.push({ state: "arquivada", label: esConvocatoria ? "Arquivar" : "Arquivar sen engadir ao mapa", cls: "quiet" });
           buttons.push({ state: "en_contacto", label: "Reabrir", cls: "quiet" });
         } else {
           buttons.push({ state: "pendente_validacion", label: "Reabrir", cls: "quiet" });
@@ -199,18 +211,25 @@
 
       function matchesQuery(item) {
         if (!query) return true;
-        const haystack = `${item.centro} ${item.centroCodigo} ${item.nome} ${item.email} ${item.telefono || ""}`.toLocaleLowerCase();
+        const haystack = tipoDe(item) === "convocatoria"
+          ? `${item.titulo} ${item.territorio} ${item.lugar || ""} ${item.nome} ${item.email}`.toLocaleLowerCase()
+          : `${item.centro} ${item.centroCodigo} ${item.nome} ${item.email} ${item.telefono || ""}`.toLocaleLowerCase();
         return haystack.includes(query);
       }
 
       function render() {
         const states = activeTab === "pendentes" ? PENDING_STATES : DONE_STATES;
-        const visible = solicitudes.filter((item) => states.includes(item.estado) && matchesQuery(item));
+        const porTipo = solicitudes.filter((item) => tipoDe(item) === activeTipo);
+        const visible = porTipo.filter((item) => states.includes(item.estado) && matchesQuery(item));
 
+        document.querySelector("#count-tipo-activacion").textContent =
+          `(${solicitudes.filter((item) => tipoDe(item) === "activacion").length})`;
+        document.querySelector("#count-tipo-convocatoria").textContent =
+          `(${solicitudes.filter((item) => tipoDe(item) === "convocatoria").length})`;
         document.querySelector("#count-pendentes").textContent =
-          `(${solicitudes.filter((item) => PENDING_STATES.includes(item.estado)).length})`;
+          `(${porTipo.filter((item) => PENDING_STATES.includes(item.estado)).length})`;
         document.querySelector("#count-atendidas").textContent =
-          `(${solicitudes.filter((item) => DONE_STATES.includes(item.estado)).length})`;
+          `(${porTipo.filter((item) => DONE_STATES.includes(item.estado)).length})`;
 
         const list = document.querySelector("#list");
         if (!visible.length) {
@@ -222,32 +241,48 @@
           return;
         }
 
-        list.innerHTML = `<div class="list">${visible.map((item) => `
+        list.innerHTML = `<div class="list">${visible.map((item) => {
+          const esConvocatoria = tipoDe(item) === "convocatoria";
+          const titulo = esConvocatoria ? escapeHtml(item.titulo) : escapeHtml(item.centro);
+          const subtitulo = esConvocatoria
+            ? `${escapeHtml(item.territorio)}${item.lugar ? ` · ${escapeHtml(item.lugar)}` : ""} · ${item.data ? new Date(item.data).toLocaleString("gl") : ""}`
+            : `Código ${escapeHtml(item.centroCodigo)}`;
+          return `
           <article class="card" data-id="${escapeHtml(item.id)}">
             <div class="card-head">
               <div>
-                <h2>${escapeHtml(item.centro)}</h2>
-                <span class="codigo">Código ${escapeHtml(item.centroCodigo)}</span>
+                <h2>${titulo}</h2>
+                <span class="codigo">${subtitulo}</span>
               </div>
               <span class="pill ${item.estado}">${STATUS_LABEL[item.estado] || item.estado}</span>
               ${item.noMapa ? '<span class="pill no-mapa">No mapa</span>' : ""}
             </div>
             <div class="card-meta">
               ${escapeHtml(item.nome)} · <a href="mailto:${encodeURIComponent(item.email)}">${escapeHtml(item.email)}</a>${item.telefono ? ` · <a href="tel:${encodeURIComponent(item.telefono)}">${escapeHtml(item.telefono)}</a>` : ""}
-              <span class="when">${new Date(item.createdAt).toLocaleString("gl")}</span>
+              <span class="when">Recibida ${new Date(item.createdAt).toLocaleString("gl")}</span>
             </div>
-            ${item.mensaxe ? `<div class="card-msg">${escapeHtml(item.mensaxe)}</div>` : ""}
+            ${esConvocatoria && item.descricion ? `<div class="card-msg">${escapeHtml(item.descricion)}</div>` : ""}
+            ${!esConvocatoria && item.mensaxe ? `<div class="card-msg">${escapeHtml(item.mensaxe)}</div>` : ""}
             <div class="actions">
               ${actionsFor(item).map((btn) => `<button type="button" class="${btn.cls}" ${btn.action ? `data-action="${btn.action}"` : `data-state="${btn.state}"`}>${btn.label}</button>`).join("")}
             </div>
           </article>
-        `).join("")}</div>`;
+        `;
+        }).join("")}</div>`;
       }
 
-      document.querySelectorAll(".tabs button[role=tab]").forEach((tab) => {
+      document.querySelectorAll("[data-tab]").forEach((tab) => {
         tab.addEventListener("click", () => {
           activeTab = tab.dataset.tab;
-          document.querySelectorAll(".tabs button[role=tab]").forEach((btn) => btn.setAttribute("aria-selected", String(btn === tab)));
+          document.querySelectorAll("[data-tab]").forEach((btn) => btn.setAttribute("aria-selected", String(btn === tab)));
+          render();
+        });
+      });
+
+      document.querySelectorAll("[data-tipo-tab]").forEach((tab) => {
+        tab.addEventListener("click", () => {
+          activeTipo = tab.dataset.tipoTab;
+          document.querySelectorAll("[data-tipo-tab]").forEach((btn) => btn.setAttribute("aria-selected", String(btn === tab)));
           render();
         });
       });

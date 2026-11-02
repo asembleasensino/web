@@ -1,0 +1,94 @@
+---
+import { territorios } from "../data/territorios";
+import { site } from "../config/site";
+
+const nomesTerritorios = territorios.map((territorio) => territorio.nome);
+---
+
+<section id="solicitar-convocatoria" class="bg-green text-paper">
+  <div class="mx-auto grid max-w-[1500px] gap-10 px-4 py-16 md:px-8 md:py-24 lg:grid-cols-12 lg:gap-14">
+    <div class="lg:col-span-5">
+      <h2 class="display type-display-section-lg max-w-2xl">Propón unha convocatoria</h2>
+      <p class="mt-8 max-w-lg text-lg leading-relaxed text-paper/80">
+        Calquera asemblea territorial ou de centro pode propor que un evento apareza aquí. Revisámolo e, se o aprobamos, publicámolo -- a proposta non aparece soa na axenda.
+      </p>
+    </div>
+    <form id="convocatoria-form" data-contact-email={site.email} class="grid gap-5 self-start bg-paper p-5 text-ink sm:p-8 lg:col-span-7" method="post" action="/api/solicitudes">
+      <input type="hidden" name="tipo" value="convocatoria" />
+      <div class="grid gap-5 sm:grid-cols-2">
+        <div>
+          <label class="mb-2 block text-xs font-bold" for="convocatoria-territorio">Territorio</label>
+          <select class="focus-ring w-full rounded-[4px] border border-ink/30 bg-transparent px-4 py-3" id="convocatoria-territorio" name="territorio" required>
+            <option value="" disabled selected>Escolle un territorio</option>
+            {nomesTerritorios.map((nome) => <option value={nome}>{nome}</option>)}
+          </select>
+        </div>
+        <div>
+          <label class="mb-2 block text-xs font-bold" for="convocatoria-data">Data e hora</label>
+          <input class="focus-ring w-full rounded-[4px] border border-ink/30 bg-transparent px-4 py-3" id="convocatoria-data" name="data" type="datetime-local" required />
+        </div>
+      </div>
+      <div>
+        <label class="mb-2 block text-xs font-bold" for="convocatoria-titulo">Título do evento</label>
+        <input class="focus-ring w-full rounded-[4px] border border-ink/30 bg-transparent px-4 py-3" id="convocatoria-titulo" name="titulo" required maxlength="200" placeholder="Ex.: Asemblea territorial de..." />
+      </div>
+      <div>
+        <label class="mb-2 block text-xs font-bold" for="convocatoria-lugar">Lugar <span class="font-normal text-ink/50">(opcional)</span></label>
+        <input class="focus-ring w-full rounded-[4px] border border-ink/30 bg-transparent px-4 py-3" id="convocatoria-lugar" name="lugar" maxlength="200" />
+      </div>
+      <div>
+        <label class="mb-2 block text-xs font-bold" for="convocatoria-descricion">Descrición breve <span class="font-normal text-ink/50">(opcional)</span></label>
+        <textarea class="focus-ring min-h-24 w-full resize-y rounded-[4px] border border-ink/30 bg-transparent px-4 py-3" id="convocatoria-descricion" name="descricion" maxlength="2000"></textarea>
+      </div>
+      <div class="grid gap-5 sm:grid-cols-2">
+        <div>
+          <label class="mb-2 block text-xs font-bold" for="convocatoria-nome">O teu nome</label>
+          <input class="focus-ring w-full rounded-[4px] border border-ink/30 bg-transparent px-4 py-3" id="convocatoria-nome" name="nome" required autocomplete="name" />
+        </div>
+        <div>
+          <label class="mb-2 block text-xs font-bold" for="convocatoria-email">Correo electrónico</label>
+          <input class="focus-ring w-full rounded-[4px] border border-ink/30 bg-transparent px-4 py-3" id="convocatoria-email" name="email" required type="email" autocomplete="email" />
+        </div>
+      </div>
+      <div>
+        <label class="mb-2 block text-xs font-bold" for="convocatoria-telefono">Teléfono <span class="font-normal text-ink/50">(opcional)</span></label>
+        <input class="focus-ring w-full rounded-[4px] border border-ink/30 bg-transparent px-4 py-3" id="convocatoria-telefono" name="telefono" type="tel" autocomplete="tel" />
+      </div>
+      <label class="flex items-start gap-3 text-xs leading-relaxed">
+        <input class="mt-1 accent-green" type="checkbox" name="consent" value="accepted" required />
+        <span>Lin a <a class="underline decoration-green underline-offset-2" href="/aviso-legal/" target="_blank" rel="noopener">información sobre protección de datos</a> e consinto que AAEP utilice estes datos para xestionar esta proposta.</span>
+      </label>
+      <button class="focus-ring justify-self-start rounded-[4px] bg-ink px-6 py-4 text-xs font-black uppercase tracking-wider text-paper hover:bg-green" type="submit">
+        Enviar proposta
+      </button>
+      <p id="convocatoria-form-status" class="hidden text-sm font-bold" role="status"></p>
+    </form>
+  </div>
+</section>
+
+<script>
+  const form = document.querySelector<HTMLFormElement>("#convocatoria-form");
+  const status = document.querySelector<HTMLElement>("#convocatoria-form-status");
+
+  form?.addEventListener("submit", async (event) => {
+    event.preventDefault();
+    const submit = form.querySelector<HTMLButtonElement>('button[type="submit"]');
+    if (submit) submit.disabled = true;
+    try {
+      const response = await fetch(form.action, { method: "POST", body: new FormData(form) });
+      if (!response.ok) throw new Error("Non foi posible enviar");
+      form.reset();
+      if (status) {
+        status.textContent = "Recibimos a proposta. Revisarémola e avisaremos se se publica.";
+        status.classList.remove("hidden");
+      }
+    } catch {
+      if (status) {
+        status.textContent = `Houbo un problema. Escríbenos a ${form.dataset.contactEmail}.`;
+        status.classList.remove("hidden");
+      }
+    } finally {
+      if (submit) submit.disabled = false;
+    }
+  });
+</script>

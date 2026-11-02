@@ -21,6 +21,20 @@ const actualidade = defineCollection({
     // de valor.
     eventDate: z.preprocess((value) => (value === "" ? undefined : value), z.coerce.date().optional()),
     eventLocation: z.string().optional(),
+    // Só se usa en entradas de tipo Convocatoria: o territorio (un dos
+    // nomes reais de src/data/territorios.json) ao que pertence, para que
+    // apareza en /axenda filtrada por ese territorio e coa mesma cor có
+    // mapa. É un "select" en Decap (non texto libre coma "type"), así que
+    // non debería chegar escrito distinto -- pero tratamos "" coma
+    // ausencia de valor polo mesmo motivo que eventDate.
+    territorio: z.preprocess((value) => (value === "" ? undefined : value), z.string().optional()),
+    // Distingue as dúas pestanas de /actualidade: contido propio de AAEP
+    // fronte a prensa/mobilizacións externas recollidas na hemeroteca.
+    // Non afecta ás Convocatorias, que teñen o seu propio espazo en /axenda.
+    seccion: z.preprocess(
+      (value) => (value === "" ? undefined : value),
+      z.enum(["actualidade", "hemeroteca"]).default("actualidade"),
+    ),
     draft: z.boolean().default(false),
   }),
 });

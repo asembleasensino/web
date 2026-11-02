@@ -1,41 +1,90 @@
 ---
 import BaseLayout from "../../layouts/BaseLayout.astro";
-import { actualidadeUrl, formatDate, getActualidade } from "../../lib/content";
+import ArticleCard from "../../components/ArticleCard.astro";
+import { actualidadeUrl, dataDaConvocatoria, formatDate, getActualidadeSenConvocatorias, getConvocatorias, isType } from "../../lib/content";
 import { site } from "../../config/site";
 
-const artigos = await getActualidade();
-const [destacado, ...resto] = artigos;
+const artigos = await getActualidadeSenConvocatorias();
+const actualidade = artigos.filter((artigo) => !isType(artigo.data.seccion, "hemeroteca"));
+const hemeroteca = artigos.filter((artigo) => isType(artigo.data.seccion, "hemeroteca"));
+
+const agora = new Date();
+const proximasConvocatorias = (await getConvocatorias())
+  .filter((entry) => dataDaConvocatoria(entry).getTime() >= agora.getTime())
+  .slice(0, 4);
 ---
 <BaseLayout title={`Actualidade · ${site.shortName}`}>
-  <header class="mx-auto max-w-[1500px] px-4 pb-12 pt-16 md:px-8 md:pb-20 md:pt-24">
+  <header class="mx-auto px-4 pb-12 pt-16 md:px-8 md:pb-20 md:pt-24">
     <h1 class="display type-page-actualidade">Actualidade</h1>
   </header>
-  <section class="mx-auto max-w-[1500px] px-4 pb-28 md:px-8">
-    {destacado ? (
-      <>
-        <a href={actualidadeUrl(destacado)} class="group grid gap-8 border-y border-ink py-10 no-underline md:py-16 lg:grid-cols-12">
-          <div class="lg:col-span-3">
-            <span class="eyebrow text-red">{destacado.data.type}</span>
-            <p class="mt-3 text-xs text-ink/45">{formatDate(destacado.data.date)}</p>
-          </div>
-          <div class="lg:col-span-9">
-            <h2 class="type-index-feature-title max-w-4xl font-extrabold leading-[.97] tracking-[-.045em] group-hover:text-red">{destacado.data.title}</h2>
-            <p class="mt-8 max-w-xl text-base leading-relaxed text-ink/60">{destacado.data.summary}</p>
-          </div>
-        </a>
-        <div class="ml-auto max-w-5xl">
-          {resto.map((artigo, index) => (
-            <a href={actualidadeUrl(artigo)} class="group grid gap-5 border-b border-ink/25 py-8 no-underline lg:grid-cols-[10rem_minmax(0,1fr)] lg:items-center">
-              <div><span class="eyebrow text-red">{artigo.data.type}</span><p class="mt-2 text-xs text-ink/45">{formatDate(artigo.data.date)}</p></div>
-              <h2 class:list={["font-extrabold leading-tight group-hover:text-red", index === 0 ? "type-list-title-lg" : "type-card-title"]}>{artigo.data.title}</h2>
-            </a>
-          ))}
-        </div>
-      </>
-    ) : (
-      <div class="border-y border-ink py-16">
-        <p class="max-w-xl text-xl font-bold">A actualidade publicarase aquí desde o panel editorial.</p>
+
+  {proximasConvocatorias.length > 0 && (
+    <section class="mx-auto max-w-[1500px] px-4 pb-12 md:px-8">
+      <div class="flex flex-wrap items-baseline justify-between gap-3 border-y border-ink/25 py-4">
+        <p class="text-xs font-black uppercase tracking-wider text-ink/55">Próximas convocatorias</p>
+        <a href="/axenda/" class="text-xs font-black uppercase tracking-wider underline decoration-red decoration-2 underline-offset-4 hover:text-red">Ver toda a axenda →</a>
       </div>
-    )}
+      <div class="mt-5 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+        {proximasConvocatorias.map((entry) => (
+          <a href={actualidadeUrl(entry)} class="block border border-ink/20 p-4 no-underline hover:border-ink">
+            <p class="text-[.65rem] font-black uppercase tracking-wider text-red">{formatDate(dataDaConvocatoria(entry))}</p>
+            <p class="mt-2 text-sm font-extrabold leading-snug">{entry.data.title}</p>
+            {entry.data.territorio && <p class="mt-1 text-xs text-ink/50">{entry.data.territorio}</p>}
+          </a>
+        ))}
+      </div>
+    </section>
+  )}
+
+  <section class="mx-auto max-w-[1500px] px-4 pb-28 md:px-8">
+    <div class="tabs mb-10 inline-flex border border-ink" role="tablist" aria-label="Sección de actualidade">
+      <button type="button" role="tab" data-secc-tab="actualidade" aria-selected="true" class="secc-tab px-5 py-3 text-xs font-black uppercase tracking-wider">Actualidade <span class="opacity-55">({actualidade.length})</span></button>
+      <button type="button" role="tab" data-secc-tab="hemeroteca" aria-selected="false" class="secc-tab border-l border-ink px-5 py-3 text-xs font-black uppercase tracking-wider">Hemeroteca <span class="opacity-55">({hemeroteca.length})</span></button>
+    </div>
+
+    <div data-secc-panel="actualidade">
+      {actualidade.length > 0 ? (
+        <div class="actualidade-grid grid grid-cols-1 gap-7 sm:grid-cols-2 lg:grid-cols-3 lg:gap-8">
+          {actualidade.map((artigo) => <ArticleCard entry={artigo} cor="red" />)}
+        </div>
+      ) : (
+        <div class="border-y border-ink py-16"><p class="max-w-xl text-xl font-bold">A actualidade publicarase aquí desde o panel editorial.</p></div>
+      )}
+    </div>
+
+    <div data-secc-panel="hemeroteca" hidden>
+      {hemeroteca.length > 0 ? (
+        <div class="actualidade-grid grid grid-cols-1 gap-7 sm:grid-cols-2 lg:grid-cols-3 lg:gap-8">
+          {hemeroteca.map((artigo) => <ArticleCard entry={artigo} cor="ink" />)}
+        </div>
+      ) : (
+        <div class="border-y border-ink py-16"><p class="max-w-xl text-xl font-bold">A hemeroteca de prensa e mobilizacións recollerase aquí.</p></div>
+      )}
+    </div>
   </section>
+
+  <style>
+    .actualidade-card { display: flex; flex-direction: column; height: 100%; background: color-mix(in srgb, var(--color-ink) 2%, var(--color-paper)); border: 1px solid color-mix(in srgb, var(--color-ink) 15%, transparent); border-radius: 4px; overflow: hidden; transition: transform .18s ease, box-shadow .18s ease, border-color .18s ease; }
+    .actualidade-card:hover, .actualidade-card:focus-visible { border-color: var(--color-ink); box-shadow: var(--shadow-hard); transform: translateY(-4px); }
+    .actualidade-visual { position: relative; aspect-ratio: 4 / 3; display: flex; align-items: center; justify-content: center; padding: 1.5rem; overflow: hidden; }
+    .actualidade-visual img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+    .actualidade-visual-type { font-family: var(--font-display); font-stretch: condensed; text-transform: uppercase; text-align: center; font-weight: 900; letter-spacing: -.01em; line-height: 1.05; font-size: clamp(1.3rem, 2.6vw, 1.85rem); opacity: .55; }
+    .actualidade-body { display: flex; flex: 1; flex-direction: column; gap: .65rem; padding: 1.35rem 1.4rem 1.5rem; }
+    .actualidade-title { font-size: 1.2rem; font-weight: 800; line-height: 1.2; letter-spacing: -.01em; }
+    .actualidade-card:hover .actualidade-title { color: var(--color-red); }
+    .actualidade-summary { flex: 1; font-size: .85rem; line-height: 1.5; color: color-mix(in srgb, var(--color-ink) 62%, transparent); }
+    .actualidade-date { font-size: .72rem; color: color-mix(in srgb, var(--color-ink) 42%, transparent); }
+    .secc-tab[aria-selected="true"] { background: var(--color-ink); color: var(--color-paper); }
+  </style>
+
+  <script>
+    const tabs = [...document.querySelectorAll<HTMLButtonElement>("[data-secc-tab]")];
+    const panels = [...document.querySelectorAll<HTMLElement>("[data-secc-panel]")];
+    tabs.forEach((tab) => {
+      tab.addEventListener("click", () => {
+        tabs.forEach((btn) => btn.setAttribute("aria-selected", String(btn === tab)));
+        panels.forEach((panel) => { panel.hidden = panel.dataset.seccPanel !== tab.dataset.seccTab; });
+      });
+    });
+  </script>
 </BaseLayout>
