@@ -51,14 +51,14 @@
       .layout { flex: 1 1 auto; display: grid; grid-template-columns: 1fr 420px; min-height: 0; }
       @media (max-width: 960px) { .layout { grid-template-columns: 1fr; grid-template-rows: 46vh 1fr; } }
 
-      .map-pane { position: relative; background: #ffffff; min-height: 0; }
+      .map-pane { position: relative; background: #ffffff; min-height: 0; min-width: 0; }
       #admin-map { position: absolute; inset: 0; }
-      .map-tip { position: absolute; bottom: 12px; left: 12px; z-index: 500; background: var(--paper-raised); padding: 7px 12px; border-radius: 4px; font-size: 0.68rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.05em; box-shadow: var(--shadow); max-width: 68%; }
+      .map-tip { position: absolute; bottom: 12px; left: 12px; z-index: 500; background: var(--paper-raised); padding: 7px 12px; border-radius: 4px; font-size: 0.68rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.05em; box-shadow: var(--shadow); max-width: 68%; pointer-events: none; }
       .leaflet-container { background: #ffffff; }
       .leaflet-popup-content, .leaflet-popup-content p { font-family: var(--font-sans); }
       .leaflet-popup-content details summary { outline: none; }
 
-      .aside { overflow-y: auto; border-left: 1px solid var(--line); min-height: 0; padding: 20px 20px 70px; display: flex; flex-direction: column; gap: 20px; }
+      .aside { overflow-y: auto; overflow-x: hidden; border-left: 1px solid var(--line); min-height: 0; min-width: 0; padding: 20px 20px 70px; display: flex; flex-direction: column; gap: 20px; }
       @media (max-width: 960px) { .aside { border-left: 0; border-top: 1px solid var(--line); } }
 
       .section-label { margin: 0 0 10px; font-size: 0.68rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.08em; color: color-mix(in srgb, var(--ink) 55%, transparent); }
@@ -86,9 +86,9 @@
       .controls { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; margin-bottom: 12px; }
 
       .list { display: grid; gap: 12px; }
-      .card { background: var(--paper-raised); border: 1px solid var(--line); border-radius: 5px; box-shadow: var(--shadow); padding: 16px 18px; display: grid; gap: 10px; }
+      .card { background: var(--paper-raised); border: 1px solid var(--line); border-radius: 5px; box-shadow: var(--shadow); padding: 16px 18px; display: grid; gap: 10px; min-width: 0; }
       .card.selected { outline: 2px solid var(--ink); outline-offset: 2px; }
-      .card-head { display: flex; flex-wrap: wrap; align-items: flex-start; justify-content: space-between; gap: 8px; }
+      .card-head { display: flex; flex-wrap: wrap; align-items: flex-start; justify-content: space-between; gap: 8px; min-width: 0; }
       .card-head h2 { margin: 0; font-size: 1.04rem; font-weight: 800; }
       .card-head .meta { display: block; margin-top: 2px; font-size: 0.72rem; color: color-mix(in srgb, var(--ink) 55%, transparent); font-weight: 600; letter-spacing: 0.02em; }
       .tags { display: flex; gap: 6px; flex-wrap: wrap; }
@@ -99,7 +99,8 @@
       .pill.territorio { background: rgba(37, 35, 33, 0.08); color: var(--ink); }
       .pill.nucleo { background: var(--red-bg); color: var(--red); }
 
-      .fields { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; }
+      .fields { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; }
+      .fields input, .fields select, .fields textarea { width: 100%; min-width: 0; }
       .fields label { display: grid; gap: 4px; font-size: 0.7rem; font-weight: 700; color: color-mix(in srgb, var(--ink) 65%, transparent); }
       .fields textarea { grid-column: 1 / -1; min-height: 48px; resize: vertical; font-family: inherit; }
       @media (max-width: 480px) { .fields { grid-template-columns: 1fr; } }
@@ -117,9 +118,16 @@
       .mover-form { background: var(--paper-raised); border: 1px solid var(--line); border-radius: 5px; box-shadow: var(--shadow); padding: 16px 18px; display: grid; gap: 10px; margin-bottom: 18px; }
       .mover-form h2 { margin: 0; font-size: 0.95rem; }
       .mover-row { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
-      .mover-row select, .mover-row input { flex: 1; min-width: 140px; }
+      .mover-row select, .mover-row input { flex: 1 1 120px; min-width: 0; }
 
       .territorio-card .concellos { font-size: 0.8rem; color: color-mix(in srgb, var(--ink) 65%, transparent); margin: 0; }
+      .centros-mini-list { list-style: none; margin: 8px 0 0; padding: 0; display: grid; gap: 3px; }
+      .centros-mini-list li { display: flex; align-items: center; gap: 6px; }
+      .centro-mini { all: unset; display: flex; align-items: center; gap: 8px; flex: 1 1 auto; min-width: 0; cursor: pointer; padding: 5px 6px; border-radius: 3px; font-size: 0.8rem; }
+      .centro-mini:hover { background: rgba(37, 35, 33, 0.06); }
+      .centro-mini .pill { flex-shrink: 0; }
+      .centro-mini-nome { flex: 1 1 auto; min-width: 0; overflow-wrap: anywhere; }
+      .centro-mini-activar { font-size: 0.68rem !important; padding: 4px 9px !important; white-space: nowrap; flex-shrink: 0; }
       .rename-row { display: flex; gap: 8px; align-items: center; width: 100%; }
       .rename-row input { flex: 1; }
       .territorio-link { font-size: 0.74rem; font-weight: 700; text-decoration: underline; cursor: pointer; background: none; border: 0; padding: 0; color: var(--ink); }
@@ -162,6 +170,11 @@
         </section>
 
         <section>
+          <p class="section-label">Exportar</p>
+          <div class="actions" style="margin-bottom:18px">
+            <button type="button" class="quiet" id="exportar-centros">Centros (CSV)</button>
+            <button type="button" class="quiet" id="exportar-territorios">Territorios (CSV)</button>
+          </div>
           <div class="tabs" role="tablist" aria-label="Sección">
             <button type="button" role="tab" data-panel="centros" aria-selected="true">Centros</button>
             <button type="button" role="tab" data-panel="territorios" aria-selected="false">Territorios</button>
@@ -384,7 +397,24 @@
         `;
       }
 
+      function listaCentrosHtml(listaCentros) {
+        const ordenados = [...listaCentros].sort((a, b) => a.nome.localeCompare(b.nome, "gl"));
+        if (!ordenados.length) return `<p class="hint" style="margin:6px 0 0">Ningún centro do catálogo neste grupo.</p>`;
+        return `<ul class="centros-mini-list">` + ordenados.map((c) => `
+          <li>
+            <button type="button" class="centro-mini" data-action="ver-centro" data-codigo="${escapeHtml(c.codigo)}">
+              <span class="pill ${c.estado}">${ESTADO_LABEL[c.estado] || c.estado}</span>
+              <span class="centro-mini-nome">${escapeHtml(c.nome)}${c.nucleo ? "" : ""}</span>
+            </button>
+            ${c.estado === "sen_asemblea" ? `<button type="button" class="quiet centro-mini-activar" data-action="activar-rapido" data-codigo="${escapeHtml(c.codigo)}">Activar</button>` : ""}
+          </li>
+        `).join("") + `</ul>`;
+      }
+
       function tarxetaTerritorio(t, destacar) {
+        const centros = centrosComDerivados();
+        const chaves = new Set(t.concellos.map((c) => normalizarConcello(c)));
+        const centrosDoTerritorio = centros.filter((c) => chaves.has(normalizarConcello(c.concello)));
         return `
           <article class="card territorio-card${destacar ? " selected" : ""}" data-nome="${escapeHtml(t.nome)}">
             <div class="card-head">
@@ -393,7 +423,7 @@
                 <button type="button" class="quiet" data-action="renomear" style="appearance:none;border:1.5px solid var(--line-strong);background:transparent;padding:7px 12px;font:inherit;font-size:0.74rem;font-weight:700;border-radius:4px;cursor:pointer">Renomear</button>
               </div>
             </div>
-            <p class="concellos">${t.concellos.map(escapeHtml).join(" · ")}</p>
+            <p class="concellos">${t.concellos.slice().sort((a, b) => a.localeCompare(b, "gl")).map(escapeHtml).join(" · ")}</p>
             <div class="fields">
               <label>Contacto do territorio<input type="text" data-field="contacto" value="${escapeHtml(t.contacto)}" /></label>
               <label>Notas<textarea data-field="notas">${escapeHtml(t.notas)}</textarea></label>
@@ -401,6 +431,10 @@
             <div class="actions">
               <button type="button" class="primary" data-action="gardar">Gardar</button>
               <button type="button" class="quiet" data-action="ver-no-mapa">Ver no mapa</button>
+            </div>
+            <div style="border-top:1px solid var(--line);margin-top:2px;padding-top:10px">
+              <p class="section-label" style="margin:0">Centros do territorio (${centrosDoTerritorio.length})</p>
+              ${listaCentrosHtml(centrosDoTerritorio)}
             </div>
           </article>
         `;
@@ -421,7 +455,8 @@
                 <span class="meta">${territorio ? (territorio.nucleo ? "Núcleo propio -- " : "Territorio: ") + escapeHtml(territorio.nome) : "Sen territorio asignado"}</span>
               </div>
             </div>
-            <p class="concellos">${centrosDoConcello.length} centro${centrosDoConcello.length === 1 ? "" : "s"} no catálogo${centrosDoConcello.length ? ": " + centrosDoConcello.map((c) => escapeHtml(c.nome) + " (" + (ESTADO_LABEL[c.estado] || c.estado) + ")").join(", ") : ""}</p>
+            <p class="concellos">${centrosDoConcello.length} centro${centrosDoConcello.length === 1 ? "" : "s"} no catálogo</p>
+            ${listaCentrosHtml(centrosDoConcello)}
             <div class="mover-row">
               <select data-field="destino">
                 <option value="">Mover a territorio…</option>
@@ -599,9 +634,41 @@
         }
       }
 
+      // Activar/pór en creación un centro dende calquera listaxe mini
+      // (dentro dunha tarxeta de concello ou de territorio), compartido
+      // coa acción equivalente da tarxeta de centro completa.
+      async function activarCentroDesdeBoton(button, codigo, novoEstado) {
+        const item = centrosComDerivados().find((c) => c.codigo === codigo);
+        if (!item) return;
+        const confirmado = window.confirm(
+          `${novoEstado === "activa" ? "Activar" : "Pór en creación"} "${item.nome}" no mapa público?\n\nIsto fai un commit no repositorio (sen datos de contacto). O mapa público tarda un par de minutos en reflectilo -- aquí vaise ver o cambio ao instante, coma vista previa.`
+        );
+        if (!confirmado) return;
+        button.disabled = true;
+        try {
+          await activarCentro(codigo, novoEstado);
+          centrosBase.find((c) => c.codigo === codigo).estado = novoEstado;
+          seleccionar({ tipo: "centro", codigo });
+          atualizarTudo();
+        } catch (error) {
+          alert(error.message);
+          button.disabled = false;
+        }
+      }
+
       async function manexarAccionConcello(button, card) {
         const nomeConcello = card.dataset.concello;
         const action = button.dataset.action;
+
+        if (action === "ver-centro") {
+          seleccionar({ tipo: "centro", codigo: button.dataset.codigo });
+          return;
+        }
+
+        if (action === "activar-rapido") {
+          await activarCentroDesdeBoton(button, button.dataset.codigo, "activa");
+          return;
+        }
 
         if (action === "ver-territorio") {
           seleccionar({ tipo: "territorio", nome: button.dataset.nome });
@@ -634,6 +701,16 @@
       async function manexarAccionTerritorio(button, card) {
         const nomeActual = card.dataset.nome;
         const action = button.dataset.action;
+
+        if (action === "ver-centro") {
+          seleccionar({ tipo: "centro", codigo: button.dataset.codigo });
+          return;
+        }
+
+        if (action === "activar-rapido") {
+          await activarCentroDesdeBoton(button, button.dataset.codigo, "activa");
+          return;
+        }
 
         if (action === "ver-no-mapa") {
           const grupo = capasPorTerritorio.get(nomeActual) ?? [];
@@ -688,6 +765,44 @@
           const input = select.closest("article")?.querySelector('[data-field="destinoNovo"]');
           if (input) input.style.display = select.value === "__novo__" ? "" : "none";
         }
+      });
+
+      // ---------------------------------------------------------------
+      // Exportar a CSV (xeración no propio navegador, sen tocar o servidor)
+      // ---------------------------------------------------------------
+      function descargarCsv(nomeFicheiro, filas) {
+        const csv = filas.map((fila) => fila.map((valor) => {
+          const texto = String(valor ?? "");
+          return /[",\n;]/.test(texto) ? '"' + texto.replace(/"/g, '""') + '"' : texto;
+        }).join(";")).join("\r\n");
+        const blob = new Blob(["\ufeff" + csv], { type: "text/csv;charset=utf-8;" });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement("a");
+        a.href = url;
+        a.download = nomeFicheiro;
+        document.body.appendChild(a);
+        a.click();
+        a.remove();
+        URL.revokeObjectURL(url);
+      }
+
+      document.querySelector("#exportar-centros").addEventListener("click", () => {
+        const centros = centrosComDerivados();
+        const cabeceira = ["Código", "Nome do centro", "Concello", "Territorial", "Estado", "Persoa de contacto", "Responsable", "Representantes / outra info", "Notas"];
+        const filas = [cabeceira, ...centros
+          .slice()
+          .sort((a, b) => a.nome.localeCompare(b.nome, "gl"))
+          .map((c) => [c.codigo, c.nome, c.concello, c.territorio || "", ESTADO_LABEL[c.estado] || c.estado, c.contacto, c.responsable, c.representantes, c.notas])];
+        descargarCsv("centros-aaep.csv", filas);
+      });
+
+      document.querySelector("#exportar-territorios").addEventListener("click", () => {
+        const cabeceira = ["Territorio", "Concellos", "Contacto", "Notas"];
+        const filas = [cabeceira, ...territorios
+          .slice()
+          .sort((a, b) => a.nome.localeCompare(b.nome, "gl"))
+          .map((t) => [t.nome, t.concellos.slice().sort((a, b) => a.localeCompare(b, "gl")).join(", "), t.contacto, t.notas])];
+        descargarCsv("territorios-aaep.csv", filas);
       });
 
       document.querySelector("#centros-search").addEventListener("input", (event) => {
@@ -786,7 +901,7 @@
             (territorio
               ? `<p style="margin:.45rem 0 0;font-size:.78rem;color:#625f5a">${numCentros} ${numCentros === 1 ? "centro activo" : "centros activos"}</p>`
               : `<p style="margin:.45rem 0 0;font-size:.78rem;color:#625f5a">${escapeHtml(nomeConcello)} -- sen territorio asignado</p>`) +
-            `<p style="margin:.6rem 0 0;font-size:.7rem;font-weight:700;text-decoration:underline">Editar no panel →</p>`,
+            `<button type="button" class="popup-ir-panel" data-concello="${escapeHtml(nomeConcello)}" style="all:unset;display:block;margin:.6rem 0 0;font-size:.7rem;font-weight:700;text-decoration:underline;cursor:pointer;color:var(--color-ink,#252321)">Ver e editar no panel →</button>`,
             { maxWidth: 240, autoPanPadding: [28, 28] }
           );
 
@@ -822,7 +937,7 @@
           if (typeof c.latitude !== "number" || typeof c.longitude !== "number") return;
           const marker = L.circleMarker([c.latitude, c.longitude], {
             pane: "markerPane",
-            radius: c.estado === "activa" ? 7 : 5.5,
+            radius: c.estado === "activa" ? 8 : 6.5,
             color: "#f2f0ec",
             weight: 1.5,
             fillColor: CORES_ESTADO[c.estado] ?? "#8c887f",
@@ -848,6 +963,19 @@
         map.createPane("territories");
         map.getPane("territories").style.zIndex = "250";
         L.control.zoom({ position: "topright" }).addTo(map);
+
+        // O botón "Ver e editar no panel" dentro dun popup: Leaflet non
+        // propaga os clics de dentro dun popup ao "click" da propia capa
+        // (para que premer no texto non peche o popup sen querer), así que
+        // hai que escoitar á parte, cada vez que se abre un popup.
+        map.on("popupopen", (event) => {
+          const boton = event.popup.getElement()?.querySelector(".popup-ir-panel");
+          if (!boton) return;
+          boton.addEventListener("click", () => {
+            seleccionar({ tipo: "concello", nome: boton.dataset.concello });
+            map.closePopup();
+          });
+        });
 
         const RecentrarControl = L.Control.extend({
           options: { position: "topright" },
