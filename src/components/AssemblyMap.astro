@@ -63,21 +63,26 @@ const universoTerritorios = [...territorios.map((territorio) => territorio.nome)
         </div>
 
         {territorios.length > 0 && (
-          <details open class="group mt-8 border-t border-paper/20 pt-6">
+          <details class="group mt-8 border-t border-paper/20 pt-6">
             <summary class="focus-ring flex cursor-pointer list-none items-center justify-between gap-2 text-[10px] uppercase tracking-wider text-paper/55 [&::-webkit-details-marker]:hidden">
               <span>Territorios (intercentros)</span>
               <ArrowIcon direction="down" class="shrink-0 text-paper/40 transition-transform group-open:rotate-180" />
             </summary>
-            <ul class="mt-3 grid gap-1.5 text-[11px] text-paper/80">
+            <ul id="legend-territorios" class="mt-3 grid gap-1.5 text-[11px] text-paper/80">
               {territorios.map((territorio) => (
-                <li class="flex items-center gap-2">
+                <li
+                  class="-mx-1 flex cursor-pointer items-center gap-2 rounded-[3px] px-1 py-0.5 transition-colors hover:bg-paper/10 hover:text-paper"
+                  data-territorio={territorio.nome}
+                  tabindex="0"
+                  role="button"
+                >
                   <i class="h-2.5 w-2.5 shrink-0 rounded-full" style={`background:${corDoTerritorio(territorio.nome, universoTerritorios)}`}></i>
                   {territorio.nome}
                 </li>
               ))}
             </ul>
             <p class="mt-3 text-[10px] leading-relaxed text-paper/45">
-              Agrupación real por concellos -- pode cambiar. Pasa por riba dun territorio no mapa para velo enteiro. Un concello cun só centro aínda sen agrupar aparece tamén coloreado, coma "núcleo" propio á espera de que outros se lle unan.
+              Agrupación real por concellos -- pode cambiar. Pasa ou clica nun territorio desta listaxe (ou no mapa) para velo enteiro. Un concello cun só centro aínda sen agrupar aparece tamén coloreado, coma "núcleo" propio á espera de que outros se lle unan.
             </p>
           </details>
         )}
@@ -121,7 +126,7 @@ const universoTerritorios = [...territorios.map((territorio) => territorio.nome)
   if (mapElement) {
     const map = L.map(mapElement, {
       zoomControl: false,
-      minZoom: 7,
+      minZoom: 6,
       maxZoom: 16,
       scrollWheelZoom: true,
     }).setView([42.85, -8.05], 8);
@@ -164,13 +169,16 @@ const universoTerritorios = [...territorios.map((territorio) => territorio.nome)
     // nosos propios datos (concellos agrupados por territorio), sen
     // topónimos, mar nin posibilidade de navegar fóra do país.
     //
-    // Cada territorio -- incluídos os "núcleo" dun só centro -- ten a súa
-    // propia cor (corDoTerritorio, en territorios.ts). O peso e opacidade
-    // do bordo son SEMPRE os mesmos para calquera territorio, agrupado ou
-    // núcleo: só cambia o matiz. O único concello "solto" (sen territorio
-    // nin núcleo) ten un bordo e recheo neutros, tamén sempre iguais. Así
-    // non hai bordos "gordos" nalgúns sitios e finos noutros sen motivo.
-    const CONCELLO_SOLTO = { color: "#f2f0ec", weight: 1, opacity: 0.5, fillColor: "#c7c4bc", fillOpacity: 0.14 };
+    // TODOS os concellos -- teñan territorio, núcleo ou ningún dos dous --
+    // levan EXACTAMENTE o mesmo bordo en repouso (cor, peso e opacidade):
+    // así non hai fronteiras "sen pintar" nin máis grosas nunhas que
+    // noutras. A diferenza entre territorios está só no recheo (a cor de
+    // corDoTerritorio). O bordo só cambia -- e pasa a levar a cor do
+    // territorio -- cando se realza ao pasar por riba ou premer.
+    const BORDE_REPOUSO = "#8c887f";
+    const estiloRepouso = (fillColor: string, fillOpacity: number) =>
+      ({ color: BORDE_REPOUSO, weight: 1, opacity: 0.6, fillColor, fillOpacity });
+    const CONCELLO_SOLTO = estiloRepouso("#c7c4bc", 0.14);
 
     // Núcleo: ver a mesma lóxica (e por que) en centros.ts. Aquí só
     // precisamos saber, por concello normalizado, se ten un centro único
@@ -190,11 +198,11 @@ const universoTerritorios = [...territorios.map((territorio) => territorio.nome)
 
     const estiloBase = (nomeTerritorio: string) => {
       const cor = corDoTerritorio(nomeTerritorio, universoTerritorios);
-      return { color: cor, weight: 1.1, opacity: 0.55, fillColor: cor, fillOpacity: 0.16 };
+      return estiloRepouso(cor, 0.18);
     };
     const estiloRealzado = (nomeTerritorio: string) => {
       const cor = corDoTerritorio(nomeTerritorio, universoTerritorios);
-      return { color: cor, weight: 2.2, opacity: 0.95, fillColor: cor, fillOpacity: 0.32 };
+      return { color: cor, weight: 2.4, opacity: 0.95, fillColor: cor, fillOpacity: 0.34 };
     };
 
     function territorioEfectivo(nomeConcello: string): { nome: string; nucleo: boolean } | undefined {
@@ -257,7 +265,7 @@ const universoTerritorios = [...territorios.map((territorio) => territorio.nome)
               '<p style="margin:.45rem 0 0;font-size:.78rem;color:#625f5a">' + numCentros + " " + (numCentros === 1 ? "centro activo" : "centros activos") + '</p>' +
               notaNucleo +
               listaCentros,
-              { maxWidth: 260 }
+              { maxWidth: 260, autoPanPadding: [28, 28] }
             );
 
             const realzar = () => grupo.forEach((capa) => capa.setStyle(estiloRealzado(territorio.nome)));
@@ -269,8 +277,52 @@ const universoTerritorios = [...territorios.map((territorio) => territorio.nome)
         }).addTo(map);
 
         limitesGalicia = capaTerritorios.getBounds();
-        map.setMaxBounds(limitesGalicia.pad(0.04));
+        // Marxe moito máis folgada ca antes: pode moverse ao redor de
+        // Galiza con liberdade, non queda enclavado no seu propio contorno
+        // -- só se impide chegar a ver Asturias ou Castela e León.
+        map.setMaxBounds(limitesGalicia.pad(0.65));
         map.fitBounds(limitesGalicia);
+
+        // Lenda da barra lateral: pasar por riba ou premer nun territorio
+        // realza ese mesmo territorio no mapa (igual ca pasar por riba del
+        // directamente no mapa). Premer, ademais, dálle zoom ao territorio
+        // enteiro e mantén o realce fixado até premer noutro ou no mesmo.
+        let territorioFixado: string | null = null;
+        document.querySelectorAll<HTMLElement>("[data-territorio]").forEach((item) => {
+          const nome = item.dataset.territorio;
+          const grupo = nome ? capasPorTerritorio.get(nome) : undefined;
+          if (!nome || !grupo) return;
+
+          const realzarGrupo = () => grupo.forEach((capa) => capa.setStyle(estiloRealzado(nome)));
+          const atenuarGrupo = () => grupo.forEach((capa) => capa.setStyle(estiloBase(nome)));
+
+          item.addEventListener("mouseenter", () => {
+            if (territorioFixado !== nome) realzarGrupo();
+          });
+          item.addEventListener("mouseleave", () => {
+            if (territorioFixado !== nome) atenuarGrupo();
+          });
+          item.addEventListener("click", () => {
+            if (territorioFixado === nome) {
+              atenuarGrupo();
+              territorioFixado = null;
+              return;
+            }
+            if (territorioFixado) {
+              capasPorTerritorio.get(territorioFixado)?.forEach((capa) => capa.setStyle(estiloBase(territorioFixado as string)));
+            }
+            territorioFixado = nome;
+            realzarGrupo();
+            const bounds = L.featureGroup(grupo).getBounds();
+            if (bounds.isValid()) map.fitBounds(bounds, { maxZoom: 12, padding: [40, 40] });
+          });
+          item.addEventListener("keydown", (event) => {
+            if (event.key === "Enter" || event.key === " ") {
+              event.preventDefault();
+              item.click();
+            }
+          });
+        });
       })
       .catch(() => undefined);
 
@@ -314,7 +366,7 @@ const universoTerritorios = [...territorios.map((territorio) => territorio.nome)
           fillColor: colors[centro.estado as Estado],
           fillOpacity: .94,
         });
-        marker.bindPopup(popup(centro));
+        marker.bindPopup(popup(centro), { autoPanPadding: [28, 28] });
         marker.addTo(markerLayer);
         if (visible.length === 1) soleMarker = marker;
       });
