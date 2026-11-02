@@ -647,6 +647,30 @@
       "nome": "IES David Buján",
       "concello": "Cambre",
       "estado": "activa"
+    },
+    {
+      "codigo": "15014957",
+      "nome": "CPI de San Sadurniño",
+      "concello": "San Sadurniño",
+      "estado": "activa"
+    },
+    {
+      "codigo": "36019669",
+      "nome": "IES Armando Cotarelo Valledor",
+      "concello": "Vilagarcía de Arousa",
+      "estado": "activa"
+    },
+    {
+      "codigo": "36015810",
+      "nome": "CEIP Plurilingüe Sobreira-Valadares",
+      "concello": "Vigo",
+      "estado": "activa"
+    },
+    {
+      "codigo": "36020362",
+      "nome": "IES Plurilingüe de Valga",
+      "concello": "Valga",
+      "estado": "activa"
     }
   ]
 }
