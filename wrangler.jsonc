@@ -10,6 +10,6 @@
     // parte do repositorio de código. Substituír <ID> polo id real que
     // devolve `wrangler kv namespace create COORDINACION` (ver README de
     // despregue / mensaxe de Claude).
-    { "binding": "COORDINACION", "id": "<ID>" }
+    { "binding": "COORDINACION", "id": "46e282a911d2491791d40c0a84524b18" }
   ]
 }
