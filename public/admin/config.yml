@@ -24,18 +24,20 @@ collections:
     fields:
       - { label: Título, name: title, widget: string }
       - { label: Data, name: date, widget: datetime }
-      - { label: Tipo, name: type, widget: string, default: Nova, hint: "Valores recomendados: Nova, Comunicado, Convocatoria, Tribuna docente ou Crónica. Se engades un tipo novo, anótao tamén en “Tipos de contido”." }
+      - { label: Tipo, name: type, widget: string, default: Nova, hint: "Etiqueta libre, só para amosar unha categoría visual (ex. Nova, Comunicado, Convocatoria, Tribuna docente, Crónica). Se é unha convocatoria de verdade, marca tamén \"É unha convocatoria?\" máis abaixo -- iso é o que fai que apareza en /axenda, non o texto que escribas aquí." }
       - { label: Resumo, name: summary, widget: text }
       - { label: Imaxe de cabeceira, name: image, widget: image, required: false, hint: "As imaxes editoriais pequenas poden gardarse no repositorio. As fotografías de arquivo deben permanecer en Drive." }
       - { label: Texto alternativo da imaxe, name: imageAlt, widget: string, required: false, hint: "Describe o que se ve na imaxe para persoas que usan lector de pantalla. Deixa baleiro só se a imaxe é puramente decorativa." }
       - { label: Destacar, name: featured, widget: boolean, default: false, required: false }
-      - { label: Data e hora do evento, name: eventDate, widget: datetime, required: false, hint: "Só para convocatorias. Permite que apareza automaticamente en /axenda." }
+      - { label: "É unha convocatoria?", name: convocatoria, widget: boolean, default: false, hint: "Marca isto para que apareza en /axenda. Se o marcas, enche tamén Territorio e Data e hora do evento." }
+      - { label: Data e hora do evento, name: eventDate, widget: datetime, required: false, hint: "Cando empeza. Precísase se marcaches \"É unha convocatoria?\"." }
+      - { label: Data e hora de fin, name: eventDateEnd, widget: datetime, required: false, hint: "Só se dura máis dun intre: varios días (ex. votación do 16 ao 20 de novembro) ou varias horas o mesmo día. Déixao baleiro para un evento dun só momento." }
       - { label: Lugar do evento, name: eventLocation, widget: string, required: false, hint: "Texto libre: nome do centro, local ou enderezo. Non precisa coincidir cun centro do catálogo." }
       - label: Territorio
         name: territorio
         widget: select
         required: false
-        hint: "Só para Convocatorias: territorio ao que pertence, para que apareza en /axenda filtrada por zona. Lista sincronizada á man con src/data/territorios.json -- se a coordinadora crea, funde ou renomea un territorio, actualiza tamén esta lista (a validación do proxecto avisa se quedan desincronizadas)."
+        hint: "Territorio ao que pertence a convocatoria, para que apareza en /axenda filtrada por zona. Escolle \"Nacional\" para algo que afecta a toda AAEP (ex. a votación do referendo) ou \"Outro\" se non encaixa en ningún territorio. Os 14 territorios reais están sincronizados á man con src/data/territorios.json -- se a coordinadora crea, funde ou renomea un territorio, actualiza tamén esta lista (a validación do proxecto avisa se quedan desincronizadas)."
         options:
           - "A Coruña"
           - "A Louriña"
@@ -51,6 +53,8 @@ collections:
           - "Redondela/Pontevedra Sur"
           - "Val Miñor/Pontevedra Sur"
           - "Vigo/Pontevedra Sur"
+          - "Nacional"
+          - "Outro"
       - label: Sección
         name: seccion
         widget: select

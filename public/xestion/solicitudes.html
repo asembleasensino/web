@@ -244,8 +244,11 @@
         list.innerHTML = `<div class="list">${visible.map((item) => {
           const esConvocatoria = tipoDe(item) === "convocatoria";
           const titulo = esConvocatoria ? escapeHtml(item.titulo) : escapeHtml(item.centro);
+          const rangoData = item.data
+            ? `${new Date(item.data).toLocaleString("gl")}${item.dataFin ? ` – ${new Date(item.dataFin).toLocaleString("gl")}` : ""}`
+            : "";
           const subtitulo = esConvocatoria
-            ? `${escapeHtml(item.territorio)}${item.lugar ? ` · ${escapeHtml(item.lugar)}` : ""} · ${item.data ? new Date(item.data).toLocaleString("gl") : ""}`
+            ? `${escapeHtml(item.territorio)}${item.lugar ? ` · ${escapeHtml(item.lugar)}` : ""} · ${rangoData}`
             : `Código ${escapeHtml(item.centroCodigo)}`;
           return `
           <article class="card" data-id="${escapeHtml(item.id)}">

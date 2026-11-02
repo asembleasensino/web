@@ -25,12 +25,14 @@ export async function getActualidade() {
 /**
  * As Convocatorias teñen o seu propio espazo en /axenda e por iso se
  * excluyen da grade normal de /actualidade (ver getActualidadeSenConvocatorias).
+ * A fonte de verdade é o booleano "convocatoria" (non o texto de "type",
+ * que é libre e só unha etiqueta visual -- ver content.config.ts).
  * Usamos eventDate cando existe (é a data/hora real do evento); se non,
  * caemos en "date" (a data de publicación da entrada) para non deixar
  * fóra unha convocatoria mal cuberta no CMS.
  */
 export async function getConvocatorias() {
-  const entries = await getCollection("actualidade", ({ data }) => !data.draft && isType(data.type, "Convocatoria"));
+  const entries = await getCollection("actualidade", ({ data }) => !data.draft && data.convocatoria);
   return entries.sort((a, b) => (a.data.eventDate ?? a.data.date).getTime() - (b.data.eventDate ?? b.data.date).getTime());
 }
 
@@ -38,9 +40,55 @@ export function dataDaConvocatoria(entry: ActualidadeEntry) {
   return entry.data.eventDate ?? entry.data.date;
 }
 
+/**
+ * Para saber se unha convocatoria segue a ser "próxima": un evento de
+ * varios días (eventDateEnd) segue a contar coma próximo mentres non remate
+ * o último día, aínda que xa comezase (ex. a votación do referendo, do día
+ * 2 ao 6, debe seguir en "próximas" o día 4).
+ */
+export function dataFinDaConvocatoria(entry: ActualidadeEntry) {
+  return entry.data.eventDateEnd ?? dataDaConvocatoria(entry);
+}
+
 /** Actualidade propia + hemeroteca, para as dúas pestanas de /actualidade -- sen Convocatorias (teñen /axenda). */
 export async function getActualidadeSenConvocatorias() {
-  return (await getActualidade()).filter((entry) => !isType(entry.data.type, "Convocatoria"));
+  return (await getActualidade()).filter((entry) => !entry.data.convocatoria);
+}
+
+/**
+ * Amosa un intre ("26 de setembro de 2026, 10:30") ou un rango, segundo o
+ * que haxa: sen eventDateEnd (ou igual a eventDate) é un só intre; co
+ * mesmo día pero hora distinta amosa "26 de setembro de 2026, 10:30–13:00";
+ * en días distintos amosa "16–20 de novembro de 2026" (ou engadindo o mes/ano
+ * de inicio se cambia respecto ao de fin).
+ */
+export function formatRangoEvento(inicio: Date, fin?: Date): string {
+  if (!fin || fin.getTime() === inicio.getTime()) {
+    return formatDate(inicio, { hour: "2-digit", minute: "2-digit" });
+  }
+  const mesmoDia = inicio.toDateString() === fin.toDateString();
+  if (mesmoDia) {
+    const horaInicio = new Intl.DateTimeFormat("gl-ES", { hour: "2-digit", minute: "2-digit", timeZone: "Europe/Madrid" }).format(inicio);
+    const horaFin = new Intl.DateTimeFormat("gl-ES", { hour: "2-digit", minute: "2-digit", timeZone: "Europe/Madrid" }).format(fin);
+    return `${formatDate(inicio)}, ${horaInicio}–${horaFin}`;
+  }
+  const mesmoMes = inicio.getUTCMonth() === fin.getUTCMonth() && inicio.getUTCFullYear() === fin.getUTCFullYear();
+  const diaInicio = new Intl.DateTimeFormat("gl-ES", { day: "2-digit", timeZone: "Europe/Madrid" }).format(inicio);
+  if (mesmoMes) {
+    return `${diaInicio}–${formatDate(fin)}`;
+  }
+  return `${formatDate(inicio)} – ${formatDate(fin)}`;
+}
+
+/** Igual que formatRangoEvento pero compacto, para a tarxeta pequena do badge de data en /axenda: "16–20" + mes, ou só o día. */
+export function formatDiaBadge(inicio: Date, fin?: Date): { dia: string; mes: string } {
+  const mes = new Intl.DateTimeFormat("gl-ES", { month: "short", timeZone: "Europe/Madrid" }).format(inicio);
+  const diaInicio = new Intl.DateTimeFormat("gl-ES", { day: "2-digit", timeZone: "Europe/Madrid" }).format(inicio);
+  if (!fin || inicio.toDateString() === fin.toDateString()) {
+    return { dia: diaInicio, mes };
+  }
+  const diaFin = new Intl.DateTimeFormat("gl-ES", { day: "2-digit", timeZone: "Europe/Madrid" }).format(fin);
+  return { dia: `${diaInicio}–${diaFin}`, mes };
 }
 
 export async function getMateriais() {

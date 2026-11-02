@@ -3,18 +3,18 @@ import BaseLayout from "../layouts/BaseLayout.astro";
 import AssemblyMap from "../components/AssemblyMap.astro";
 import ActivationForm from "../components/ActivationForm.astro";
 import ArrowIcon from "../components/ArrowIcon.astro";
-import { actualidadeUrl, formatDate, getActualidade, isType } from "../lib/content";
+import { actualidadeUrl, dataDaConvocatoria, dataFinDaConvocatoria, formatDate, formatDiaBadge, formatRangoEvento, getActualidade } from "../lib/content";
 import home from "../data/home.json";
 
 const actualidade = await getActualidade();
 const novas = [
-  ...actualidade.filter((entry) => entry.data.featured),
-  ...actualidade.filter((entry) => !entry.data.featured),
+  ...actualidade.filter((entry) => entry.data.featured && !entry.data.convocatoria),
+  ...actualidade.filter((entry) => !entry.data.featured && !entry.data.convocatoria),
 ].slice(0, 3);
 const agora = new Date();
 const convocatorias = actualidade
-  .filter((entry) => isType(entry.data.type, "Convocatoria") && entry.data.eventDate && entry.data.eventDate >= agora)
-  .sort((a, b) => (a.data.eventDate?.getTime() || 0) - (b.data.eventDate?.getTime() || 0))
+  .filter((entry) => entry.data.convocatoria && dataFinDaConvocatoria(entry).getTime() >= agora.getTime())
+  .sort((a, b) => dataDaConvocatoria(a).getTime() - dataDaConvocatoria(b).getTime())
   .slice(0, 3);
 ---
 
@@ -130,21 +130,25 @@ const convocatorias = actualidade
     <div class="grid gap-16 lg:grid-cols-12 lg:gap-24">
       <div class="min-w-0 lg:col-span-5">
         <h2 class="display type-display-section">Próximas<br />convocatorias</h2>
+        <a href="/axenda/" class="mt-6 inline-block text-xs font-black uppercase tracking-wider underline decoration-red decoration-2 underline-offset-4 hover:text-red">Ver toda a axenda →</a>
       </div>
       <div class="min-w-0 lg:col-span-7 lg:pt-28">
-        {convocatorias.map((evento, index) => (
-          <a href={actualidadeUrl(evento)} class:list={["min-w-0 grid grid-cols-[5.5rem_minmax(0,1fr)_auto] items-center gap-4 border-t border-ink/25 no-underline last:border-b", index === 0 ? "py-9" : "py-6"]}>
-            <div>
-              <strong class="display block text-4xl">{evento.data.eventDate?.getDate()}</strong>
-              <span class="eyebrow text-red">{evento.data.eventDate?.toLocaleDateString("gl-ES", { month: "short", timeZone: "Europe/Madrid" })}</span>
-            </div>
-            <div>
-              <h3 class:list={["font-extrabold", index === 0 ? "text-2xl" : "text-lg"]}>{evento.data.title}</h3>
-              <p class="mt-1 text-sm text-ink/55">{evento.data.eventLocation || formatDate(evento.data.eventDate!)}</p>
-            </div>
-            <ArrowIcon direction="up-right" aria-hidden="true" class="h-6 w-6" />
-          </a>
-        ))}
+        {convocatorias.map((evento, index) => {
+          const badge = formatDiaBadge(dataDaConvocatoria(evento), evento.data.eventDateEnd);
+          return (
+            <a href={actualidadeUrl(evento)} class:list={["min-w-0 grid grid-cols-[5.5rem_minmax(0,1fr)_auto] items-center gap-4 border-t border-ink/25 no-underline last:border-b", index === 0 ? "py-9" : "py-6"]}>
+              <div>
+                <strong class="display block text-4xl">{badge.dia}</strong>
+                <span class="eyebrow text-red">{badge.mes}</span>
+              </div>
+              <div>
+                <h3 class:list={["font-extrabold", index === 0 ? "text-2xl" : "text-lg"]}>{evento.data.title}</h3>
+                <p class="mt-1 text-sm text-ink/55">{evento.data.eventLocation || formatRangoEvento(dataDaConvocatoria(evento), evento.data.eventDateEnd)}</p>
+              </div>
+              <ArrowIcon direction="up-right" aria-hidden="true" class="h-6 w-6" />
+            </a>
+          );
+        })}
       </div>
     </div>
   </section>}
