@@ -22,6 +22,27 @@ export async function getActualidade() {
   return (await getCollection("actualidade", ({ data }) => !data.draft)).sort(newestFirst);
 }
 
+/**
+ * As Convocatorias teñen o seu propio espazo en /axenda e por iso se
+ * excluyen da grade normal de /actualidade (ver getActualidadeSenConvocatorias).
+ * Usamos eventDate cando existe (é a data/hora real do evento); se non,
+ * caemos en "date" (a data de publicación da entrada) para non deixar
+ * fóra unha convocatoria mal cuberta no CMS.
+ */
+export async function getConvocatorias() {
+  const entries = await getCollection("actualidade", ({ data }) => !data.draft && isType(data.type, "Convocatoria"));
+  return entries.sort((a, b) => (a.data.eventDate ?? a.data.date).getTime() - (b.data.eventDate ?? b.data.date).getTime());
+}
+
+export function dataDaConvocatoria(entry: ActualidadeEntry) {
+  return entry.data.eventDate ?? entry.data.date;
+}
+
+/** Actualidade propia + hemeroteca, para as dúas pestanas de /actualidade -- sen Convocatorias (teñen /axenda). */
+export async function getActualidadeSenConvocatorias() {
+  return (await getActualidade()).filter((entry) => !isType(entry.data.type, "Convocatoria"));
+}
+
 export async function getMateriais() {
   return (await getCollection("materiais", ({ data }) => !data.draft)).sort((a, b) => {
     if (a.data.featured !== b.data.featured) return a.data.featured ? -1 : 1;

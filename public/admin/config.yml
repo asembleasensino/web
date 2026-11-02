@@ -29,8 +29,36 @@ collections:
       - { label: Imaxe de cabeceira, name: image, widget: image, required: false, hint: "As imaxes editoriais pequenas poden gardarse no repositorio. As fotografías de arquivo deben permanecer en Drive." }
       - { label: Texto alternativo da imaxe, name: imageAlt, widget: string, required: false, hint: "Describe o que se ve na imaxe para persoas que usan lector de pantalla. Deixa baleiro só se a imaxe é puramente decorativa." }
       - { label: Destacar, name: featured, widget: boolean, default: false, required: false }
-      - { label: Data e hora do evento, name: eventDate, widget: datetime, required: false, hint: "Só para convocatorias. Permite que apareza automaticamente en Próximas convocatorias." }
-      - { label: Lugar do evento, name: eventLocation, widget: string, required: false }
+      - { label: Data e hora do evento, name: eventDate, widget: datetime, required: false, hint: "Só para convocatorias. Permite que apareza automaticamente en /axenda." }
+      - { label: Lugar do evento, name: eventLocation, widget: string, required: false, hint: "Texto libre: nome do centro, local ou enderezo. Non precisa coincidir cun centro do catálogo." }
+      - label: Territorio
+        name: territorio
+        widget: select
+        required: false
+        hint: "Só para Convocatorias: territorio ao que pertence, para que apareza en /axenda filtrada por zona. Lista sincronizada á man con src/data/territorios.json -- se a coordinadora crea, funde ou renomea un territorio, actualiza tamén esta lista (a validación do proxecto avisa se quedan desincronizadas)."
+        options:
+          - "A Coruña"
+          - "A Louriña"
+          - "Baixo Miño/O Condado/Paradanta"
+          - "Barbanza"
+          - "Bergantiños-Costa da Morte"
+          - "Compostela"
+          - "Deza/Compostela"
+          - "Ferrolterra"
+          - "Morrazo/Pontevedra Sur"
+          - "Muros/Compostela"
+          - "Pontevedra/Pontevedra Sur"
+          - "Redondela/Pontevedra Sur"
+          - "Val Miñor/Pontevedra Sur"
+          - "Vigo/Pontevedra Sur"
+      - label: Sección
+        name: seccion
+        widget: select
+        default: actualidade
+        hint: "En que pestana de /actualidade aparece: Actualidade (contido propio de AAEP) ou Hemeroteca (prensa e mobilizacións externas). Non afecta ás Convocatorias, que teñen o seu propio espazo en /axenda."
+        options:
+          - { label: Actualidade, value: actualidade }
+          - { label: Hemeroteca, value: hemeroteca }
       - { label: Borrador técnico, name: draft, widget: boolean, default: false, required: false, hint: "Oculta o contido incluso se chega á rama principal." }
       - { label: Corpo, name: body, widget: markdown }
 

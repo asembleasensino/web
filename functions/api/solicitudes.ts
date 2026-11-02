@@ -16,29 +16,51 @@ function escapeHtml(value: string) {
   })[character] || character);
 }
 
-async function notifyByEmail(env: Env, payload: {
+type SolicitudeActivacion = {
   id: string;
+  tipo: "activacion";
   centro: string;
   centroCodigo: string;
   nome: string;
   email: string;
   telefono: string;
   mensaxe: string;
-}) {
+};
+
+type SolicitudeConvocatoria = {
+  id: string;
+  tipo: "convocatoria";
+  territorio: string;
+  nome: string;
+  email: string;
+  telefono: string;
+  titulo: string;
+  data: string;
+  lugar: string;
+  descricion: string;
+};
+
+async function notifyByEmail(env: Env, payload: SolicitudeActivacion | SolicitudeConvocatoria) {
   if (!env.RESEND_API_KEY) return;
   const to = env.SOLICITUDES_TO_EMAIL || "info@asembleasensino.gal";
   const from = env.SOLICITUDES_FROM_EMAIL || "Web AAEP <web@asembleasensino.gal>";
-  const response = await fetch("https://api.resend.com/emails", {
-    method: "POST",
-    headers: {
-      authorization: `Bearer ${env.RESEND_API_KEY}`,
-      "content-type": "application/json",
-      "idempotency-key": `solicitude-${payload.id}`,
-    },
-    body: JSON.stringify({
-      from,
-      to: [to],
-      reply_to: payload.email,
+  const { subject, html } = payload.tipo === "convocatoria"
+    ? {
+      subject: `Nova proposta de convocatoria · ${payload.territorio}`,
+      html: `
+        <h1>Nova proposta de convocatoria para a axenda</h1>
+        <p><strong>Territorio:</strong> ${escapeHtml(payload.territorio)}</p>
+        <p><strong>Título:</strong> ${escapeHtml(payload.titulo)}</p>
+        <p><strong>Data:</strong> ${escapeHtml(payload.data)}</p>
+        ${payload.lugar ? `<p><strong>Lugar:</strong> ${escapeHtml(payload.lugar)}</p>` : ""}
+        <p><strong>Persoa:</strong> ${escapeHtml(payload.nome)}</p>
+        <p><strong>Correo:</strong> ${escapeHtml(payload.email)}</p>
+        ${payload.telefono ? `<p><strong>Teléfono:</strong> ${escapeHtml(payload.telefono)}</p>` : ""}
+        ${payload.descricion ? `<p><strong>Descrición:</strong><br>${escapeHtml(payload.descricion)}</p>` : ""}
+        <p>Non se publica soa: revisa a proposta no panel privado e, se a aprobas, crea a entrada en Decap CMS.</p>
+      `,
+    }
+    : {
       subject: `Nova solicitude de asemblea · ${payload.centro}`,
       html: `
         <h1>Nova solicitude de asemblea</h1>
@@ -49,7 +71,15 @@ async function notifyByEmail(env: Env, payload: {
         ${payload.mensaxe ? `<p><strong>Mensaxe:</strong><br>${escapeHtml(payload.mensaxe)}</p>` : ""}
         <p>A solicitude tamén quedou gardada no panel privado.</p>
       `,
-    }),
+    };
+  const response = await fetch("https://api.resend.com/emails", {
+    method: "POST",
+    headers: {
+      authorization: `Bearer ${env.RESEND_API_KEY}`,
+      "content-type": "application/json",
+      "idempotency-key": `solicitude-${payload.id}`,
+    },
+    body: JSON.stringify({ from, to: [to], reply_to: payload.email, subject, html }),
   });
   if (!response.ok) throw new Error(`Resend respondeu ${response.status}`);
 }
@@ -95,41 +125,83 @@ export const onRequestPost: PagesFunction<Env> = async ({ request, env }) => {
     return Response.json({ ok: false, error: "Servizo temporalmente non dispoñible" }, { status: 503 });
   }
   const form = await request.formData();
-  const centro = String(form.get("centro") ?? "").trim();
-  const centroCodigo = String(form.get("centroCodigo") ?? "").trim();
+  const tipo = String(form.get("tipo") ?? "activacion").trim();
   const nome = String(form.get("nome") ?? "").trim();
   const email = String(form.get("email") ?? "").trim();
   const telefono = String(form.get("telefono") ?? "").trim();
-  const mensaxe = String(form.get("mensaxe") ?? "").trim();
   const consent = String(form.get("consent") ?? "");
 
-  if (
-    !centro || centro.length > 200
-    || !centroCodigo || centroCodigo.length > 30
-    || !nome || nome.length > 150
-    || !email || email.length > 254
-    || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)
-    || telefono.length > 30
-    || (telefono && !/^[\d\s+().-]+$/.test(telefono))
-    || mensaxe.length > 5000
-    || consent !== "accepted"
-  ) {
-    return Response.json({ ok: false, error: "Datos incompletos" }, { status: 400 });
-  }
+  const emailValido = email.length > 0 && email.length <= 254 && /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+  const telefonoValido = telefono.length <= 30 && (!telefono || /^[\d\s+().-]+$/.test(telefono));
+  const consentValido = consent === "accepted";
 
   const id = crypto.randomUUID();
-  const payload = {
-    id,
-    centro,
-    centroCodigo,
-    nome,
-    email,
-    telefono,
-    mensaxe,
-    estado: "pendente_validacion",
-    privacyVersion: "2026-09-01",
-    createdAt: new Date().toISOString(),
-  };
+  let payload: Record<string, unknown>;
+
+  if (tipo === "convocatoria") {
+    const territorio = String(form.get("territorio") ?? "").trim();
+    const titulo = String(form.get("titulo") ?? "").trim();
+    const data = String(form.get("data") ?? "").trim();
+    const lugar = String(form.get("lugar") ?? "").trim();
+    const descricion = String(form.get("descricion") ?? "").trim();
+
+    if (
+      !territorio || territorio.length > 100
+      || !titulo || titulo.length > 200
+      || !data || Number.isNaN(Date.parse(data))
+      || lugar.length > 200
+      || descricion.length > 2000
+      || !nome || nome.length > 150
+      || !emailValido || !telefonoValido || !consentValido
+    ) {
+      return Response.json({ ok: false, error: "Datos incompletos" }, { status: 400 });
+    }
+
+    payload = {
+      id,
+      tipo: "convocatoria",
+      territorio,
+      titulo,
+      data,
+      lugar,
+      descricion,
+      nome,
+      email,
+      telefono,
+      estado: "pendente_validacion",
+      privacyVersion: "2026-09-01",
+      createdAt: new Date().toISOString(),
+    };
+  } else {
+    const centro = String(form.get("centro") ?? "").trim();
+    const centroCodigo = String(form.get("centroCodigo") ?? "").trim();
+    const mensaxe = String(form.get("mensaxe") ?? "").trim();
+
+    if (
+      !centro || centro.length > 200
+      || !centroCodigo || centroCodigo.length > 30
+      || !nome || nome.length > 150
+      || !emailValido || !telefonoValido
+      || mensaxe.length > 5000
+      || !consentValido
+    ) {
+      return Response.json({ ok: false, error: "Datos incompletos" }, { status: 400 });
+    }
+
+    payload = {
+      id,
+      tipo: "activacion",
+      centro,
+      centroCodigo,
+      nome,
+      email,
+      telefono,
+      mensaxe,
+      estado: "pendente_validacion",
+      privacyVersion: "2026-09-01",
+      createdAt: new Date().toISOString(),
+    };
+  }
 
   try {
     await env.SOLICITUDES.put(`solicitude:${id}`, JSON.stringify(payload));
@@ -138,7 +210,7 @@ export const onRequestPost: PagesFunction<Env> = async ({ request, env }) => {
     return Response.json({ ok: false, error: "Non foi posible gardar a solicitude" }, { status: 503 });
   }
   try {
-    await notifyByEmail(env, payload);
+    await notifyByEmail(env, payload as SolicitudeActivacion | SolicitudeConvocatoria);
   } catch (error) {
     console.error("A solicitude gardouse, pero fallou a notificación por correo", error);
   }

@@ -10,6 +10,7 @@ summary: O 26 de setembro celebraremos en Santiago de Compostela unha Xornada de
 image: ""
 featured: true
 eventDate: 2026-09-26T10:30:00.000+02:00
+territorio: Compostela
 eventLocation: Centro Cívico Romaño-Vista Alegre (Santiago de Compostela)
 draft: false
 ---

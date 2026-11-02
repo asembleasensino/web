@@ -1,7 +1,7 @@
 ---
 import { getCollection, render, type CollectionEntry } from "astro:content";
 import BaseLayout from "../../layouts/BaseLayout.astro";
-import { actualidadeUrl, formatDate } from "../../lib/content";
+import { actualidadeUrl, formatDate, isType } from "../../lib/content";
 import { site } from "../../config/site";
 
 export async function getStaticPaths() {
@@ -35,6 +35,7 @@ const canonical = new URL(actualidadeUrl(entry), Astro.site);
           <div class="mt-8 border-l-4 border-red pl-5">
             <p class="font-extrabold">{formatDate(entry.data.eventDate, { hour: "2-digit", minute: "2-digit" })}</p>
             {entry.data.eventLocation && <p class="mt-1 text-sm text-ink/60">{entry.data.eventLocation}</p>}
+            {entry.data.territorio && <p class="mt-1 text-sm text-ink/60">{entry.data.territorio}</p>}
           </div>
         )}
       </div>
@@ -45,7 +46,7 @@ const canonical = new URL(actualidadeUrl(entry), Astro.site);
       </figure>
     )}
     <div class="mx-auto grid max-w-[1500px] gap-10 px-4 py-16 md:px-8 md:py-24 lg:grid-cols-12">
-      <a href="/actualidade/" class="text-xs font-black uppercase tracking-wider underline decoration-red decoration-2 underline-offset-4 lg:col-span-3">← Actualidade</a>
+      <a href={isType(entry.data.type, "Convocatoria") ? "/axenda/" : "/actualidade/"} class="text-xs font-black uppercase tracking-wider underline decoration-red decoration-2 underline-offset-4 lg:col-span-3">{isType(entry.data.type, "Convocatoria") ? "← Axenda" : "← Actualidade"}</a>
       <div class="content-body lg:col-span-8">
         <Content />
       </div>
