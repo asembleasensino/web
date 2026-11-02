@@ -92,7 +92,7 @@ const universoTerritorios = [...territorios.map((territorio) => territorio.nome)
           <span class="flex items-center gap-2"><i class="h-2.5 w-2.5 rounded-full bg-[#6f6c66]"></i> Resultado de busca</span>
         </div>
       </aside>
-      <div class="relative min-h-[520px] bg-[#dedbd4] sm:min-h-[620px] lg:min-h-[720px]">
+      <div class="relative min-h-[520px] bg-white sm:min-h-[620px] lg:min-h-[720px]">
         <div id="assembly-map" class="absolute inset-0" aria-label="Mapa interactivo dos centros educativos de Galiza"></div>
         <p id="map-results" class="absolute bottom-3 left-3 z-[500] rounded-[4px] bg-paper px-3 py-2 text-[10px] font-bold uppercase tracking-wider text-ink shadow-hard-sm">
           {counts.activas} asembleas na rede
@@ -129,7 +129,7 @@ const universoTerritorios = [...territorios.map((territorio) => territorio.nome)
       minZoom: 6,
       maxZoom: 16,
       scrollWheelZoom: true,
-    }).setView([42.85, -8.05], 8);
+    }).setView([42.85, -8.05], 9);
     map.createPane("territories");
     const territoryPane = map.getPane("territories");
     if (territoryPane) {
@@ -158,7 +158,7 @@ const universoTerritorios = [...territorios.map((territorio) => territorio.nome)
         L.DomEvent.disableClickPropagation(contedor);
         L.DomEvent.on(boton, "click", (event) => {
           L.DomEvent.preventDefault(event);
-          if (limitesGalicia) map.fitBounds(limitesGalicia);
+          if (limitesGalicia) map.fitBounds(limitesGalicia.pad(-0.04));
         });
         return contedor;
       },
@@ -281,7 +281,7 @@ const universoTerritorios = [...territorios.map((territorio) => territorio.nome)
         // Galiza con liberdade, non queda enclavado no seu propio contorno
         // -- só se impide chegar a ver Asturias ou Castela e León.
         map.setMaxBounds(limitesGalicia.pad(0.65));
-        map.fitBounds(limitesGalicia);
+        map.fitBounds(limitesGalicia.pad(-0.04));
 
         // Lenda da barra lateral: pasar por riba ou premer nun territorio
         // realza ese mesmo territorio no mapa (igual ca pasar por riba del

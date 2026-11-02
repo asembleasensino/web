@@ -51,9 +51,10 @@
       .layout { flex: 1 1 auto; display: grid; grid-template-columns: 1fr 420px; min-height: 0; }
       @media (max-width: 960px) { .layout { grid-template-columns: 1fr; grid-template-rows: 46vh 1fr; } }
 
-      .map-pane { position: relative; background: #dedbd4; min-height: 0; }
+      .map-pane { position: relative; background: #ffffff; min-height: 0; }
       #admin-map { position: absolute; inset: 0; }
       .map-tip { position: absolute; bottom: 12px; left: 12px; z-index: 500; background: var(--paper-raised); padding: 7px 12px; border-radius: 4px; font-size: 0.68rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.05em; box-shadow: var(--shadow); max-width: 68%; }
+      .leaflet-container { background: #ffffff; }
       .leaflet-popup-content, .leaflet-popup-content p { font-family: var(--font-sans); }
       .leaflet-popup-content details summary { outline: none; }
 
@@ -843,7 +844,7 @@
           minZoom: 6,
           maxZoom: 16,
           scrollWheelZoom: true,
-        }).setView([42.85, -8.05], 8);
+        }).setView([42.85, -8.05], 9);
         map.createPane("territories");
         map.getPane("territories").style.zIndex = "250";
         L.control.zoom({ position: "topright" }).addTo(map);
@@ -863,7 +864,7 @@
             L.DomEvent.disableClickPropagation(contedor);
             L.DomEvent.on(boton, "click", (event) => {
               L.DomEvent.preventDefault(event);
-              if (limitesGalicia) map.fitBounds(limitesGalicia);
+              if (limitesGalicia) map.fitBounds(limitesGalicia.pad(-0.04));
             });
             return contedor;
           },
@@ -886,7 +887,7 @@
 
             limitesGalicia = capaTerritorios.getBounds();
             map.setMaxBounds(limitesGalicia.pad(0.65));
-            map.fitBounds(limitesGalicia);
+            map.fitBounds(limitesGalicia.pad(-0.04));
 
             markerLayer = L.layerGroup().addTo(map);
             redesenharMapa();

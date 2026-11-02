@@ -257,7 +257,7 @@ h3 {
 .rule { border-top: 1px solid var(--rule-hair); }
 
 .leaflet-container {
-  background: #dedbd4;
+  background: #ffffff;
   font-family: var(--font-sans);
 }
 
