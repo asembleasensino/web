@@ -13,6 +13,7 @@ summary: >-
   Porque o ensino público se constrúe entre todas. Xuntas imos mudalo!
 image: /uploads/instagram-post-4x5.png
 featured: false
+convocatoria: true
 eventDate: 2026-11-05T18:30:00.000+01:00
 eventLocation: IES Santa Irene (Vigo)
 territorio: Vigo/Pontevedra Sur
