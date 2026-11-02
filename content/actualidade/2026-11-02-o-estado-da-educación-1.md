@@ -1,6 +1,6 @@
 ---
 title: O estado da educación
-date: 2026-11-02T18:30:00.000+01:00
+date: 2026-11-02T20:18:00.000+01:00
 type: Convocatoria
 summary: >-
   📢O próximo 5 de novembro vémonos en Vigo toda a comunidade educativa da
@@ -13,7 +13,7 @@ summary: >-
   Porque o ensino público se constrúe entre todas. Xuntas imos mudalo!
 image: /uploads/instagram-post-4x5.png
 featured: false
-eventDate: 2026-11-05T20:05:00.000+01:00
+eventDate: 2026-11-05T18:30:00.000+01:00
 eventLocation: IES Santa Irene (Vigo)
 territorio: Vigo/Pontevedra Sur
 seccion: actualidade
