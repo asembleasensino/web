@@ -64,6 +64,10 @@ export const onRequestGet: PagesFunction<Env> = async ({ request, env }) => {
       estado: centro.estado,
       territorio: centro.territorio ?? null,
       nucleo: "nucleo" in centro ? centro.nucleo : false,
+      // Coordenadas: só para que o panel poida debuxar o seu propio mapa
+      // (réplica do público) -- xa son públicas, veñen do catálogo oficial.
+      latitude: centro.latitude,
+      longitude: centro.longitude,
       contacto: privado?.contacto ?? "",
       responsable: privado?.responsable ?? "",
       representantes: privado?.representantes ?? "",
