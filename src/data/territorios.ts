@@ -15,7 +15,7 @@ export const territorios: Territorio[] = territoriosData.territorios;
 export function normalizarConcello(nome: string): string {
   const sinAcentos = nome
     .normalize("NFKD")
-    .replace(/[̀-ͯ]/g, "")
+    .replace(/[\u0300-\u036f]/g, "")
     .toLowerCase()
     .trim();
   const partido = sinAcentos.match(/^(a|o|as|os)\s+(.+)$/);
@@ -32,4 +32,23 @@ for (const territorio of territorios) {
 
 export function territorioDoConcello(concello: string): string | undefined {
   return territorioPorConcelloNormalizado.get(normalizarConcello(concello));
+}
+
+// Cor por territorio -- xerada, non fixa a man, para que calquera número de
+// territorios (incluídos os "núcleo" dun só centro, ver centros.ts) se
+// distinga ben sen tocar código cada vez que a coordinadora engade un grupo
+// novo. O "ángulo áureo" repartido sobre a roda de cores fai que cores
+// veciñas no índice queden sempre ben separadas visualmente.
+//
+// `universoOrdenado` ten que ser a MESMA lista (mesma orde) en todos os
+// sitios onde se chame a esta función, para que cada territorio manteña
+// sempre a mesma cor. Por iso o hint do CMS pide engadir territorios novos
+// ao FINAL da lista: así os que xa existen non cambian de cor.
+const ANGULO_AUREO = 137.507764;
+
+export function corDoTerritorio(nome: string, universoOrdenado: readonly string[]): string {
+  const indice = universoOrdenado.indexOf(nome);
+  if (indice < 0) return "#355a2c";
+  const matiz = (indice * ANGULO_AUREO) % 360;
+  return `hsl(${matiz.toFixed(1)}, 42%, 36%)`;
 }

@@ -1,6 +1,7 @@
 ---
+import ArrowIcon from "./ArrowIcon.astro";
 import { centros } from "../data/centros";
-import { territorios } from "../data/territorios";
+import { territorios, corDoTerritorio } from "../data/territorios";
 const tiposPrincipais = ["CEIP", "CPI", "IES", "CIFP", "EEI"];
 const todosOsTipos = [...new Set(centros.map((centro) => centro.tipo))].filter(Boolean);
 const tipos = [
@@ -11,6 +12,15 @@ const tipos = [
 const counts = {
   activas: centros.filter((centro) => centro.estado === "activa").length,
 };
+
+// Mesma orde en todos os sitios (ver corDoTerritorio en territorios.ts): os
+// territorios oficiais na súa orde do CMS, despois os "núcleo" dun só
+// centro (ver centros.ts), ordenados alfabeticamente entre eles. Así a cor
+// dun territorio é sempre a mesma na lenda e no mapa.
+const nucleosOrdenados = [...new Set(
+  centros.filter((centro) => centro.nucleo).map((centro) => centro.territorio as string)
+)].sort((a, b) => a.localeCompare(b, "gl"));
+const universoTerritorios = [...territorios.map((territorio) => territorio.nome), ...nucleosOrdenados];
 ---
 
 <section id="mapa" class="border-y border-ink/20 bg-ink text-paper">
@@ -53,15 +63,23 @@ const counts = {
         </div>
 
         {territorios.length > 0 && (
-          <div class="mt-8 border-t border-paper/20 pt-6">
-            <span class="text-[10px] uppercase tracking-wider text-paper/55">Territorios (intercentros)</span>
+          <details open class="group mt-8 border-t border-paper/20 pt-6">
+            <summary class="focus-ring flex cursor-pointer list-none items-center justify-between gap-2 text-[10px] uppercase tracking-wider text-paper/55 [&::-webkit-details-marker]:hidden">
+              <span>Territorios (intercentros)</span>
+              <ArrowIcon direction="down" class="shrink-0 text-paper/40 transition-transform group-open:rotate-180" />
+            </summary>
             <ul class="mt-3 grid gap-1.5 text-[11px] text-paper/80">
-              {territorios.map((territorio) => <li>{territorio.nome}</li>)}
+              {territorios.map((territorio) => (
+                <li class="flex items-center gap-2">
+                  <i class="h-2.5 w-2.5 shrink-0 rounded-full" style={`background:${corDoTerritorio(territorio.nome, universoTerritorios)}`}></i>
+                  {territorio.nome}
+                </li>
+              ))}
             </ul>
             <p class="mt-3 text-[10px] leading-relaxed text-paper/45">
-              Agrupación provisional por concellos -- pode cambiar. Pasa por riba dun territorio no mapa para velo enteiro.
+              Agrupación real por concellos -- pode cambiar. Pasa por riba dun territorio no mapa para velo enteiro. Un concello cun só centro aínda sen agrupar aparece tamén coloreado, coma "núcleo" propio á espera de que outros se lle unan.
             </p>
-          </div>
+          </details>
         )}
 
         <div class="mt-auto flex flex-wrap gap-x-5 gap-y-2 pt-8 text-[10px] uppercase tracking-wider text-paper/55">
@@ -82,7 +100,7 @@ const counts = {
 <script>
   import L from "leaflet";
   import { centros } from "../data/centros";
-  import { territorioDoConcello } from "../data/territorios";
+  import { territorios, territorioDoConcello, normalizarConcello, corDoTerritorio } from "../data/territorios";
 
   type Estado = "activa" | "creacion" | "sen_asemblea";
   type Centro = (typeof centros)[number];
@@ -115,24 +133,83 @@ const counts = {
 
     L.control.zoom({ position: "topright" }).addTo(map);
 
+    // Límites reais de Galiza, calculados a partir do propio GeoJSON en
+    // canto carga (ver máis abaixo) -- así non hai que inventar
+    // coordenadas a man nin arriscarse a deixar ver Asturias ou Castela e
+    // León polo bordo. O botón de recentrar reutiliza estes mesmos límites.
+    let limitesGalicia: L.LatLngBounds | null = null;
+    const RecentrarControl = L.Control.extend({
+      options: { position: "topright" },
+      onAdd() {
+        const contedor = L.DomUtil.create("div", "leaflet-bar leaflet-control");
+        const boton = L.DomUtil.create("a", "", contedor) as HTMLAnchorElement;
+        boton.href = "#";
+        boton.title = "Centrar en Galiza";
+        boton.setAttribute("aria-label", "Centrar en Galiza");
+        boton.style.display = "flex";
+        boton.style.alignItems = "center";
+        boton.style.justifyContent = "center";
+        boton.innerHTML = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="7"></circle><path d="M12 2v3M12 19v3M2 12h3M19 12h3"></path></svg>';
+        L.DomEvent.disableClickPropagation(contedor);
+        L.DomEvent.on(boton, "click", (event) => {
+          L.DomEvent.preventDefault(event);
+          if (limitesGalicia) map.fitBounds(limitesGalicia);
+        });
+        return contedor;
+      },
+    });
+    new RecentrarControl().addTo(map);
+
     // Sen fondo de OpenStreetMap a propósito: así Galiza debúxase só cos
     // nosos propios datos (concellos agrupados por territorio), sen
     // topónimos, mar nin posibilidade de navegar fóra do país.
     //
-    // Sen paleta de cores nova a propósito (a guía de estilo pide evitar
-    // cores que non estean xa na marca): tódolos territorios usan o mesmo
-    // verde da marca (organización/comunidade), só o concello solto sen
-    // territorio queda nun gris neutro. Para distinguir un territorio do
-    // veciño, pasar por riba (ou premer) realza á vez tódolos concellos
-    // dese mesmo territorio.
+    // Cada territorio -- incluídos os "núcleo" dun só centro -- ten a súa
+    // propia cor (corDoTerritorio, en territorios.ts). O peso e opacidade
+    // do bordo son SEMPRE os mesmos para calquera territorio, agrupado ou
+    // núcleo: só cambia o matiz. O único concello "solto" (sen territorio
+    // nin núcleo) ten un bordo e recheo neutros, tamén sempre iguais. Así
+    // non hai bordos "gordos" nalgúns sitios e finos noutros sen motivo.
     const CONCELLO_SOLTO = { color: "#f2f0ec", weight: 1, opacity: 0.5, fillColor: "#c7c4bc", fillOpacity: 0.14 };
-    const TERRITORIO_BASE = { color: "#355a2c", weight: 1.1, opacity: 0.55, fillColor: "#355a2c", fillOpacity: 0.16 };
-    const TERRITORIO_REALZADO = { color: "#355a2c", weight: 2.2, opacity: 0.95, fillColor: "#355a2c", fillOpacity: 0.32 };
 
-    const centrosActivosPorTerritorio = new Map<string, number>();
+    // Núcleo: ver a mesma lóxica (e por que) en centros.ts. Aquí só
+    // precisamos saber, por concello normalizado, se ten un centro único
+    // sen territorio oficial e cal sería o nome dese territorio sintético.
+    const nucleoPorConcelloNormalizado = new Map<string, string>();
+    for (const centro of centros) {
+      if (centro.nucleo && centro.territorio) {
+        nucleoPorConcelloNormalizado.set(normalizarConcello(centro.concello), centro.territorio);
+      }
+    }
+
+    // Mesma orde que no frontmatter deste compoñente -- ver alí o motivo.
+    const nucleosOrdenados = [...new Set(
+      centros.filter((centro) => centro.nucleo).map((centro) => centro.territorio as string)
+    )].sort((a, b) => a.localeCompare(b, "gl"));
+    const universoTerritorios = [...territorios.map((territorio) => territorio.nome), ...nucleosOrdenados];
+
+    const estiloBase = (nomeTerritorio: string) => {
+      const cor = corDoTerritorio(nomeTerritorio, universoTerritorios);
+      return { color: cor, weight: 1.1, opacity: 0.55, fillColor: cor, fillOpacity: 0.16 };
+    };
+    const estiloRealzado = (nomeTerritorio: string) => {
+      const cor = corDoTerritorio(nomeTerritorio, universoTerritorios);
+      return { color: cor, weight: 2.2, opacity: 0.95, fillColor: cor, fillOpacity: 0.32 };
+    };
+
+    function territorioEfectivo(nomeConcello: string): { nome: string; nucleo: boolean } | undefined {
+      const oficial = territorioDoConcello(nomeConcello);
+      if (oficial) return { nome: oficial, nucleo: false };
+      const nucleo = nucleoPorConcelloNormalizado.get(normalizarConcello(nomeConcello));
+      return nucleo ? { nome: nucleo, nucleo: true } : undefined;
+    }
+
+    const centrosActivosPorTerritorio = new Map<string, Centro[]>();
     for (const centro of centros) {
       if (centro.estado !== "activa" || !centro.territorio) continue;
-      centrosActivosPorTerritorio.set(centro.territorio, (centrosActivosPorTerritorio.get(centro.territorio) ?? 0) + 1);
+      const lista = centrosActivosPorTerritorio.get(centro.territorio) ?? [];
+      lista.push(centro);
+      centrosActivosPorTerritorio.set(centro.territorio, lista);
     }
 
     // Capas de cada territorio, para poder realzalas tódas xuntas cando se
@@ -141,36 +218,60 @@ const counts = {
 
     fetch("/data/concellos.geojson")
       .then((response) => response.json())
-      .then((data) => L.geoJSON(data as GeoJSON.GeoJsonObject, {
-        pane: "territories",
-        style: (feature) => {
-          const nomeConcello = feature?.properties?.CONCELLO as string | undefined;
-          const territorio = nomeConcello ? territorioDoConcello(nomeConcello) : undefined;
-          return territorio ? TERRITORIO_BASE : CONCELLO_SOLTO;
-        },
-        onEachFeature: (feature, layer) => {
-          const nomeConcello = feature?.properties?.CONCELLO as string | undefined;
-          const territorio = nomeConcello ? territorioDoConcello(nomeConcello) : undefined;
-          if (!territorio || !(layer instanceof L.Path)) return;
+      .then((data) => {
+        const capaTerritorios = L.geoJSON(data as GeoJSON.GeoJsonObject, {
+          pane: "territories",
+          style: (feature) => {
+            const nomeConcello = feature?.properties?.CONCELLO as string | undefined;
+            const territorio = nomeConcello ? territorioEfectivo(nomeConcello) : undefined;
+            return territorio ? estiloBase(territorio.nome) : CONCELLO_SOLTO;
+          },
+          onEachFeature: (feature, layer) => {
+            const nomeConcello = feature?.properties?.CONCELLO as string | undefined;
+            const territorio = nomeConcello ? territorioEfectivo(nomeConcello) : undefined;
+            if (!territorio || !(layer instanceof L.Path)) return;
 
-          const grupo = capasPorTerritorio.get(territorio) ?? [];
-          grupo.push(layer);
-          capasPorTerritorio.set(territorio, grupo);
+            const grupo = capasPorTerritorio.get(territorio.nome) ?? [];
+            grupo.push(layer);
+            capasPorTerritorio.set(territorio.nome, grupo);
 
-          const numCentros = centrosActivosPorTerritorio.get(territorio) ?? 0;
-          layer.bindPopup(`
-            <p style="margin:0 0 .35rem;font-size:.65rem;font-weight:800;text-transform:uppercase;letter-spacing:.12em;color:#355a2c">Territorio</p>
-            <strong style="font-size:1rem;line-height:1.15">${territorio}</strong>
-            <p style="margin:.45rem 0 0;font-size:.78rem;color:#625f5a">${numCentros} ${numCentros === 1 ? "centro activo" : "centros activos"}</p>
-          `);
+            const centrosDoTerritorio = centrosActivosPorTerritorio.get(territorio.nome) ?? [];
+            const numCentros = centrosDoTerritorio.length;
+            const etiqueta = territorio.nucleo ? "Núcleo" : "Territorio";
+            const notaNucleo = territorio.nucleo
+              ? '<p style="margin:.4rem 0 0;font-size:.72rem;color:#625f5a">Primeiro centro desta zona. Pode converterse nun territorio máis grande se se suman veciños.</p>'
+              : "";
+            const listaCentros = numCentros
+              ? '<details style="margin-top:.5rem">' +
+                  '<summary style="cursor:pointer;font-size:.72rem;font-weight:700;color:#355a2c">Ver centros</summary>' +
+                  '<ul style="margin:.4rem 0 0;padding-left:1rem;font-size:.74rem;line-height:1.5;color:#3a3734">' +
+                  centrosDoTerritorio
+                    .map((centro) => '<li>' + centro.nome + (centro.concello === territorio.nome ? "" : ' <span style="color:#8a877f">(' + centro.concello + ')</span>') + '</li>')
+                    .join("") +
+                  '</ul></details>'
+              : "";
 
-          const realzar = () => grupo.forEach((capa) => capa.setStyle(TERRITORIO_REALZADO));
-          const atenuar = () => grupo.forEach((capa) => capa.setStyle(TERRITORIO_BASE));
-          layer.on("mouseover", realzar);
-          layer.on("mouseout", atenuar);
-          layer.on("popupclose", atenuar);
-        },
-      }).addTo(map))
+            layer.bindPopup(
+              '<p style="margin:0 0 .35rem;font-size:.65rem;font-weight:800;text-transform:uppercase;letter-spacing:.12em;color:' + corDoTerritorio(territorio.nome, universoTerritorios) + '">' + etiqueta + '</p>' +
+              '<strong style="font-size:1rem;line-height:1.15">' + territorio.nome + '</strong>' +
+              '<p style="margin:.45rem 0 0;font-size:.78rem;color:#625f5a">' + numCentros + " " + (numCentros === 1 ? "centro activo" : "centros activos") + '</p>' +
+              notaNucleo +
+              listaCentros,
+              { maxWidth: 260 }
+            );
+
+            const realzar = () => grupo.forEach((capa) => capa.setStyle(estiloRealzado(territorio.nome)));
+            const atenuar = () => grupo.forEach((capa) => capa.setStyle(estiloBase(territorio.nome)));
+            layer.on("mouseover", realzar);
+            layer.on("mouseout", atenuar);
+            layer.on("popupclose", atenuar);
+          },
+        }).addTo(map);
+
+        limitesGalicia = capaTerritorios.getBounds();
+        map.setMaxBounds(limitesGalicia.pad(0.04));
+        map.fitBounds(limitesGalicia);
+      })
       .catch(() => undefined);
 
     const markerLayer = L.layerGroup().addTo(map);
