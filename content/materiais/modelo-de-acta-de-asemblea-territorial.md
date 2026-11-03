@@ -7,7 +7,7 @@ summary: Modelo en branco para tomar acta nunha Asemblea Territorial, coa orde
 driveUrl: ""
 ficheiro: /uploads/plantilla-acta.docx
 image: /uploads/plantilla-acta.png
-featured: false
+featured: true
 draft: false
 desglose:
   categorias: []
