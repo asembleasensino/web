@@ -1,5 +1,5 @@
 ---
-title: Modelo de acta de asemblea
+title: Modelo de acta de Asemblea de Centro
 date: 2026-10-15T10:00:00.000+02:00
 type: Modelo
 summary: Modelo en branco para tomar acta nunha Asemblea de Centro, coa orde do
