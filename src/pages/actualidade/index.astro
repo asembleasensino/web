@@ -1,12 +1,12 @@
 ---
 import BaseLayout from "../../layouts/BaseLayout.astro";
 import ArticleCard from "../../components/ArticleCard.astro";
-import { actualidadeUrl, dataDaConvocatoria, dataFinDaConvocatoria, formatRangoEvento, getActualidadeSenConvocatorias, getConvocatorias, isType } from "../../lib/content";
+import HemerotecaCard from "../../components/HemerotecaCard.astro";
+import { actualidadeUrl, dataDaConvocatoria, dataFinDaConvocatoria, formatRangoEvento, getActualidadeSenConvocatorias, getConvocatorias, getHemeroteca } from "../../lib/content";
 import { site } from "../../config/site";
 
-const artigos = await getActualidadeSenConvocatorias();
-const actualidade = artigos.filter((artigo) => !isType(artigo.data.seccion, "hemeroteca"));
-const hemeroteca = artigos.filter((artigo) => isType(artigo.data.seccion, "hemeroteca"));
+const actualidade = await getActualidadeSenConvocatorias();
+const hemeroteca = await getHemeroteca();
 
 const agora = new Date();
 const proximasConvocatorias = (await getConvocatorias())
@@ -55,7 +55,7 @@ const proximasConvocatorias = (await getConvocatorias())
     <div data-secc-panel="hemeroteca" hidden>
       {hemeroteca.length > 0 ? (
         <div class="actualidade-grid grid grid-cols-1 gap-7 sm:grid-cols-2 lg:grid-cols-3 lg:gap-8">
-          {hemeroteca.map((artigo) => <ArticleCard entry={artigo} cor="ink" />)}
+          {hemeroteca.map((item) => <HemerotecaCard item={item} />)}
         </div>
       ) : (
         <div class="border-y border-ink py-16"><p class="max-w-xl text-xl font-bold">A hemeroteca de prensa e mobilizacións recollerase aquí.</p></div>

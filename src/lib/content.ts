@@ -2,21 +2,10 @@ import { getCollection, type CollectionEntry } from "astro:content";
 
 export type ActualidadeEntry = CollectionEntry<"actualidade">;
 export type MaterialEntry = CollectionEntry<"materiais">;
+export type HemerotecaEntry = CollectionEntry<"hemeroteca">;
 
 const newestFirst = <T extends { data: { date: Date } }>(a: T, b: T) =>
   b.data.date.getTime() - a.data.date.getTime();
-
-/**
- * O campo "type" é texto libre en Decap (deliberado: permite crear categorías
- * novas sen tocar código, ver scripts/validate-project.mjs). Como contrapartida,
- * unha entrada escrita como "convocatoria" ou "Convocatoria " (con espazo) non
- * coincidiría cunha comparación exacta e desaparecería en silencio de calquera
- * filtro. isType() compara ignorando maiúsculas/minúsculas e espazos sobrantes
- * para que ese tipo de erro editorial non rompa a funcionalidade.
- */
-export function isType(value: string, expected: string) {
-  return value.trim().toLocaleLowerCase("gl") === expected.trim().toLocaleLowerCase("gl");
-}
 
 export async function getActualidade() {
   return (await getCollection("actualidade", ({ data }) => !data.draft)).sort(newestFirst);
@@ -50,7 +39,7 @@ export function dataFinDaConvocatoria(entry: ActualidadeEntry) {
   return entry.data.eventDateEnd ?? dataDaConvocatoria(entry);
 }
 
-/** Actualidade propia + hemeroteca, para as dúas pestanas de /actualidade -- sen Convocatorias (teñen /axenda). */
+/** Para a pestana "Actualidade" de /actualidade -- sen Convocatorias (teñen /axenda) nin Hemeroteca (colección propia, ver getHemeroteca). */
 export async function getActualidadeSenConvocatorias() {
   return (await getActualidade()).filter((entry) => !entry.data.convocatoria);
 }
@@ -127,4 +116,99 @@ export function materialUrl(entry: MaterialEntry) {
   // desde o esquema xenérico) apuntan a unha páxina Astro propia en vez de
   // á páxina xenérica desta colección. Ver `href` en content.config.ts.
   return entry.data.href || `/materiais/${entrySlug(entry)}/`;
+}
+
+export type HemerotecaItem = {
+  url: string;
+  date: Date;
+  title: string;
+  image?: string;
+  medio: string;
+};
+
+function dominioDe(url: string) {
+  try {
+    return new URL(url).hostname.replace(/^www\./, "");
+  } catch {
+    return url;
+  }
+}
+
+function resolverUrlImaxe(image: string | undefined, baseUrl: string) {
+  if (!image) return undefined;
+  try {
+    return new URL(image, baseUrl).toString();
+  } catch {
+    return undefined;
+  }
+}
+
+/**
+ * Le as etiquetas Open Graph (og:title/og:image/og:site_name) da propia
+ * noticia -- o mesmo mecanismo que usan WhatsApp/Twitter para a vista previa
+ * dunha ligazón. Se a petición falla, tarda demais ou o medio non ten esas
+ * etiquetas, devolve {} en vez de lanzar un erro: UNHA noticia con problemas
+ * nunca debe romper o despregue enteiro (ver getHemeroteca).
+ */
+async function obterMetadatosOg(url: string): Promise<{ title?: string; image?: string; medio?: string }> {
+  try {
+    const response = await fetch(url, {
+      signal: AbortSignal.timeout(8000),
+      headers: { "User-Agent": "Mozilla/5.0 (compatible; AAEPWebBot/1.0; +https://asembleasensino.gal)" },
+    });
+    if (!response.ok) return {};
+    const html = await response.text();
+    const buscarMeta = (propiedade: string) => {
+      const patrons = [
+        new RegExp(`<meta[^>]+property=["']${propiedade}["'][^>]+content=["']([^"']*)["']`, "i"),
+        new RegExp(`<meta[^>]+content=["']([^"']*)["'][^>]+property=["']${propiedade}["']`, "i"),
+      ];
+      for (const patron of patrons) {
+        const match = html.match(patron);
+        if (match) return match[1];
+      }
+      return undefined;
+    };
+    return {
+      title: buscarMeta("og:title"),
+      image: resolverUrlImaxe(buscarMeta("og:image"), url),
+      medio: buscarMeta("og:site_name"),
+    };
+  } catch {
+    return {};
+  }
+}
+
+/**
+ * Colección deliberadamente mínima (só a URL é obrigatoria -- ver
+ * content.config.ts): título, imaxe e medio recóllense ao construír a web
+ * lendo as etiquetas Open Graph da propia noticia. Os campos de respaldo do
+ * CMS (title/image/medio) teñen prioridade se se enchen á man; se non, e a
+ * detección automática falla, cáese no dominio da URL (ex. "xornal21.com")
+ * para que sempre haxa algo que amosar, sen bloquear o despregue.
+ */
+export async function getHemeroteca(): Promise<HemerotecaItem[]> {
+  // getCollection() lanza un erro se a colección non ten NINGÚN ficheiro
+  // (en vez de devolver unha lista baleira) -- e isto é o estado normal
+  // ao principio, antes de que se engada a primeira noticia en Decap.
+  let collectionEntries: Awaited<ReturnType<typeof getCollection<"hemeroteca">>>;
+  try {
+    collectionEntries = await getCollection("hemeroteca", ({ data }) => !data.draft);
+  } catch {
+    return [];
+  }
+  const entries = collectionEntries.sort(newestFirst);
+  return Promise.all(
+    entries.map(async (entry) => {
+      const faltaAlgo = !entry.data.title || !entry.data.medio || !entry.data.image;
+      const og = faltaAlgo ? await obterMetadatosOg(entry.data.url) : {};
+      return {
+        url: entry.data.url,
+        date: entry.data.date,
+        title: entry.data.title || og.title || dominioDe(entry.data.url),
+        image: entry.data.image || og.image,
+        medio: entry.data.medio || og.medio || dominioDe(entry.data.url),
+      };
+    }),
+  );
 }

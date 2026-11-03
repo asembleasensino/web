@@ -1,0 +1,23 @@
+---
+import { formatDate, type HemerotecaItem } from "../lib/content";
+
+interface Props {
+  item: HemerotecaItem;
+}
+
+const { item } = Astro.props;
+---
+<a href={item.url} target="_blank" rel="noopener noreferrer" class="actualidade-card focus-ring block no-underline">
+  <div class="actualidade-visual" style="background:color-mix(in srgb, var(--color-ink) 10%, var(--color-paper))">
+    {item.image ? (
+      <img src={item.image} alt="" loading="lazy" />
+    ) : (
+      <span class="actualidade-visual-type" style="color:var(--color-ink)" aria-hidden="true">{item.medio}</span>
+    )}
+  </div>
+  <div class="actualidade-body">
+    <span class="eyebrow" style="color:var(--color-ink)">{item.medio}</span>
+    <h2 class="actualidade-title line-clamp-2">{item.title}</h2>
+    <p class="actualidade-date">{formatDate(item.date)}</p>
+  </div>
+</a>

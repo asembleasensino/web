@@ -128,7 +128,7 @@ for (const field of ["site_url", "display_url"]) {
   if (decap[field] !== site.siteUrl) fail(`public/admin/config.yml: ${field} non coincide con siteUrl`);
 }
 
-const requiredCollections = ["actualidade", "materiais", "paxinas", "configuracion"];
+const requiredCollections = ["actualidade", "hemeroteca", "materiais", "paxinas", "configuracion"];
 const collectionNames = new Set((decap.collections || []).map((collection) => collection.name));
 for (const name of requiredCollections) {
   if (!collectionNames.has(name)) fail(`public/admin/config.yml: falta a colección ${name}`);
@@ -165,7 +165,7 @@ for (const requiredFile of [
   }
 }
 
-for (const directory of ["content/actualidade", "content/materiais", "content/paxinas"]) {
+for (const directory of ["content/actualidade", "content/hemeroteca", "content/materiais", "content/paxinas"]) {
   const files = await readdir(directory);
   for (const file of files.filter((name) => !name.startsWith("."))) {
     if (/\s/.test(file)) fail(`${directory}/${file}: o nome non debe conter espazos`);
@@ -197,6 +197,19 @@ for (const file of (await readdir("content/actualidade")).filter((name) => name.
   }
   if (!frontmatter.convocatoria && !frontmatter.summary) {
     fail(`content/actualidade/${file}: falta o resumo (summary) -- só é opcional nas Convocatorias`);
+  }
+}
+
+// Unha entrada de hemeroteca é só unha ligazón -- se a URL non ten boa
+// pinta, mellor avisar aquí (mensaxe clara) que esperar a que falle máis
+// adiante ao tentar ler as etiquetas Open Graph.
+for (const file of (await readdir("content/hemeroteca")).filter((name) => name.endsWith(".md") || name.endsWith(".mdx"))) {
+  const raw = await readFile(`content/hemeroteca/${file}`, "utf8");
+  const frontmatterMatch = raw.match(/^---\r?\n([\s\S]*?)\r?\n---/);
+  if (!frontmatterMatch) continue;
+  const frontmatter = parse(frontmatterMatch[1]) || {};
+  if (!frontmatter.url || !/^https?:\/\/.+/.test(frontmatter.url)) {
+    fail(`content/hemeroteca/${file}: url debe ser unha ligazón completa (https://...)`);
   }
 }
 

@@ -55,16 +55,22 @@ collections:
           - "Vigo/Pontevedra Sur"
           - "Nacional"
           - "Outro"
-      - label: Sección
-        name: seccion
-        widget: select
-        default: actualidade
-        hint: "En que pestana de /actualidade aparece: Actualidade (contido propio de AAEP) ou Hemeroteca (prensa e mobilizacións externas). Non afecta ás Convocatorias, que teñen o seu propio espazo en /axenda."
-        options:
-          - { label: Actualidade, value: actualidade }
-          - { label: Hemeroteca, value: hemeroteca }
       - { label: Borrador técnico, name: draft, widget: boolean, default: false, required: false, hint: "Oculta o contido incluso se chega á rama principal." }
       - { label: Corpo, name: body, widget: markdown }
+
+  - name: hemeroteca
+    label: Hemeroteca
+    label_singular: "Noticia de hemeroteca"
+    folder: content/hemeroteca
+    create: true
+    slug: "{{year}}-{{month}}-{{day}}-{{slug}}"
+    fields:
+      - { label: URL da noticia, name: url, widget: string, pattern: ['^https?://.+', "Debe ser unha ligazón completa (https://...)"], hint: "Ligazón á noticia orixinal. O título, a imaxe e o medio recóllense automaticamente ao despregar a web (lendo as etiquetas Open Graph da propia noticia) -- non fai falla enchelos a man." }
+      - { label: Data, name: date, widget: datetime, default: "{{now}}", hint: "Para ordenar cronoloxicamente na hemeroteca." }
+      - { label: "Título (respaldo)", name: title, widget: string, required: false, hint: "Só se queres cambiar o título detectado automaticamente, ou se a detección falla." }
+      - { label: "Imaxe (respaldo)", name: image, widget: image, required: false, hint: "Só se queres cambiar a imaxe detectada automaticamente, ou se non se detecta ningunha." }
+      - { label: "Medio (respaldo)", name: medio, widget: string, required: false, hint: "Nome do medio/publicación (ex. \"Xornal21\"). Só se queres cambialo ou se non se detecta." }
+      - { label: Borrador técnico, name: draft, widget: boolean, default: false, required: false, hint: "Oculta a entrada incluso se chega á rama principal." }
 
   - name: materiais
     label: Materiais

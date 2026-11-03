@@ -43,13 +43,23 @@ const actualidade = defineCollection({
     // "type"), así que non debería chegar escrito distinto -- pero
     // tratamos "" coma ausencia de valor polo mesmo motivo que eventDate.
     territorio: z.preprocess((value) => (value === "" ? undefined : value), z.string().optional()),
-    // Distingue as dúas pestanas de /actualidade: contido propio de AAEP
-    // fronte a prensa/mobilizacións externas recollidas na hemeroteca.
-    // Non afecta ás Convocatorias, que teñen o seu propio espazo en /axenda.
-    seccion: z.preprocess(
-      (value) => (value === "" ? undefined : value),
-      z.enum(["actualidade", "hemeroteca"]).default("actualidade"),
-    ),
+    draft: z.boolean().default(false),
+  }),
+});
+
+// Unha ligazón a prensa/mobilizacións externas, non contido propio de AAEP.
+// Deliberadamente mínima (só a URL é obrigatoria): título, imaxe e medio
+// recóllense ao construír a web lendo as etiquetas Open Graph da propia
+// noticia (ver getHemeroteca en src/lib/content.ts), e só fan falla aquí
+// coma respaldo se a detección automática falla ou se quere cambiar.
+const hemeroteca = defineCollection({
+  loader: glob({ base: "./content/hemeroteca", pattern: "**/*.{md,mdx}" }),
+  schema: z.object({
+    url: z.url(),
+    date: z.coerce.date(),
+    title: z.preprocess((value) => (value === "" ? undefined : value), z.string().optional()),
+    image: z.string().optional(),
+    medio: z.preprocess((value) => (value === "" ? undefined : value), z.string().optional()),
     draft: z.boolean().default(false),
   }),
 });
@@ -129,4 +139,4 @@ const paxinas = defineCollection({
   }),
 });
 
-export const collections = { actualidade, materiais, paxinas };
+export const collections = { actualidade, hemeroteca, materiais, paxinas };
