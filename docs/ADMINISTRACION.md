@@ -73,6 +73,19 @@ Configura:
 
 O script valida que a data sexa martes, crea ou reutiliza a carpeta `AAAA-MM-DD` e garda dentro a fotografía como `Centro - Concello.ext` (mantendo acentos e eñes, para o guión de Instagram). Se xa existe, engade un número ao nome.
 
+### Stories (`/xestion/stories`)
+
+A páxina `/xestion/stories` pide o contrasinal de xestión (`XESTION_PASSWORD`) e amosa as fotos de cada martes tal como están no Drive. Para cada foto:
+
+- se xa ten story en `AAAA-MM-DD/stories_individuais_editorial/`, cárgaa;
+- se non a ten, xéraa no propio navegador en estilo editorial e con data (`public/xestion/stories/render.js`, tradución do xerador local `_interno/webapp.py`) e gárdaa no Drive como `story - Centro - Concello.jpg`.
+
+Desde o martes 3/11/2026 (`AUTO_DESDE` en `stories.html`) as stories novas gárdanse soas ao abrir a páxina. Nos martes anteriores só se amosan como vista previa e gárdanse co botón «Gardar». Calquera story pódese descargar (unha ou todas nun .zip), compartir desde o móbil ou volver xerar.
+
+O titular «MARTES EN LOITA» vai como imaxe (`public/xestion/stories/titular-*.png`) debuxada coa fonte Druk Condensed, que non se publica. O nome do centro e a data usan Helvetica Neue se o ordenador a ten (Mac/iPhone) e, se non, Arimo/Arial.
+
+Usa a mesma URL e segredo do Apps Script (`GOOGLE_APPS_SCRIPT_URL`, `GOOGLE_APPS_SCRIPT_SECRET`). Despois de actualizar `apps-script/MartesEnLoita.gs` hai que publicar unha **nova versión do despregue existente** (Despregar → Xestionar despregues → Editar → Versión: nova) para non cambiar a URL.
+
 ## Configuración externa obrigatoria antes de publicar
 
 - crear a OAuth App de GitHub e cargar as credenciais;

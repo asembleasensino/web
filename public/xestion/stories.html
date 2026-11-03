@@ -1,0 +1,507 @@
+<!doctype html>
+<html lang="gl">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="robots" content="noindex, nofollow" />
+    <title>Stories · Xestión AAEP</title>
+    <style>
+      @import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&family=Arimo&display=swap");
+
+      :root {
+        --ink: #252321;
+        --paper: #f2f0ec;
+        --paper-raised: #fbfaf8;
+        --red: #c94a42;
+        --red-bg: rgba(201, 74, 66, 0.1);
+        --green: #355a2c;
+        --green-bg: rgba(53, 90, 44, 0.1);
+        --amber: #a8722a;
+        --amber-bg: rgba(184, 134, 46, 0.14);
+        --line: rgba(37, 35, 33, 0.14);
+        --line-strong: rgba(37, 35, 33, 0.28);
+        --shadow: 3px 3px 0 rgba(37, 35, 33, 0.12);
+        --muted: color-mix(in srgb, var(--ink) 58%, transparent);
+        --font-display: "Arial Narrow", "Helvetica Neue Condensed", "Roboto Condensed", sans-serif;
+        --font-sans: Inter, "Helvetica Neue", Arial, sans-serif;
+      }
+      * { box-sizing: border-box; }
+      body { margin: 0; font-family: var(--font-sans); background: var(--paper); color: var(--ink); line-height: 1.5; }
+
+      .topbar { position: sticky; top: 0; z-index: 10; background: var(--paper); border-bottom: 1px solid var(--line); }
+      .topbar-inner { max-width: 1180px; margin: 0 auto; padding: 18px 20px; display: flex; align-items: center; gap: 16px; flex-wrap: wrap; }
+      .badge { display: grid; place-items: center; width: 34px; height: 34px; border-radius: 4px; background: var(--ink); color: var(--paper); font-weight: 800; font-size: 0.7rem; flex-shrink: 0; }
+      .topbar h1 { font-family: var(--font-display); font-stretch: condensed; font-size: 1.5rem; margin: 0; letter-spacing: -0.01em; }
+      .topbar .links { margin-left: auto; display: flex; gap: 16px; align-items: center; font-size: 0.78rem; font-weight: 700; flex-wrap: wrap; }
+      .topbar a { color: var(--ink); }
+      .topbar button.link { appearance: none; background: none; border: 0; padding: 0; font: inherit; font-weight: 700; color: var(--ink); opacity: 0.55; cursor: pointer; }
+      .topbar button.link:hover { opacity: 1; text-decoration: underline; }
+
+      .wrap { max-width: 1180px; margin: 0 auto; padding: 28px 20px 90px; }
+
+      .controls { display: flex; flex-wrap: wrap; gap: 12px; align-items: center; margin-bottom: 10px; }
+      .controls label { font-size: 0.78rem; font-weight: 700; }
+      select {
+        border: 1.5px solid var(--ink); border-radius: 4px; padding: 9px 12px; font: inherit; font-size: 0.88rem; font-weight: 600;
+        background: var(--paper-raised); color: var(--ink); min-width: 0; max-width: 100%;
+      }
+      .spacer { flex: 1; }
+
+      button.btn {
+        appearance: none; border: 1.5px solid var(--ink); background: transparent; color: var(--ink);
+        padding: 8px 14px; font: inherit; font-size: 0.78rem; font-weight: 700; border-radius: 4px; cursor: pointer; white-space: nowrap;
+      }
+      button.btn:hover { background: var(--ink); color: var(--paper); }
+      button.btn:disabled { opacity: 0.4; cursor: default; background: none; color: var(--ink); }
+      button.btn.primary { background: var(--ink); color: var(--paper); }
+      button.btn.primary:hover:not(:disabled) { background: var(--red); border-color: var(--red); }
+      button.btn.small { padding: 5px 10px; font-size: 0.72rem; }
+      button.btn.quiet { border-color: var(--line-strong); }
+
+      .summary { display: flex; flex-wrap: wrap; gap: 8px 18px; align-items: baseline; margin: 6px 0 22px; font-size: 0.85rem; color: var(--muted); }
+      .summary strong { color: var(--ink); }
+      .note { margin: 0 0 20px; padding: 12px 14px; border-radius: 4px; font-size: 0.85rem; background: var(--amber-bg); }
+      .note.info { background: rgba(37, 35, 33, 0.05); }
+
+      .status-msg { padding: 50px 0; text-align: center; color: var(--muted); font-size: 0.95rem; }
+      .status-msg.error { color: var(--red); font-weight: 700; }
+      .status-msg button { margin-top: 14px; }
+
+      .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(190px, 1fr)); gap: 22px 18px; }
+      .story { display: grid; gap: 8px; align-content: start; }
+      .frame {
+        position: relative; aspect-ratio: 9 / 16; border-radius: 6px; overflow: hidden;
+        background: #252321; box-shadow: var(--shadow); border: 1px solid var(--line);
+      }
+      .frame img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; display: block; cursor: zoom-in; }
+      .frame .working {
+        position: absolute; inset: 0; display: grid; place-items: center; color: rgba(242, 240, 236, 0.7);
+        font-size: 0.75rem; font-weight: 700; text-align: center; padding: 12px;
+      }
+      .spinner { width: 26px; height: 26px; border-radius: 50%; border: 3px solid rgba(242, 240, 236, 0.2); border-top-color: var(--paper); animation: spin 0.8s linear infinite; margin: 0 auto 10px; }
+      @keyframes spin { to { transform: rotate(360deg); } }
+
+      .story h2 { margin: 0; font-size: 0.82rem; font-weight: 700; line-height: 1.3; overflow-wrap: anywhere; }
+      .story-row { display: flex; flex-wrap: wrap; gap: 6px; align-items: center; }
+      .pill { font-size: 0.64rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.05em; padding: 3px 9px; border-radius: 999px; white-space: nowrap; }
+      .pill.gardada { background: var(--green-bg); color: var(--green); }
+      .pill.nova { background: var(--amber-bg); color: var(--amber); }
+      .pill.traballando { background: rgba(37, 35, 33, 0.08); color: var(--muted); }
+      .pill.erro { background: var(--red-bg); color: var(--red); }
+      .story .err { margin: 0; font-size: 0.72rem; color: var(--red); }
+
+      dialog { border: 0; padding: 0; background: transparent; max-width: 96vw; max-height: 96vh; }
+      dialog::backdrop { background: rgba(20, 19, 18, 0.85); }
+      dialog img { display: block; max-width: 96vw; max-height: 92vh; border-radius: 6px; }
+      dialog form { text-align: center; margin-top: 8px; }
+      dialog button { color: var(--paper); border-color: var(--paper); }
+
+      @media (max-width: 560px) {
+        .topbar .links { margin-left: 0; }
+        .grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 18px 12px; }
+        .controls select { flex: 1 1 100%; }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="topbar">
+      <div class="topbar-inner">
+        <span class="badge">AA</span>
+        <h1>Stories · Martes en loita</h1>
+        <div class="links">
+          <a href="/xestion/solicitudes.html">Solicitudes →</a>
+          <a href="/martes-en-loita">Formulario público →</a>
+          <button type="button" class="link" id="forget-password">Esquecer contrasinal</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="wrap">
+      <div class="controls">
+        <label for="day">Martes</label>
+        <select id="day" disabled><option>Cargando datas…</option></select>
+        <button type="button" class="btn quiet" id="refresh">Actualizar</button>
+        <span class="spacer"></span>
+        <button type="button" class="btn" id="save-all" hidden>Gardar todas no Drive</button>
+        <button type="button" class="btn" id="share-all" hidden>Compartir</button>
+        <button type="button" class="btn primary" id="download-all" disabled>Descargar todas (.zip)</button>
+      </div>
+      <div class="summary" id="summary"></div>
+      <div id="notes"></div>
+      <div id="content"><p class="status-msg">Cargando…</p></div>
+    </div>
+
+    <dialog id="viewer">
+      <img alt="" />
+      <form method="dialog"><button class="btn">Pechar</button></form>
+    </dialog>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+    <script src="/xestion/stories/render.js"></script>
+    <script>
+      // As stories dos martes desde esta data xéranse e gárdanse no Drive
+      // automaticamente ao abrir a páxina. Os días anteriores fixéronse co
+      // xerador do ordenador (story_1.jpg, story_2.jpg…), así que neles só se
+      // amosan vistas previas e se garda cando alguén o pide.
+      const AUTO_DESDE = "2026-11-03";
+      const API = "/api/martes-stories";
+      const MESES = ["xaneiro", "febreiro", "marzo", "abril", "maio", "xuño", "xullo", "agosto", "setembro", "outubro", "novembro", "decembro"];
+
+      const $ = (selector) => document.querySelector(selector);
+      const escapeHtml = (value = "") => String(value).replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#039;" })[c]);
+
+      function xestionAuthHeader() {
+        let password = sessionStorage.getItem("aaep-xestion-password");
+        if (password === null) {
+          password = window.prompt("Contrasinal de xestión:") || "";
+          sessionStorage.setItem("aaep-xestion-password", password);
+        }
+        return "Basic " + btoa(":" + password);
+      }
+      $("#forget-password").addEventListener("click", () => {
+        sessionStorage.removeItem("aaep-xestion-password");
+        location.reload();
+      });
+
+      class AuthError extends Error {}
+
+      async function api(params, options = {}) {
+        const query = params ? "?" + new URLSearchParams(params) : "";
+        const response = await fetch(API + query, {
+          ...options,
+          headers: { ...(options.headers || {}), Authorization: xestionAuthHeader() },
+        });
+        if (response.status === 401) {
+          sessionStorage.removeItem("aaep-xestion-password");
+          throw new AuthError("Contrasinal incorrecto.");
+        }
+        const data = await response.json().catch(() => ({ ok: false, error: `Resposta non válida (${response.status})` }));
+        if (!response.ok || data.ok === false) throw new Error(data.error || `Erro ${response.status}`);
+        return data;
+      }
+
+      const base64ToBlob = async (base64, type) => (await fetch(`data:${type};base64,${base64}`)).blob();
+      const blobToBase64 = (blob) => new Promise((resolve, reject) => {
+        const reader = new FileReader();
+        reader.onload = () => resolve(String(reader.result).split(",")[1]);
+        reader.onerror = () => reject(reader.error);
+        reader.readAsDataURL(blob);
+      });
+
+      function longDate(day) {
+        const [y, m, d] = day.split("-").map(Number);
+        return `${d} de ${MESES[m - 1]} de ${y}`;
+      }
+
+      // Cola sinxela: como moito dúas fotos á vez, para non saturar Drive nin o móbil.
+      function makeQueue(limit) {
+        let active = 0;
+        const waiting = [];
+        const next = () => {
+          if (active >= limit || !waiting.length) return;
+          active++;
+          const { task, resolve, reject } = waiting.shift();
+          task().then(resolve, reject).finally(() => { active--; next(); });
+        };
+        return (task) => new Promise((resolve, reject) => { waiting.push({ task, resolve, reject }); next(); });
+      }
+
+      // ---------------------------------------------------------------------
+      // Estado
+      // ---------------------------------------------------------------------
+      let days = [];
+      let current = null; // { day, auto, items: [...] }
+      let loadToken = 0;
+
+      async function loadDays(selectDay) {
+        const select = $("#day");
+        select.disabled = true;
+        const data = await api({ accion: "dias" });
+        days = data.days || [];
+        if (!days.length) {
+          select.innerHTML = "<option>Aínda non hai fotos</option>";
+          $("#content").innerHTML = `<p class="status-msg">Aínda non chegou ningunha foto.</p>`;
+          return null;
+        }
+        select.innerHTML = days.map((d) => {
+          const label = `${longDate(d.data)} · ${d.fotos} foto${d.fotos === 1 ? "" : "s"}`;
+          return `<option value="${d.data}">${escapeHtml(label)}</option>`;
+        }).join("");
+        const wanted = selectDay && days.some((d) => d.data === selectDay) ? selectDay : days[0].data;
+        select.value = wanted;
+        select.disabled = false;
+        return wanted;
+      }
+
+      async function loadDay(day) {
+        const token = ++loadToken;
+        $("#content").innerHTML = `<p class="status-msg"><span class="spinner" style="border-color: rgba(37,35,33,.15); border-top-color: var(--ink)"></span>Buscando as fotos de ${escapeHtml(longDate(day))}…</p>`;
+        $("#summary").innerHTML = "";
+        $("#notes").innerHTML = "";
+        $("#download-all").disabled = true;
+        $("#save-all").hidden = true;
+        $("#share-all").hidden = true;
+
+        const data = await api({ accion: "dia", data: day });
+        if (token !== loadToken) return;
+
+        const auto = day >= AUTO_DESDE;
+        const stories = data.stories || [];
+        const used = new Set();
+        const items = (data.fotos || []).map((foto) => {
+          const storyName = MartesStory.storyFilename(foto.nome);
+          const story = stories.find((s) => s.orixe === foto.id) || stories.find((s) => s.nome === storyName);
+          if (story) used.add(story.id);
+          return {
+            foto,
+            storyName,
+            story: story || null,
+            state: story ? "gardada" : "nova",
+            blob: null,
+            url: null,
+            error: "",
+          };
+        });
+        const legacy = stories.filter((s) => !used.has(s.id));
+        current = { day, auto, items };
+
+        if (legacy.length) {
+          $("#notes").innerHTML = `<p class="note info">Este día ten ${legacy.length} stor${legacy.length === 1 ? "y antiga feita" : "ies antigas feitas"} co xerador do ordenador (story_1.jpg…). Seguen no Drive; aquí só se amosan as stories feitas desde a web.</p>`;
+        }
+        if (!auto && items.some((item) => item.state === "nova")) {
+          $("#notes").insertAdjacentHTML("beforeend", `<p class="note">Este martes é anterior á xeración automática: as stories que faltan amósanse como vista previa e só se gardan no Drive se premes «Gardar».</p>`);
+        }
+
+        if (!items.length) {
+          $("#content").innerHTML = `<p class="status-msg">Neste martes aínda non hai fotos.</p>`;
+          renderSummary();
+          return;
+        }
+
+        $("#content").innerHTML = `<div class="grid" id="grid"></div>`;
+        items.forEach((item, index) => $("#grid").insertAdjacentHTML("beforeend", cardHtml(item, index)));
+        renderSummary();
+
+        const queue = makeQueue(2);
+        await Promise.all(items.map((item, index) => queue(() => processItem(item, index, token))));
+        if (token === loadToken) renderSummary();
+      }
+
+      // Carga a story xa gardada ou, se non existe, xérase desde a foto.
+      async function processItem(item, index, token, force = false) {
+        if (token !== loadToken) return;
+        try {
+          if (item.story && !force) {
+            setState(item, index, "traballando", "Cargando…");
+            const file = await api({ accion: "ficheiro", id: item.story.id });
+            setBlob(item, await base64ToBlob(file.base64, file.mimeType || "image/jpeg"));
+            setState(item, index, "gardada");
+            return;
+          }
+          setState(item, index, "traballando", "Xerando…");
+          const file = await api({ accion: "ficheiro", id: item.foto.id });
+          const photo = await base64ToBlob(file.base64, file.mimeType || item.foto.mimeType);
+          const canvas = await MartesStory.renderStory(photo, { day: current.day, filename: item.foto.nome });
+          setBlob(item, await MartesStory.canvasToJpeg(canvas));
+          if (token !== loadToken) return;
+          if (current.auto || force) {
+            await saveItem(item, index);
+          } else {
+            setState(item, index, "nova");
+          }
+        } catch (error) {
+          if (error instanceof AuthError) return showAuthError();
+          item.error = error.message || String(error);
+          setState(item, index, "erro");
+        }
+      }
+
+      async function saveItem(item, index) {
+        setState(item, index, "traballando", "Gardando no Drive…");
+        try {
+          const saved = await api(null, {
+            method: "POST",
+            headers: { "content-type": "application/json" },
+            body: JSON.stringify({ data: current.day, orixe: item.foto.id, nome: item.storyName, base64: await blobToBase64(item.blob) }),
+          });
+          item.story = { id: saved.id, nome: saved.nome, orixe: item.foto.id };
+          item.error = "";
+          setState(item, index, "gardada");
+        } catch (error) {
+          if (error instanceof AuthError) return showAuthError();
+          item.error = `Non se gardou: ${error.message || error}`;
+          setState(item, index, "erro");
+        }
+      }
+
+      function setBlob(item, blob) {
+        if (item.url) URL.revokeObjectURL(item.url);
+        item.blob = blob;
+        item.url = URL.createObjectURL(blob);
+      }
+
+      const STATE_LABEL = { gardada: "No Drive", nova: "Sen gardar", traballando: "", erro: "Erro" };
+
+      function cardHtml(item, index) {
+        const working = item.state === "traballando" || !item.url;
+        const label = item.workingLabel || (item.story ? "Cargando…" : "Á espera…");
+        const canShare = item.blob && canShareFiles([new File([item.blob], item.storyName, { type: "image/jpeg" })]);
+        return `
+          <article class="story" data-index="${index}">
+            <div class="frame">
+              ${item.url ? `<img src="${item.url}" alt="Story de ${escapeHtml(MartesStory.naturalName(item.foto.nome))}" data-action="view" />` : ""}
+              ${working && item.state !== "erro" ? `<div class="working"><div><div class="spinner"></div>${escapeHtml(label)}</div></div>` : ""}
+            </div>
+            <h2>${escapeHtml(MartesStory.naturalName(item.foto.nome))}</h2>
+            <div class="story-row">
+              ${item.state !== "traballando" ? `<span class="pill ${item.state}">${STATE_LABEL[item.state]}</span>` : `<span class="pill traballando">${escapeHtml(label)}</span>`}
+            </div>
+            ${item.error ? `<p class="err">${escapeHtml(item.error)}</p>` : ""}
+            <div class="story-row">
+              <button type="button" class="btn small" data-action="download" ${item.blob ? "" : "disabled"}>Descargar</button>
+              ${canShare ? `<button type="button" class="btn small" data-action="share">Compartir</button>` : ""}
+              ${item.state === "nova" && item.blob ? `<button type="button" class="btn small primary" data-action="save">Gardar</button>` : ""}
+              ${item.state === "gardada" || item.state === "erro" ? `<button type="button" class="btn small quiet" data-action="regenerate" title="Volver xerar a story desde a foto e substituíla no Drive">Rexerar</button>` : ""}
+            </div>
+          </article>`;
+      }
+
+      function setState(item, index, state, workingLabel = "") {
+        item.state = state;
+        item.workingLabel = workingLabel;
+        const node = document.querySelector(`.story[data-index="${index}"]`);
+        if (node) node.outerHTML = cardHtml(item, index);
+        renderSummary();
+      }
+
+      function renderSummary() {
+        if (!current) return;
+        const items = current.items;
+        const saved = items.filter((i) => i.state === "gardada").length;
+        const ready = items.filter((i) => i.blob).length;
+        const pending = items.filter((i) => i.state === "nova" && i.blob).length;
+        const busy = items.filter((i) => i.state === "traballando" || (!i.blob && i.state !== "erro")).length;
+        $("#summary").innerHTML = `
+          <span><strong>${escapeHtml(longDate(current.day))}</strong></span>
+          <span>${items.length} foto${items.length === 1 ? "" : "s"}</span>
+          <span>${saved} no Drive</span>
+          ${busy ? `<span>${busy} en proceso…</span>` : ""}`;
+        $("#download-all").disabled = ready === 0;
+        $("#save-all").hidden = pending === 0;
+        $("#save-all").textContent = `Gardar ${pending} no Drive`;
+        const files = items.filter((i) => i.blob).map((i) => new File([i.blob], i.storyName, { type: "image/jpeg" }));
+        $("#share-all").hidden = !(files.length > 1 && canShareFiles(files));
+      }
+
+      function canShareFiles(files) {
+        try {
+          return Boolean(navigator.canShare && navigator.canShare({ files }));
+        } catch {
+          return false;
+        }
+      }
+
+      function downloadBlob(blob, filename) {
+        const a = document.createElement("a");
+        a.href = URL.createObjectURL(blob);
+        a.download = filename;
+        document.body.append(a);
+        a.click();
+        a.remove();
+        setTimeout(() => URL.revokeObjectURL(a.href), 2000);
+      }
+
+      function showAuthError() {
+        $("#content").innerHTML = `<div class="status-msg error">Contrasinal incorrecto.<br /><button type="button" class="btn" onclick="location.reload()">Volver intentalo</button></div>`;
+      }
+
+      function showError(error) {
+        if (error instanceof AuthError) return showAuthError();
+        $("#content").innerHTML = `<div class="status-msg error">${escapeHtml(error.message || String(error))}<br /><button type="button" class="btn" onclick="location.reload()">Volver intentalo</button></div>`;
+      }
+
+      // ---------------------------------------------------------------------
+      // Eventos
+      // ---------------------------------------------------------------------
+      $("#content").addEventListener("click", async (event) => {
+        const button = event.target.closest("[data-action]");
+        if (!button || !current) return;
+        const index = Number(button.closest(".story").dataset.index);
+        const item = current.items[index];
+        const action = button.dataset.action;
+        if (action === "view") {
+          $("#viewer img").src = item.url;
+          $("#viewer").showModal();
+        } else if (action === "download") {
+          downloadBlob(item.blob, item.storyName);
+        } else if (action === "share") {
+          const file = new File([item.blob], item.storyName, { type: "image/jpeg" });
+          navigator.share({ files: [file] }).catch(() => {});
+        } else if (action === "save") {
+          await saveItem(item, index);
+        } else if (action === "regenerate") {
+          await processItem(item, index, loadToken, true);
+        }
+      });
+
+      $("#viewer").addEventListener("click", (event) => {
+        if (event.target === $("#viewer")) $("#viewer").close();
+      });
+
+      $("#download-all").addEventListener("click", async () => {
+        const ready = current.items.filter((i) => i.blob);
+        if (!ready.length) return;
+        const button = $("#download-all");
+        button.disabled = true;
+        button.textContent = "Preparando…";
+        try {
+          if (window.JSZip) {
+            const zip = new JSZip();
+            ready.forEach((item) => zip.file(item.storyName, item.blob));
+            downloadBlob(await zip.generateAsync({ type: "blob" }), `stories-martes-en-loita-${current.day}.zip`);
+          } else {
+            for (const item of ready) {
+              downloadBlob(item.blob, item.storyName);
+              await new Promise((r) => setTimeout(r, 400));
+            }
+          }
+        } finally {
+          button.textContent = "Descargar todas (.zip)";
+          button.disabled = false;
+        }
+      });
+
+      $("#share-all").addEventListener("click", () => {
+        const files = current.items.filter((i) => i.blob).map((i) => new File([i.blob], i.storyName, { type: "image/jpeg" }));
+        navigator.share({ files }).catch(() => {});
+      });
+
+      $("#save-all").addEventListener("click", async () => {
+        const queue = makeQueue(2);
+        await Promise.all(current.items.map((item, index) => (item.state === "nova" && item.blob ? queue(() => saveItem(item, index)) : null)));
+      });
+
+      $("#day").addEventListener("change", (event) => {
+        loadDay(event.target.value).catch(showError);
+      });
+
+      $("#refresh").addEventListener("click", async () => {
+        try {
+          const day = await loadDays(current && current.day);
+          if (day) await loadDay(day);
+        } catch (error) {
+          showError(error);
+        }
+      });
+
+      (async () => {
+        try {
+          const day = await loadDays();
+          if (day) await loadDay(day);
+        } catch (error) {
+          showError(error);
+        }
+      })();
+    </script>
+  </body>
+</html>
