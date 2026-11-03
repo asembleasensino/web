@@ -5,7 +5,7 @@ type: Modelo
 summary: Modelo en branco para tomar acta nunha Asemblea Territorial, coa orde
   do día, os temas tratados, os acordos e a próxima reunión.
 driveUrl: ""
-ficheiro: https://docs.google.com/document/d/1qQnII1O81Z1czMNkJmpSaa9sVFRbD4Wu/edit?usp=drive_link&ouid=106961050313603215391&rtpof=true&sd=true
+ficheiro: /uploads/plantilla-acta.docx
 image: /uploads/plantilla-acta.png
 featured: false
 draft: false
