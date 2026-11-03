@@ -2,9 +2,8 @@
 title: Modelo de acta de asemblea
 date: 2026-10-15T10:00:00.000+02:00
 type: Modelo
-summary: Modelo en branco para tomar acta nunha asemblea de centro ou
-  territorial, coa orde do día, os temas tratados, os acordos e a próxima
-  reunión.
+summary: Modelo en branco para tomar acta nunha Asemblea de Centro, coa orde do
+  día, os temas tratados, os acordos e a próxima reunión.
 ficheiro: /uploads/modelo-acta-asemblea.docx
 image: /uploads/modelo-acta-asemblea-caratula.jpg
 imageAlt: Modelo de acta de reunión en branco, cos campos centro, data, hora,
