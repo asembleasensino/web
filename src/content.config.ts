@@ -8,7 +8,12 @@ const actualidade = defineCollection({
     title: z.string(),
     date: z.coerce.date(),
     type: z.string().min(1),
-    summary: z.string(),
+    // Obrigatorio para Nova/Comunicado/Tribuna/Crónica (cabeceira, buscadores,
+    // tarxetas). Para unha Convocatoria pode deixarse baleiro -- xa ten o seu
+    // propio bloque de data/lugar/territorio en /axenda e na ficha, así que
+    // un resumo adicional é opcional. scripts/validate-project.mjs esixe que
+    // estea cuberto cando convocatoria=false.
+    summary: z.preprocess((value) => (value === "" ? undefined : value), z.string().optional()),
     image: z.string().optional(),
     imageAlt: z.string().optional(),
     featured: z.boolean().default(false),
