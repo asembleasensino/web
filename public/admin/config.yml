@@ -123,7 +123,7 @@ collections:
     slug: "{{slug}}"
     fields:
       - { label: Título, name: title, widget: string }
-      - { label: Resumo, name: summary, widget: text, hint: "Utilízase na cabeceira e nos buscadores." }
+      - { label: Resumo, name: summary, widget: text, required: false, hint: "Necesario para Nova/Comunicado/Tribuna/Crónica (cabeceira e buscadores). Nunha Convocatoria pode quedar baleiro." }
       - { label: Imaxe de cabeceira, name: image, widget: image, required: false }
       - { label: Texto alternativo da imaxe, name: imageAlt, widget: string, required: false, hint: "Describe o que se ve na imaxe para persoas que usan lector de pantalla. Deixa baleiro só se a imaxe é puramente decorativa." }
       - { label: Borrador técnico, name: draft, widget: boolean, default: false, required: false }

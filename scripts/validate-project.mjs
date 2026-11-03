@@ -195,6 +195,9 @@ for (const file of (await readdir("content/actualidade")).filter((name) => name.
   if (frontmatter.eventDateEnd && frontmatter.eventDate && new Date(frontmatter.eventDateEnd) < new Date(frontmatter.eventDate)) {
     fail(`content/actualidade/${file}: a data de fin (eventDateEnd) é anterior á data de inicio (eventDate)`);
   }
+  if (!frontmatter.convocatoria && !frontmatter.summary) {
+    fail(`content/actualidade/${file}: falta o resumo (summary) -- só é opcional nas Convocatorias`);
+  }
 }
 
 if (errors.length) {
