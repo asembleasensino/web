@@ -12,4 +12,4 @@ territorio: A Coruña
 seccion: actualidade
 draft: false
 ---
-[![Ver o cartaz](https://drive.google.com/uc?export=view&id=1oQndzAAyH5htB54uCqcyGDkuF2DLF_py)](https://drive.google.com/file/d/1oQndzAAyH5htB54uCqcyGDkuF2DLF_py/view)
+[Ver o cartaz](https://drive.google.com/file/d/1oQndzAAyH5htB54uCqcyGDkuF2DLF_py/view?usp=sharing)
