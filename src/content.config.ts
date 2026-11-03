@@ -83,12 +83,16 @@ const materiais = defineCollection({
     // se se indica, a tarxeta e a busca en /materiais/ enlazan aquí en vez
     // de xerar a páxina xenérica desta colección.
     href: z.string().optional(),
-    driveUrl: z.url().optional(),
+    // Decap garda "" (cadea baleira) cando este campo opcional non se
+    // toca, en vez de omitir a clave -- e z.url() rexeita "" coma URL
+    // non válida, o que rompe o build (mesmo problema xa visto con
+    // eventDate/eventDateEnd/summary). Tratamos "" coma ausencia de valor.
+    driveUrl: z.preprocess((value) => (value === "" ? undefined : value), z.url().optional()),
     // Para un ficheiro descargábel aloxado na propia web (PDF, DOCX...), a
     // diferenza de driveUrl que é sempre unha ligazón externa a Drive.
     ficheiro: z.string().optional(),
     fonteTitulo: z.string().optional(),
-    fonteUrl: z.url().optional(),
+    fonteUrl: z.preprocess((value) => (value === "" ? undefined : value), z.url().optional()),
     // O widget "object" de Decap CMS non impide gardar esta sección a
     // medias (por exemplo, só "Total de horas" cuberto, sen ningunha
     // "Categoría") cando se toca sen chegar a completala -- típico nun
