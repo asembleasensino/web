@@ -12,7 +12,7 @@ featured: true
 draft: false
 ---
 
-Documento de Word editable para tomar acta nas reunións: centro, data, hora,
+Documento de Word editábel para tomar acta nas reunións: centro, data, hora,
 lugar, persoas asistentes, quen modera e quen toma acta, orde do día, temas
 tratados, acordos (con responsable e prazo) e a coordinación coa próxima
 reunión e coa comarca.
