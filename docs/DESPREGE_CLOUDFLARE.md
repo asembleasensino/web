@@ -27,8 +27,7 @@ Cloudflare pode xestionar os bindings deste proxecto a través do ficheiro `wran
 
    ```jsonc
    "kv_namespaces": [
-     { "binding": "SOLICITUDES", "id": "<id-do-namespace>" },
-     { "binding": "CENSO_REFERENDO", "id": "<id-do-namespace>" }
+     { "binding": "SOLICITUDES", "id": "<id-do-namespace>" }
    ]
    ```
 4. Fai commit e push do cambio a `main`; Cloudflare recolle os bindings novos no seguinte despregue.
@@ -41,9 +40,6 @@ Namespace KV `aaep-solicitudes`, binding exacto `SOLICITUDES`. Sen el, `POST /ap
 
 Bucket R2 `aaep-martes-media`, binding `MARTES_MEDIA`, para gardar unha copia de respaldo das fotografías de "Martes en loita" ademais de Drive. O plan gratuíto de Cloudflare inclúe R2 con límites; se non se quere activar (por exemplo, por evitar calquera paso que pida datos de facturación), pódese omitir sen problema: a Function funciona igual só con Drive, simplemente sen copia de respaldo.
 
-### KV do censo do referendo
-
-Namespace KV `aaep-censo-referendo`, binding exacto `CENSO_REFERENDO`. Sen el, `POST /api/referendo-censo` responde `503` e a páxina `/referendo/` non pode gardar inscricións. A páxina `/xestion/censo-referendo.html` (protexida por Cloudflare Access, ver punto 6) permite consultar e exportar en CSV as persoas inscritas.
 
 ## 3. Variables e segredos
 
@@ -96,8 +92,8 @@ Un fallo de correo non perde a solicitude: queda gardada en KV e rexístrase o e
 Cloudflare Access esixe ter un método de pago rexistrado mesmo no plan gratuíto, así que este proxecto non o usa para `/xestion/*`. En troques, a protección real vive nos propios endpoints da API (non nas páxinas estáticas, que non conteñen datos por si mesmas):
 
 1. Configura o segredo `XESTION_PASSWORD` en Cloudflare (ver punto 3).
-2. Os endpoints `GET`/`PATCH` de `/api/solicitudes` e `GET` de `/api/referendo-censo` esixen ese contrasinal na cabeceira `Authorization` (autenticación HTTP básica); sen el, ou con outro distinto, responden `401`. Non se debe protexer `/api/solicitudes` completo porque o `POST` é público.
-3. As páxinas `public/xestion/solicitudes.html` e `public/xestion/censo-referendo.html` piden ese contrasinal cun `prompt()` de JavaScript a primeira vez, gárdano en `sessionStorage` (só nesa pestana, mentres estea aberta) e engádeno como cabeceira `Authorization` en cada petición. Non se depende de que o navegador reenvíe só a autenticación HTTP nativa, xa que ese comportamento non é fiable en todos os navegadores.
+2. Os endpoints `GET`/`PATCH` de `/api/solicitudes` esixen ese contrasinal na cabeceira `Authorization` (autenticación HTTP básica); sen el, ou con outro distinto, responden `401`. Non se debe protexer `/api/solicitudes` completo porque o `POST` é público.
+3. As páxinas de `public/xestion/` piden ese contrasinal cun `prompt()` de JavaScript a primeira vez, gárdano en `sessionStorage` (só nesa pestana, mentres estea aberta) e engádeno como cabeceira `Authorization` en cada petición. Non se depende de que o navegador reenvíe só a autenticación HTTP nativa, xa que ese comportamento non é fiable en todos os navegadores.
 
 `/admin/*` (Decap CMS) segue usando OAuth de GitHub, sen relación con isto.
 

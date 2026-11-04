@@ -32,8 +32,8 @@ export function dataDaConvocatoria(entry: ActualidadeEntry) {
 /**
  * Para saber se unha convocatoria segue a ser "próxima": un evento de
  * varios días (eventDateEnd) segue a contar coma próximo mentres non remate
- * o último día, aínda que xa comezase (ex. a votación do referendo, do día
- * 2 ao 6, debe seguir en "próximas" o día 4).
+ * o último día, aínda que xa comezase (ex. unha folga do día 2 ao 6, debe
+ * seguir en "próximas" o día 4).
  */
 export function dataFinDaConvocatoria(entry: ActualidadeEntry) {
   return entry.data.eventDateEnd ?? dataDaConvocatoria(entry);

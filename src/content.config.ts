@@ -25,9 +25,9 @@ const actualidade = defineCollection({
     // arriba para o mesmo problema noutro campo). Tratamos "" coma ausencia
     // de valor.
     eventDate: z.preprocess((value) => (value === "" ? undefined : value), z.coerce.date().optional()),
-    // Para eventos que duran máis dun intre (varios días, coma a votación
-    // do referendo, ou só varias horas o mesmo día): data e hora de fin,
-    // opcional. Se non se enche, o evento é un só momento (coma antes).
+    // Para eventos que duran máis dun intre (varios días, coma unha folga
+    // de varias xornadas, ou só varias horas o mesmo día): data e hora de
+    // fin, opcional. Se non se enche, o evento é un só momento (coma antes).
     eventDateEnd: z.preprocess((value) => (value === "" ? undefined : value), z.coerce.date().optional()),
     eventLocation: z.string().optional(),
     // A FONTE DE VERDADE de se unha entrada é unha convocatoria (aparece en
