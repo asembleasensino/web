@@ -101,20 +101,59 @@
         .grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 18px 12px; }
         .controls select { flex: 1 1 100%; }
       }
+      .xestion-shell { display: flex; align-items: flex-start; min-height: 100vh; }
+      .xestion-sidebar { flex: 0 0 220px; position: sticky; top: 0; height: 100vh; overflow-y: auto; background: var(--paper-raised); border-right: 1px solid var(--line); display: flex; flex-direction: column; padding: 20px 16px; box-sizing: border-box; }
+      .xestion-sidebar-brand { display: flex; align-items: center; gap: 10px; margin-bottom: 24px; text-decoration: none; }
+      .xestion-sidebar-brand .brand-title { font-family: var(--font-display); font-stretch: condensed; font-size: 1.1rem; font-weight: 700; color: var(--ink); text-decoration: none; letter-spacing: -0.01em; }
+      .xestion-nav { flex: 1 1 auto; display: flex; flex-direction: column; gap: 2px; }
+      .nav-group-label { margin: 18px 0 6px; font-size: 0.66rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.07em; color: color-mix(in srgb, var(--ink) 50%, transparent); }
+      .xestion-nav .nav-group-label:first-child { margin-top: 0; }
+      .nav-link { display: block; padding: 8px 10px; border-radius: 4px; font-size: 0.86rem; font-weight: 600; color: var(--ink); text-decoration: none; }
+      .nav-link:hover { background: rgba(37, 35, 33, 0.06); }
+      .nav-link.current { background: var(--ink); color: var(--paper); font-weight: 700; }
+      .xestion-sidebar-foot { margin-top: 20px; padding-top: 16px; border-top: 1px solid var(--line); display: flex; flex-direction: column; gap: 10px; font-size: 0.78rem; font-weight: 700; }
+      .xestion-sidebar-foot a { color: var(--ink); }
+      .xestion-sidebar-foot button.link { appearance: none; background: none; border: 0; padding: 0; font: inherit; font-weight: 700; color: var(--ink); opacity: 0.55; cursor: pointer; text-align: left; }
+      .xestion-sidebar-foot button.link:hover { opacity: 1; text-decoration: underline; }
+      .xestion-main { flex: 1 1 auto; min-width: 0; }
+      @media (max-width: 760px) {
+        .xestion-shell { flex-direction: column; min-height: 0; }
+        .xestion-sidebar { position: static; height: auto; width: 100%; flex-direction: row; flex-wrap: wrap; align-items: center; border-right: 0; border-bottom: 1px solid var(--line); }
+        .xestion-sidebar-brand { margin-bottom: 0; margin-right: auto; }
+        .xestion-nav { flex-direction: row; flex-wrap: wrap; gap: 6px; }
+        .nav-group-label { display: none; }
+        .xestion-sidebar-foot { flex-direction: row; margin-top: 0; padding-top: 0; border-top: 0; margin-left: auto; }
+      }
     </style>
   </head>
   <body>
+    <div class="xestion-shell">
+      <aside class="xestion-sidebar">
+        <a class="xestion-sidebar-brand" href="/xestion/">
+          <span class="badge">AA</span>
+          <span class="brand-title">Xestión AAEP</span>
+        </a>
+        <nav class="xestion-nav">
+          <p class="nav-group-label">Xeral</p>
+          <a href="/xestion/solicitudes" class="nav-link">Solicitudes</a>
+          <p class="nav-group-label">Coordinación</p>
+          <a href="/xestion/coordinacion" class="nav-link">Mapa e territorios</a>
+          <a href="/xestion/censo-asembleas" class="nav-link">Censo de asembleas</a>
+          <p class="nav-group-label">GdT Comunicación</p>
+          <a href="/xestion/stories" class="nav-link current">Stories</a>
+        </nav>
+        <div class="xestion-sidebar-foot">
+          <a href="/admin/">CMS (Decap) →</a>
+          <button type="button" class="link" id="forget-password">Esquecer contrasinal</button>
+        </div>
+      </aside>
+      <div class="xestion-main">
     <div class="topbar">
       <div class="topbar-inner">
         <span class="badge">AA</span>
         <h1>Stories · Martes en loita</h1>
         <div class="links">
-          <a href="/xestion/">← Panel</a>
-          <a href="/xestion/solicitudes">Solicitudes →</a>
-          <a href="/xestion/coordinacion">Coordinación →</a>
-          <a href="/xestion/censo-asembleas">Censo de asembleas →</a>
           <a href="/martes-en-loita">Formulario público →</a>
-          <button type="button" class="link" id="forget-password">Esquecer contrasinal</button>
         </div>
       </div>
     </div>
@@ -138,6 +177,9 @@
       <img alt="" />
       <form method="dialog"><button class="btn">Pechar</button></form>
     </dialog>
+
+      </div>
+    </div>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
     <script src="/xestion/stories/render.js"></script>
