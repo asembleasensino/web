@@ -34,7 +34,13 @@ Cloudflare pode xestionar os bindings deste proxecto a través do ficheiro `wran
 
 ### KV obrigatorio
 
-Namespace KV `aaep-solicitudes`, binding exacto `SOLICITUDES`. Sen el, `POST /api/solicitudes` responde `503` e non acepta datos.
+Tres namespaces KV, cada un co seu binding exacto en `wrangler.jsonc`. Ningún deles forma parte do repositorio de código: son datos operativos internos, sen historial de versións nin backup automático (ver punto 9).
+
+| Binding | Contido | Sen el |
+| --- | --- | --- |
+| `SOLICITUDES` | Solicitudes públicas do formulario de contacto | `POST /api/solicitudes` responde `503` e non acepta datos |
+| `COORDINACION` | Datos privados do panel de coordinación (contacto/responsable/representantes/notas por centro e por territorio) | `/xestion/coordinacion` non pode gardar nin ler eses datos |
+| `EVENTOS` | Calendario interno de Coordinación e dos GdT (reunións, prazos, tarefas) usado en `/xestion/calendario` | `/xestion/calendario` responde `503` e non amosa nin acepta eventos |
 
 ### R2 opcional
 
@@ -124,3 +130,9 @@ En staging:
 - correo de Resend;
 - fotografía presente en Drive e R2;
 - acceso denegado a `/xestion/` para unha conta non autorizada.
+
+## 9. Backup de datos operativos (KV)
+
+O contido editorial (noticias, materiais, convocatorias, páxinas) vive en GitHub: cada cambio é un commit, con historial completo e sen risco real de perda. Os tres namespaces KV do punto 2 (`SOLICITUDES`, `COORDINACION`, `EVENTOS`) son distintos: só existen en Cloudflare, sen historial de versións nin copia de seguranza automática. Un borrado accidental ou un erro nunha Function pode perder eses datos sen posibilidade de desfacer.
+
+`GET /api/backup` (protexido con `XESTION_PASSWORD`, igual que o resto de `/xestion/*`) devolve nun só JSON todo o contido actual destes tres namespaces (solicitudes, centros e territorios de coordinación, e eventos do calendario). Non hai aínda un botón na interface que o chame: de momento execútase a man, por exemplo dende o navegador ou con `curl`, e gárdase o JSON resultante nalgún sitio seguro (Drive, etc.) de cando en vez. Se o volume de datos xustifica automatizalo, a opción natural é un Cloudflare Cron Trigger que chame a este mesmo endpoint e garde o resultado (por exemplo, nun bucket R2 ou enviándoo por correo).

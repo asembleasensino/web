@@ -9,6 +9,12 @@
     // parte do repositorio de código. Substituír <ID> polo id real que
     // devolve `wrangler kv namespace create COORDINACION` (ver README de
     // despregue / mensaxe de Claude).
-    { "binding": "COORDINACION", "id": "46e282a911d2491791d40c0a84524b18" }
+    { "binding": "COORDINACION", "id": "46e282a911d2491791d40c0a84524b18" },
+    // Calendario interno de Coordinación e dos GdT (reunións, prazos,
+    // tarefas: a axenda común que se ve en /xestion/calendario). Tampouco
+    // forma parte do repositorio de código. Substituír <ID> polo id real
+    // que devolve `wrangler kv namespace create EVENTOS` (ver README de
+    // despregue).
+    { "binding": "EVENTOS", "id": "<ID>" }
   ]
 }
