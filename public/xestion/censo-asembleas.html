@@ -112,12 +112,30 @@
       .xestion-sidebar { flex: 0 0 220px; position: sticky; top: 0; height: 100vh; overflow-y: auto; background: var(--paper-raised); border-right: 1px solid var(--line); display: flex; flex-direction: column; padding: 20px 16px; box-sizing: border-box; }
       .xestion-sidebar-brand { display: flex; align-items: center; gap: 10px; margin-bottom: 24px; text-decoration: none; }
       .xestion-sidebar-brand .brand-title { font-family: var(--font-display); font-stretch: condensed; font-size: 1.1rem; font-weight: 700; color: var(--ink); text-decoration: none; letter-spacing: -0.01em; }
+      .xestion-sidebar-top { display: flex; align-items: center; gap: 8px; margin-bottom: 24px; }
+      .xestion-sidebar-top .xestion-sidebar-brand { margin-bottom: 0; flex: 1 1 auto; min-width: 0; }
+      .sidebar-toggle { flex-shrink: 0; appearance: none; border: 1px solid var(--line-strong); background: var(--paper); color: var(--ink); width: 26px; height: 26px; border-radius: 4px; font-size: 0.8rem; line-height: 1; cursor: pointer; display: grid; place-items: center; }
+      .sidebar-toggle:hover { background: var(--ink); color: var(--paper); border-color: var(--ink); }
+      .nav-group { display: flex; flex-direction: column; }
+      .nav-group-toggle { all: unset; display: flex; align-items: center; justify-content: space-between; gap: 6px; cursor: pointer; padding: 8px 2px 4px; margin-top: 10px; }
+      .xestion-nav .nav-group:first-child .nav-group-toggle { margin-top: 0; }
+      .nav-group-toggle .chev { font-size: 0.6rem; color: color-mix(in srgb, var(--ink) 45%, transparent); transition: transform 0.15s ease; }
+      .nav-group-toggle[aria-expanded="false"] .chev { transform: rotate(-90deg); }
+      .nav-group-body { display: flex; flex-direction: column; gap: 2px; }
+      .nav-subgroup-label { margin: 10px 0 2px; padding: 0 10px; font-size: 0.72rem; font-weight: 700; color: color-mix(in srgb, var(--ink) 65%, transparent); }
+      .nav-group-body .nav-subgroup-label:first-child { margin-top: 2px; }
       .xestion-nav { flex: 1 1 auto; display: flex; flex-direction: column; gap: 2px; }
       .nav-group-label { margin: 18px 0 6px; font-size: 0.66rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.07em; color: color-mix(in srgb, var(--ink) 50%, transparent); }
       .xestion-nav .nav-group-label:first-child { margin-top: 0; }
       .nav-link { display: block; padding: 8px 10px; border-radius: 4px; font-size: 0.86rem; font-weight: 600; color: var(--ink); text-decoration: none; }
       .nav-link:hover { background: rgba(37, 35, 33, 0.06); }
       .nav-link.current { background: var(--ink); color: var(--paper); font-weight: 700; }
+      .xestion-sidebar { transition: flex-basis 0.15s ease, padding 0.15s ease; }
+      .xestion-sidebar.collapsed { flex-basis: 48px; padding-left: 8px; padding-right: 8px; }
+      .xestion-sidebar.collapsed .xestion-sidebar-brand,
+      .xestion-sidebar.collapsed .xestion-nav,
+      .xestion-sidebar.collapsed .xestion-sidebar-foot { display: none; }
+      .xestion-sidebar.collapsed .xestion-sidebar-top { justify-content: center; }
       .xestion-sidebar-foot { margin-top: 20px; padding-top: 16px; border-top: 1px solid var(--line); display: flex; flex-direction: column; gap: 10px; font-size: 0.78rem; font-weight: 700; }
       .xestion-sidebar-foot a { color: var(--ink); }
       .xestion-sidebar-foot button.link { appearance: none; background: none; border: 0; padding: 0; font: inherit; font-weight: 700; color: var(--ink); opacity: 0.55; cursor: pointer; text-align: left; }
@@ -127,6 +145,15 @@
         .xestion-shell { flex-direction: column; min-height: 0; }
         .xestion-sidebar { position: static; height: auto; width: 100%; flex-direction: row; flex-wrap: wrap; align-items: center; border-right: 0; border-bottom: 1px solid var(--line); }
         .xestion-sidebar-brand { margin-bottom: 0; margin-right: auto; }
+        .sidebar-toggle { display: none; }
+        .xestion-sidebar.collapsed { flex-basis: 100%; padding-left: 16px; padding-right: 16px; }
+        .xestion-sidebar.collapsed .xestion-sidebar-brand,
+        .xestion-sidebar.collapsed .xestion-nav,
+        .xestion-sidebar.collapsed .xestion-sidebar-foot { display: flex; }
+        .nav-group { flex-direction: row; flex-wrap: wrap; align-items: center; gap: 6px; }
+        .nav-group-toggle { display: none; }
+        .nav-group-body { display: flex !important; flex-direction: row; flex-wrap: wrap; gap: 6px; }
+        .nav-subgroup-label { display: none; }
         .xestion-nav { flex-direction: row; flex-wrap: wrap; gap: 6px; }
         .nav-group-label { display: none; }
         .xestion-sidebar-foot { flex-direction: row; margin-top: 0; padding-top: 0; border-top: 0; margin-left: auto; }
@@ -135,19 +162,44 @@
   </head>
   <body>
     <div class="xestion-shell">
-      <aside class="xestion-sidebar">
-        <a class="xestion-sidebar-brand" href="/xestion/">
-          <span class="badge">AA</span>
-          <span class="brand-title">Xestión AAEP</span>
-        </a>
+      <aside class="xestion-sidebar" id="xestion-sidebar">
+        <div class="xestion-sidebar-top">
+          <a class="xestion-sidebar-brand" href="/xestion/">
+            <span class="badge">AA</span>
+            <span class="brand-title">Xestión AAEP</span>
+          </a>
+          <button type="button" class="sidebar-toggle" id="sidebar-toggle" aria-label="Pregar menú" title="Pregar menú">«</button>
+        </div>
         <nav class="xestion-nav">
-          <p class="nav-group-label">Xeral</p>
-          <a href="/xestion/solicitudes" class="nav-link">Solicitudes</a>
-          <p class="nav-group-label">Coordinación</p>
-          <a href="/xestion/coordinacion" class="nav-link">Mapa e territorios</a>
-          <a href="/xestion/censo-asembleas" class="nav-link current">Censo de asembleas</a>
-          <p class="nav-group-label">GdT Comunicación</p>
-          <a href="/xestion/stories" class="nav-link">Stories</a>
+          <div class="nav-group" data-group="xeral">
+            <button type="button" class="nav-group-toggle" aria-expanded="true">
+              <span class="nav-group-label">Xeral</span>
+              <span class="chev">▾</span>
+            </button>
+            <div class="nav-group-body">
+              <a href="/xestion/solicitudes" class="nav-link">Solicitudes</a>
+            </div>
+          </div>
+          <div class="nav-group" data-group="coordinacion">
+            <button type="button" class="nav-group-toggle" aria-expanded="true">
+              <span class="nav-group-label">Coordinación</span>
+              <span class="chev">▾</span>
+            </button>
+            <div class="nav-group-body">
+              <a href="/xestion/coordinacion" class="nav-link">Mapa e territorios</a>
+              <a href="/xestion/censo-asembleas" class="nav-link current">Censo de asembleas</a>
+            </div>
+          </div>
+          <div class="nav-group" data-group="gdt">
+            <button type="button" class="nav-group-toggle" aria-expanded="true">
+              <span class="nav-group-label">Grupos de traballo</span>
+              <span class="chev">▾</span>
+            </button>
+            <div class="nav-group-body">
+              <p class="nav-subgroup-label">Comunicación</p>
+              <a href="/xestion/stories" class="nav-link">Stories</a>
+            </div>
+          </div>
         </nav>
         <div class="xestion-sidebar-foot">
           <a href="/admin/">CMS (Decap) →</a>
@@ -181,6 +233,7 @@
       </div>
     </div>
 
+    <script src="/xestion/sidebar.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js" defer></script>
     <script>
       const escapeHtml = (value = "") => String(value).replace(/[&<>"']/g, (character) => ({
