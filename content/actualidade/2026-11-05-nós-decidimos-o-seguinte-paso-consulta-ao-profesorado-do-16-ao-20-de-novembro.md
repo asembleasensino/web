@@ -7,8 +7,10 @@ summary: Pero nada diso vai chegar só. Por iso, do 16 ao 20 de novembro imos
   facer unha consulta a todo o profesorado para decidir xuntas como mobilizarnos
   este curso.
 image: /uploads/cabeceira-web-1200x630.png
-featured: false
-convocatoria: false
+featured: true
+convocatoria: true
+eventDate: 2026-11-16T00:00:00.000+01:00
+eventDateEnd: 2026-11-20T23:55:00.000+01:00
 draft: false
 ---
 Levamos meses recollendo nos centros os mesmos problemas: ratios que non baixan, persoal que non chega, burocracia que nos come o tempo, centros sen manter e alumnado sen os profesionais que precisa. Con todo iso elaboramos o decálogo das Asembleas Abertas do Ensino Público, que podes consultar en [Materiais](https://asembleasensino.gal/materiais).
