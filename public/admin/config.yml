@@ -30,6 +30,7 @@ collections:
       - { label: Texto alternativo da imaxe, name: imageAlt, widget: string, required: false, hint: "Describe o que se ve na imaxe para persoas que usan lector de pantalla. Deixa baleiro só se a imaxe é puramente decorativa." }
       - { label: Destacar, name: featured, widget: boolean, default: false, required: false }
       - { label: "É unha convocatoria?", name: convocatoria, widget: boolean, default: false, hint: "Marca isto para que apareza en /axenda. Se o marcas, enche tamén Territorio e Data e hora do evento." }
+      - { label: "Amosar tamén en Actualidade?", name: tamenEnActualidade, widget: boolean, default: false, required: false, hint: "Só ten sentido se marcaches \"É unha convocatoria?\". Por defecto unha convocatoria só aparece en Axenda; marca isto se ademais merece un sitio na grade de Actualidade (ex. unha consulta/votación con entidade propia)." }
       - { label: Data e hora do evento, name: eventDate, widget: datetime, required: false, hint: "Cando empeza. Precísase se marcaches \"É unha convocatoria?\"." }
       - { label: Data e hora de fin, name: eventDateEnd, widget: datetime, required: false, hint: "Só se dura máis dun intre: varios días (ex. votación do 16 ao 20 de novembro) ou varias horas o mesmo día. Déixao baleiro para un evento dun só momento." }
       - { label: Lugar do evento, name: eventLocation, widget: string, required: false, hint: "Texto libre: nome do centro, local ou enderezo. Non precisa coincidir cun centro do catálogo." }
