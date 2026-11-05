@@ -27,11 +27,11 @@ A consulta ten dúas preguntas sobre as mesmas cinco opcións:
 
 As opcións son:
 
-- Non participarei en ningún tipo de futuras mobilizacións.
-- Participarei nunha gran mobilización de toda a comunidade educativa en febreiro ou marzo, a partir da cal se definan as seguintes accións.
-- Participarei nunha folga de 15 días en decembro, coincidindo coas sesións de avaliación, de xeito que a folga inclúa non poñer as cualificacións en XADE.
-- Participarei nunha folga indefinida en marzo.
-- Participarei nunha folga continua (indefinida) e alterna en marzo, por provincias ou comarcas, de xeito que todos os días haxa territorios en folga pero que sexa sostible para o profesorado.
+- [ ] Non participarei en ningún tipo de futuras mobilizacións.
+- [ ] Participarei nunha gran mobilización de toda a comunidade educativa en febreiro ou marzo, a partir da cal se definan as seguintes accións.
+- [ ] Participarei nunha folga de 15 días en decembro, coincidindo coas sesións de avaliación, de xeito que a folga inclúa non poñer as cualificacións en XADE.
+- [ ] Participarei nunha folga indefinida en marzo.
+- [ ] Participarei nunha folga continua (indefinida) e alterna en marzo, por provincias ou comarcas, de xeito que todos os días haxa territorios en folga pero que sexa sostible para o profesorado.
 
 ## Como funciona?
 
