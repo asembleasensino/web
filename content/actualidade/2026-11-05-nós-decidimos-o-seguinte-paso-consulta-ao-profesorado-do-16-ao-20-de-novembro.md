@@ -37,7 +37,7 @@ As opcións son:
 ## Como funciona?
 
 - **Para quen:** todo o profesorado do ensino público galego, independentemente do corpo ao que pertenza.
-- **Anónima:** os votos gárdanse cifrados. Para abrilos e contalos fai falta a participación de tres custodios independentes, de xeito que ningunha persoa pode velos nin contalos pola súa conta.
+- **Anónima:** votaremos a través dos nosos correos, mais os votos se gardarán cifrados, garantindo o absoluto anonimato. 
 - **Desde o móbil:** en liña, en poucos minutos.
 - **Podes cambiar o voto:** mentres a consulta estea aberta podes votar de novo; só conta o último voto.
 
