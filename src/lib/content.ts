@@ -39,9 +39,14 @@ export function dataFinDaConvocatoria(entry: ActualidadeEntry) {
   return entry.data.eventDateEnd ?? dataDaConvocatoria(entry);
 }
 
-/** Para a pestana "Actualidade" de /actualidade -- sen Convocatorias (teñen /axenda) nin Hemeroteca (colección propia, ver getHemeroteca). */
+/**
+ * Para a pestana "Actualidade" de /actualidade -- sen Convocatorias (teñen
+ * /axenda) nin Hemeroteca (colección propia, ver getHemeroteca), coa
+ * excepción das convocatorias marcadas con "tamenEnActualidade" (ver
+ * content.config.ts): esas si aparecen aquí, ademais de en /axenda.
+ */
 export async function getActualidadeSenConvocatorias() {
-  return (await getActualidade()).filter((entry) => !entry.data.convocatoria);
+  return (await getActualidade()).filter((entry) => !entry.data.convocatoria || entry.data.tamenEnActualidade);
 }
 
 /**

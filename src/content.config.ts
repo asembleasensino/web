@@ -31,11 +31,20 @@ const actualidade = defineCollection({
     eventDateEnd: z.preprocess((value) => (value === "" ? undefined : value), z.coerce.date().optional()),
     eventLocation: z.string().optional(),
     // A FONTE DE VERDADE de se unha entrada é unha convocatoria (aparece en
-    // /axenda, usa territorio/eventDate, exclúese da grade de /actualidade)
-    // é ESTE booleano, non o campo "type". "type" segue sendo texto libre
-    // (deliberado, ver máis abaixo) e por iso un erro de escritura nel xa
-    // non rompe nada -- antes "Convocatoria" tiña que estar escrito exacto.
+    // /axenda, usa territorio/eventDate e, por defecto, exclúese da grade
+    // de /actualidade -- ver tamenEnActualidade máis abaixo para a
+    // excepción) é ESTE booleano, non o campo "type". "type" segue sendo
+    // texto libre (deliberado, ver máis abaixo) e por iso un erro de
+    // escritura nel xa non rompe nada -- antes "Convocatoria" tiña que
+    // estar escrito exacto.
     convocatoria: z.preprocess((value) => (value === "" ? undefined : value), z.boolean().default(false)),
+    // Só ten sentido cando convocatoria=true: fai que esta convocatoria
+    // apareza TAMÉN na grade de /actualidade (ademais de en /axenda, onde
+    // xa aparece sempre). Pensado para unha convocatoria con entidade
+    // propia de dabondo (ex. unha consulta/votación) como para merecer un
+    // sitio en Actualidade e non só en Axenda. Se queda sen marcar (o
+    // normal), o comportamento é o de sempre: só en /axenda.
+    tamenEnActualidade: z.preprocess((value) => (value === "" ? undefined : value), z.boolean().default(false)),
     // Só ten sentido cando convocatoria=true: o territorio (un dos nomes
     // reais de src/data/territorios.json, ou "Nacional"/"Outro") ao que
     // pertence, para que apareza en /axenda filtrada por ese territorio e
