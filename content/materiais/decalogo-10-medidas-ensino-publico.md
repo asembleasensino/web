@@ -1,5 +1,5 @@
 ---
-title: "Decálogo: 10 medidas para mellorar o ensino público"
+title: Decálogo
 date: 2026-10-09T09:00:00.000+02:00
 type: Infografía
 summary: As dez medidas que reivindican as Asembleas Abertas do Ensino Público
