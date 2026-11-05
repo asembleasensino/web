@@ -15,6 +15,6 @@
     // forma parte do repositorio de código. Substituír <ID> polo id real
     // que devolve `wrangler kv namespace create EVENTOS` (ver README de
     // despregue).
-    { "binding": "EVENTOS", "id": "<ID>" }
+    { "binding": "EVENTOS", "id": "12cfdce86dfa4592adc12bb0056b2eb3" }
   ]
 }
