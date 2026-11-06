@@ -7,9 +7,12 @@ import { actualidadeUrl, dataDaConvocatoria, dataFinDaConvocatoria, formatDate, 
 import home from "../data/home.json";
 
 const actualidade = await getActualidade();
+// Coma na grade de /actualidade: unha Convocatoria só entra aquí se está
+// marcada "tamenEnActualidade" (ver content.config.ts); se non, queda
+// só en "Próximas convocatorias" máis abaixo, coma sempre.
 const novas = [
-  ...actualidade.filter((entry) => entry.data.featured && !entry.data.convocatoria),
-  ...actualidade.filter((entry) => !entry.data.featured && !entry.data.convocatoria),
+  ...actualidade.filter((entry) => entry.data.featured && (!entry.data.convocatoria || entry.data.tamenEnActualidade)),
+  ...actualidade.filter((entry) => !entry.data.featured && (!entry.data.convocatoria || entry.data.tamenEnActualidade)),
 ].slice(0, 3);
 const agora = new Date();
 const convocatorias = actualidade
