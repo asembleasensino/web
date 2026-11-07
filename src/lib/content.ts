@@ -217,3 +217,66 @@ export async function getHemeroteca(): Promise<HemerotecaItem[]> {
     }),
   );
 }
+
+export type SearchResult = {
+  title: string;
+  url: string;
+  type: string;
+  summary?: string;
+};
+
+/**
+ * Páxinas que non veñen dunha colección de contido (índices fixos,
+ * âncoras da portada...) pero que si ten sentido que o buscador atope.
+ * Mantéñense aquí, á man: se se engade algunha páxina nova deste tipo,
+ * só hai que sumar unha liña.
+ */
+const PAXINAS_FIXAS_NO_BUSCADOR: SearchResult[] = [
+  { title: "Mapa da rede", url: "/#mapa", type: "PÁXINA", summary: "Atopa a túa asemblea territorial no mapa." },
+  { title: "A rede", url: "/a-rede/", type: "PÁXINA", summary: "Como se organiza e se coordina a rede de asembleas abertas." },
+  { title: "Actualidade", url: "/actualidade/", type: "PÁXINA", summary: "Novas, crónicas e hemeroteca de prensa das asembleas." },
+  { title: "Axenda", url: "/axenda/", type: "PÁXINA", summary: "Próximas convocatorias e mobilizacións." },
+  { title: "Materiais", url: "/materiais/", type: "PÁXINA", summary: "Recursos descargables: decálogos, kits, modelos de acta, cartaces..." },
+  { title: "Martes en loita", url: "/martes-en-loita/", type: "PÁXINA", summary: "Arquivo colectivo das accións semanais nos centros." },
+  { title: "Activa o teu centro", url: "/#participa", type: "PÁXINA", summary: "Como comezar unha asemblea aberta no teu centro." },
+];
+
+/**
+ * Índice completo para o buscador do sitio (ver SiteSearch.astro e
+ * buscar-index.json.ts): todo o contido que ten unha URL propia e un
+ * título polo que alguén o buscaría. Deliberadamente NON inclúe a
+ * hemeroteca de prensa (son ligazóns externas, xa visibles na súa propia
+ * pestana de /actualidade) nin as "próximas convocatorias" por separado
+ * das entradas de actualidade (unha convocatoria xa aparece aquí una soa
+ * vez, etiquetada "AXENDA").
+ */
+export async function getSearchIndex(): Promise<SearchResult[]> {
+  const [actualidade, materiais, paxinas] = await Promise.all([
+    getActualidade(),
+    getMateriais(),
+    getCollection("paxinas", ({ data }) => !data.draft),
+  ]);
+
+  const actualidadeItems: SearchResult[] = actualidade.map((entry) => ({
+    title: entry.data.title.trim(),
+    url: actualidadeUrl(entry),
+    type: entry.data.convocatoria ? "AXENDA" : "ACTUALIDADE",
+    summary: entry.data.summary,
+  }));
+
+  const materiaisItems: SearchResult[] = materiais.map((entry) => ({
+    title: entry.data.title.trim(),
+    url: materialUrl(entry),
+    type: "MATERIAIS",
+    summary: entry.data.summary,
+  }));
+
+  const paxinasItems: SearchResult[] = paxinas.map((entry) => ({
+    title: entry.data.title.trim(),
+    url: `/${entrySlug(entry)}/`,
+    type: "PÁXINA",
+    summary: entry.data.summary,
+  }));
+
+  return [...PAXINAS_FIXAS_NO_BUSCADOR, ...actualidadeItems, ...materiaisItems, ...paxinasItems];
+}
