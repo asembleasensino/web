@@ -1,0 +1,227 @@
+---
+// Buscador do sitio: unha icona na cabeceira abre unha caixa flotante con
+// resultados en vivo (materiais, actualidade, axenda e páxinas fixas). O
+// índice (buscar-index.json, xerado en build por buscar-index.json.ts)
+// só se descarga a primeira vez que se abre a busca, non en cada carga de
+// páxina -- para non engadir peso a quen nunca a use.
+---
+
+<button
+  id="site-search-button"
+  type="button"
+  class="focus-ring flex items-center gap-2 rounded-[4px] border border-ink/25 px-3 py-2 text-ink/70 hover:border-ink hover:text-ink"
+  aria-haspopup="dialog"
+>
+  <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" class="h-4 w-4 shrink-0">
+    <circle cx="11" cy="11" r="7"></circle>
+    <line x1="21" y1="21" x2="16.1" y2="16.1"></line>
+  </svg>
+  <span class="sr-only">Buscar</span>
+</button>
+
+<div id="site-search" class="fixed inset-0 z-[200] hidden">
+  <div id="site-search-backdrop" class="absolute inset-0 bg-ink/70"></div>
+  <div
+    role="dialog"
+    aria-modal="true"
+    aria-label="Buscar no sitio"
+    class="relative mx-auto mt-[10vh] w-[92%] max-w-xl overflow-hidden rounded-[4px] border border-ink bg-paper shadow-hard md:mt-[14vh]"
+  >
+    <div class="flex items-center gap-3 border-b border-ink px-4 py-3">
+      <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" class="h-5 w-5 shrink-0 text-ink/50">
+        <circle cx="11" cy="11" r="7"></circle>
+        <line x1="21" y1="21" x2="16.1" y2="16.1"></line>
+      </svg>
+      <input
+        id="site-search-input"
+        type="text"
+        autocomplete="off"
+        spellcheck="false"
+        placeholder="Decálogo, Kit, Convocatoria…"
+        class="min-w-0 flex-1 bg-transparent text-lg leading-tight text-ink outline-none placeholder:text-ink/35"
+      />
+      <button id="site-search-close" type="button" class="focus-ring shrink-0 rounded-[4px] border border-ink/25 px-2 py-1 text-[.65rem] font-black uppercase tracking-wider text-ink/50 hover:border-ink hover:text-ink">
+        Esc
+      </button>
+    </div>
+    <div id="site-search-results" role="listbox" aria-label="Resultados da busca" class="max-h-[55vh] divide-y divide-ink/10 overflow-y-auto"></div>
+    <p id="site-search-empty" class="hidden px-4 py-10 text-center text-sm text-ink/45"></p>
+    <div class="hidden items-center gap-4 border-t border-ink/15 px-4 py-2 text-[.65rem] font-bold uppercase tracking-wider text-ink/35 md:flex">
+      <span>↑↓ moverse</span>
+      <span>↵ ir</span>
+      <span>Esc pechar</span>
+    </div>
+  </div>
+</div>
+
+<script>
+  type SearchResult = { title: string; url: string; type: string; summary?: string };
+
+  const button = document.querySelector<HTMLButtonElement>("#site-search-button");
+  const modal = document.querySelector<HTMLElement>("#site-search");
+  const backdrop = document.querySelector<HTMLElement>("#site-search-backdrop");
+  const closeButton = document.querySelector<HTMLButtonElement>("#site-search-close");
+  const input = document.querySelector<HTMLInputElement>("#site-search-input");
+  const resultsEl = document.querySelector<HTMLElement>("#site-search-results");
+  const emptyEl = document.querySelector<HTMLElement>("#site-search-empty");
+
+  if (button && modal && backdrop && closeButton && input && resultsEl && emptyEl) {
+    let index: SearchResult[] | null = null;
+    let indexPromise: Promise<SearchResult[]> | null = null;
+    let activeIndex = -1;
+    let lastFocused: HTMLElement | null = null;
+
+    function cargarIndice(): Promise<SearchResult[]> {
+      if (!indexPromise) {
+        indexPromise = fetch("/buscar-index.json")
+          .then((response) => (response.ok ? response.json() : []))
+          .then((data: SearchResult[]) => (index = data))
+          .catch(() => (index = []));
+      }
+      return indexPromise;
+    }
+
+    function normalizar(texto: string): string {
+      return texto
+        .normalize("NFD")
+        .replace(/[̀-ͯ]/g, "")
+        .toLowerCase()
+        .trim();
+    }
+
+    function escapeRegExp(texto: string): string {
+      return texto.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+    }
+
+    function buscar(items: SearchResult[], consulta: string): SearchResult[] {
+      const tokens = normalizar(consulta).split(/\s+/).filter(Boolean);
+      if (!tokens.length) return [];
+      const puntuados: { item: SearchResult; score: number }[] = [];
+      for (const item of items) {
+        const titulo = normalizar(item.title);
+        const resumo = item.summary ? normalizar(item.summary) : "";
+        let score = 0;
+        let encaixaTodo = true;
+        for (const token of tokens) {
+          const limiteDePalabra = new RegExp(`\\b${escapeRegExp(token)}`);
+          if (titulo.startsWith(token)) score += 50;
+          else if (limiteDePalabra.test(titulo)) score += 35;
+          else if (titulo.includes(token)) score += 20;
+          else if (resumo.includes(token)) score += 8;
+          else {
+            encaixaTodo = false;
+            break;
+          }
+        }
+        if (encaixaTodo) puntuados.push({ item, score });
+      }
+      puntuados.sort((a, b) => b.score - a.score || a.item.title.localeCompare(b.item.title, "gl"));
+      return puntuados.slice(0, 8).map((p) => p.item);
+    }
+
+    function pintarResultados(items: SearchResult[]) {
+      activeIndex = items.length ? 0 : -1;
+      resultsEl!.innerHTML = items
+        .map(
+          (item, i) => `
+            <a
+              href="${item.url}"
+              role="option"
+              aria-selected="${i === activeIndex}"
+              data-index="${i}"
+              class="site-search-result flex flex-col gap-0.5 px-4 py-3 no-underline focus-ring ${i === activeIndex ? "bg-ink/5" : ""}"
+            >
+              <span class="eyebrow text-red">${item.type}</span>
+              <span class="font-extrabold leading-snug text-ink">${item.title}</span>
+              ${item.summary ? `<span class="line-clamp-1 text-xs text-ink/55">${item.summary}</span>` : ""}
+            </a>
+          `,
+        )
+        .join("");
+    }
+
+    function actualizar() {
+      const consulta = input!.value;
+      if (!consulta.trim()) {
+        resultsEl!.innerHTML = "";
+        emptyEl!.classList.remove("hidden");
+        emptyEl!.textContent = "Escribe para buscar en materiais, actualidade, axenda e páxinas.";
+        return;
+      }
+      const items = buscar(index ?? [], consulta);
+      if (!items.length) {
+        resultsEl!.innerHTML = "";
+        emptyEl!.classList.remove("hidden");
+        emptyEl!.textContent = `Sen resultados para "${consulta}".`;
+        return;
+      }
+      emptyEl!.classList.add("hidden");
+      pintarResultados(items);
+    }
+
+    function marcarActivo() {
+      const opcions = resultsEl!.querySelectorAll<HTMLElement>(".site-search-result");
+      opcions.forEach((opcion, i) => {
+        const activo = i === activeIndex;
+        opcion.classList.toggle("bg-ink/5", activo);
+        opcion.setAttribute("aria-selected", String(activo));
+        if (activo) opcion.scrollIntoView({ block: "nearest" });
+      });
+    }
+
+    function abrir() {
+      lastFocused = document.activeElement as HTMLElement | null;
+      modal!.classList.remove("hidden");
+      document.body.classList.add("overflow-hidden");
+      input!.value = "";
+      actualizar();
+      input!.focus();
+      cargarIndice().then(() => {
+        if (input!.value.trim()) actualizar();
+      });
+    }
+
+    function pechar() {
+      modal!.classList.add("hidden");
+      document.body.classList.remove("overflow-hidden");
+      lastFocused?.focus();
+    }
+
+    button.addEventListener("click", abrir);
+    closeButton.addEventListener("click", pechar);
+    backdrop.addEventListener("click", pechar);
+
+    input.addEventListener("input", actualizar);
+
+    input.addEventListener("keydown", (event) => {
+      const opcions = resultsEl!.querySelectorAll<HTMLAnchorElement>(".site-search-result");
+      if (event.key === "ArrowDown") {
+        event.preventDefault();
+        if (opcions.length) activeIndex = (activeIndex + 1) % opcions.length;
+        marcarActivo();
+      } else if (event.key === "ArrowUp") {
+        event.preventDefault();
+        if (opcions.length) activeIndex = (activeIndex - 1 + opcions.length) % opcions.length;
+        marcarActivo();
+      } else if (event.key === "Enter") {
+        event.preventDefault();
+        const activo = opcions[activeIndex] ?? opcions[0];
+        activo?.click();
+      } else if (event.key === "Escape") {
+        pechar();
+      }
+    });
+
+    document.addEventListener("keydown", (event) => {
+      const destino = event.target as HTMLElement | null;
+      const escribindo = destino && ["INPUT", "TEXTAREA"].includes(destino.tagName);
+      const atallo = (event.key === "/" && !escribindo) || ((event.metaKey || event.ctrlKey) && event.key.toLowerCase() === "k");
+      if (atallo) {
+        event.preventDefault();
+        abrir();
+      } else if (event.key === "Escape" && !modal!.classList.contains("hidden")) {
+        pechar();
+      }
+    });
+  }
+</script>

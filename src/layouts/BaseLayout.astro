@@ -1,6 +1,7 @@
 ---
 import "../styles/global.css";
 import SiteNavigation from "../components/SiteNavigation.astro";
+import SiteSearch from "../components/SiteSearch.astro";
 import BrandMark from "../components/BrandMark.astro";
 import { currentYear, site } from "../config/site";
 
@@ -48,9 +49,12 @@ const {
         <nav aria-label="Navegación principal" class="hidden items-center gap-6 text-xs font-bold uppercase tracking-wider xl:flex">
           <SiteNavigation items={site.headerNavigation} />
         </nav>
-        <button id="menu-button" class="focus-ring rounded-[4px] border border-ink px-3 py-2 text-xs font-bold uppercase xl:hidden" aria-expanded="false" aria-controls="mobile-menu">
-          Menú
-        </button>
+        <div class="flex items-center gap-3">
+          <SiteSearch />
+          <button id="menu-button" class="focus-ring rounded-[4px] border border-ink px-3 py-2 text-xs font-bold uppercase xl:hidden" aria-expanded="false" aria-controls="mobile-menu">
+            Menú
+          </button>
+        </div>
       </div>
       <nav id="mobile-menu" class="hidden border-t border-ink/20 px-4 py-4 text-sm font-bold uppercase xl:hidden">
         <div class="grid gap-4">
