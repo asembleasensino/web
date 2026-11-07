@@ -63,18 +63,39 @@ const proximasConvocatorias = (await getConvocatorias())
     </div>
   </section>
 
-  <style>
+  <style is:global>
+    /* is:global: as tarxetas (.actualidade-card) renderízaas ArticleCard.astro
+       e HemerotecaCard.astro, compoñentes á parte, así que o seu propio
+       <style> con scope de Astro NUNCA chegaba a elas (o atributo
+       data-astro-cid-* só se estampa no HTML escrito directamente nesta
+       páxina) -- por iso levaban dende sempre SEN estes estilos aplicados
+       (sen bordo, sen sombra, sen tamaño de título, sen alturas mínimas
+       para igualar a grade). É:global arranxa isto definitivamente. */
     .actualidade-card { display: flex; flex-direction: column; height: 100%; background: color-mix(in srgb, var(--color-ink) 2%, var(--color-paper)); border: 1px solid color-mix(in srgb, var(--color-ink) 15%, transparent); border-radius: 4px; overflow: hidden; transition: transform .18s ease, box-shadow .18s ease, border-color .18s ease; }
     .actualidade-card:hover, .actualidade-card:focus-visible { border-color: var(--color-ink); box-shadow: var(--shadow-hard); transform: translateY(-4px); }
     .actualidade-visual { position: relative; aspect-ratio: 4 / 3; display: flex; align-items: center; justify-content: center; padding: 1.5rem; overflow: hidden; }
     .actualidade-visual img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
     .actualidade-visual-type { font-family: var(--font-display); font-stretch: condensed; text-transform: uppercase; text-align: center; font-weight: 900; letter-spacing: -.01em; line-height: 1.05; font-size: clamp(1.3rem, 2.6vw, 1.85rem); opacity: .55; }
     .actualidade-body { display: flex; flex: 1; flex-direction: column; gap: .65rem; padding: 1.35rem 1.4rem 1.5rem; }
-    .actualidade-title { font-size: 1.2rem; font-weight: 800; line-height: 1.2; letter-spacing: -.01em; }
+    /* Título con máis presenza (pedido explícito): máis grande e máis
+       negro có antes, e con min-height a 2 liñas para que un título
+       curto non faga a tarxeta máis baixa cá veciña -- é isto, non a
+       foto (xa fixa en 4/3 arriba), o que facía que a grade parecese
+       cambiar de tamaño tarxeta a tarxeta. */
+    .actualidade-title { font-size: clamp(1.2rem, 1.05rem + .5vw, 1.5rem); font-weight: 900; line-height: 1.18; letter-spacing: -.015em; min-height: 2.36em; }
     .actualidade-card:hover .actualidade-title { color: var(--color-red); }
-    .actualidade-summary { flex: 1; font-size: .85rem; line-height: 1.5; color: color-mix(in srgb, var(--color-ink) 62%, transparent); }
+    .actualidade-summary { flex: 1; font-size: .85rem; line-height: 1.5; color: color-mix(in srgb, var(--color-ink) 62%, transparent); min-height: 4.5em; }
     .actualidade-date { font-size: .72rem; color: color-mix(in srgb, var(--color-ink) 42%, transparent); }
     .secc-tab[aria-selected="true"] { background: var(--color-ink); color: var(--color-paper); }
+
+    /* Hemeroteca: dateline de xornal (medio en caixa condensada + data en
+       cifras tabulares) arriba do título, en vez do "eyebrow" xenérico, e
+       unha regra fina a separar da imaxe -- para que se note que é un
+       recorte de prensa gardado, non unha nova propia. */
+    .hemeroteca-card .actualidade-body { border-top: 1px solid var(--rule-hair); }
+    .hemeroteca-dateline { display: flex; align-items: baseline; justify-content: space-between; gap: .6rem; }
+    .hemeroteca-medio { font-family: var(--font-display); font-stretch: condensed; font-weight: 800; text-transform: uppercase; letter-spacing: .03em; font-size: .82rem; color: var(--color-ink); }
+    .hemeroteca-date { font-size: .7rem; font-variant-numeric: tabular-nums; letter-spacing: .02em; color: color-mix(in srgb, var(--color-ink) 50%, transparent); white-space: nowrap; }
   </style>
 
   <script>

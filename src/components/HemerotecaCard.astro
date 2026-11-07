@@ -7,7 +7,7 @@ interface Props {
 
 const { item } = Astro.props;
 ---
-<a href={item.url} target="_blank" rel="noopener noreferrer" class="actualidade-card focus-ring block no-underline">
+<a href={item.url} target="_blank" rel="noopener noreferrer" class="actualidade-card hemeroteca-card focus-ring block no-underline">
   <div class="actualidade-visual" style="background:color-mix(in srgb, var(--color-ink) 10%, var(--color-paper))">
     {item.image ? (
       <img src={item.image} alt="" loading="lazy" />
@@ -16,8 +16,10 @@ const { item } = Astro.props;
     )}
   </div>
   <div class="actualidade-body">
-    <span class="eyebrow" style="color:var(--color-ink)">{item.medio}</span>
+    <div class="hemeroteca-dateline">
+      <span class="hemeroteca-medio">{item.medio}</span>
+      <span class="hemeroteca-date">{formatDate(item.date)}</span>
+    </div>
     <h2 class="actualidade-title line-clamp-2">{item.title}</h2>
-    <p class="actualidade-date">{formatDate(item.date)}</p>
   </div>
 </a>
