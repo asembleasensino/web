@@ -19,6 +19,8 @@ Levamos meses recollendo nos centros os mesmos problemas: ratios que non baixan,
 
 Pero nada diso vai chegar só. Por iso, **do 16 ao 20 de novembro** imos facer unha consulta a todo o profesorado para decidir xuntas como nos mobilizamos este curso.
 
+### A votación está dispoñíbel [aquí](https://enquisa.asembleasensino.gal/) ([https://enquisa.asembleasensino.gal/](https://enquisa.asembleasensino.gal/))
+
 ## Que se pregunta?
 
 A consulta ten dúas preguntas sobre as mesmas cinco opcións:
@@ -45,6 +47,6 @@ As opcións son:
 
 Ningunha mobilización funciona sen apoio maioritario. Antes de decidir, queremos saber con quen contamos. Tamén se non pensas mobilizarte: a túa resposta conta igual, porque sen ela non saberiamos as forzas reais.
 
-Publicaremos aquí a ligazón para votar o 16 de novembro e, despois, os resultados.
+Fai click [aquí](https://enquisa.asembleasensino.gal/) para votar o 16 de novembro!
 
 **Nós decidimos o seguinte paso.**
