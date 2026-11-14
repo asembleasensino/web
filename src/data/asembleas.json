@@ -671,6 +671,42 @@
       "nome": "IES Plurilingüe de Valga",
       "concello": "Valga",
       "estado": "activa"
+    },
+    {
+      "codigo": "15006742",
+      "nome": "IES Concepción Arenal",
+      "concello": "Ferrol",
+      "estado": "activa"
+    },
+    {
+      "codigo": "15021834",
+      "nome": "CEIP Ledicia",
+      "concello": "Ferrol",
+      "estado": "activa"
+    },
+    {
+      "codigo": "15032081",
+      "nome": "IES de Fene",
+      "concello": "Fene",
+      "estado": "activa"
+    },
+    {
+      "codigo": "15025301",
+      "nome": "IES Arcebispo Xelmírez II",
+      "concello": "Santiago de Compostela",
+      "estado": "activa"
+    },
+    {
+      "codigo": "15027721",
+      "nome": "IES Plurilingüe de Ames",
+      "concello": "Ames",
+      "estado": "activa"
+    },
+    {
+      "codigo": "36013758",
+      "nome": "IES Laxeiro",
+      "concello": "Lalín",
+      "estado": "activa"
     }
   ]
 }
