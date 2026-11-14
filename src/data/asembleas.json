@@ -671,6 +671,12 @@
       "nome": "IES Plurilingüe de Valga",
       "concello": "Valga",
       "estado": "activa"
+    },
+    {
+      "codigo": "15006742",
+      "nome": "IES Concepción Arenal",
+      "concello": "Ferrol",
+      "estado": "activa"
     }
   ]
 }
