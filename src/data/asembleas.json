@@ -677,6 +677,12 @@
       "nome": "IES Concepción Arenal",
       "concello": "Ferrol",
       "estado": "activa"
+    },
+    {
+      "codigo": "15021834",
+      "nome": "CEIP Ledicia",
+      "concello": "Ferrol",
+      "estado": "activa"
     }
   ]
 }
