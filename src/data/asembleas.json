@@ -701,6 +701,12 @@
       "nome": "IES Plurilingüe de Ames",
       "concello": "Ames",
       "estado": "activa"
+    },
+    {
+      "codigo": "36013758",
+      "nome": "IES Laxeiro",
+      "concello": "Lalín",
+      "estado": "activa"
     }
   ]
 }
