@@ -683,6 +683,12 @@
       "nome": "CEIP Ledicia",
       "concello": "Ferrol",
       "estado": "activa"
+    },
+    {
+      "codigo": "15032081",
+      "nome": "IES de Fene",
+      "concello": "Fene",
+      "estado": "activa"
     }
   ]
 }
