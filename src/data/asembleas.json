@@ -689,6 +689,12 @@
       "nome": "IES de Fene",
       "concello": "Fene",
       "estado": "activa"
+    },
+    {
+      "codigo": "15025301",
+      "nome": "IES Arcebispo Xelmírez II",
+      "concello": "Santiago de Compostela",
+      "estado": "activa"
     }
   ]
 }
