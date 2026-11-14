@@ -695,6 +695,12 @@
       "nome": "IES Arcebispo Xelmírez II",
       "concello": "Santiago de Compostela",
       "estado": "activa"
+    },
+    {
+      "codigo": "15027721",
+      "nome": "IES Plurilingüe de Ames",
+      "concello": "Ames",
+      "estado": "activa"
     }
   ]
 }
