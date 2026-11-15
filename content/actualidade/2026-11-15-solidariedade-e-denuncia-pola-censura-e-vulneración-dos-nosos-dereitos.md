@@ -3,6 +3,7 @@ title: Solidariedade e denuncia pola censura e vulneración dos nosos dereitos
 date: 2026-11-15T13:07:00.000+01:00
 type: Nova
 summary: Solidariedade e denuncia pola censura e vulneración dos nosos dereitos
+image: /uploads/whatsapp-image-2026-11-15-at-12.45.01-1-.jpeg
 featured: false
 convocatoria: false
 tamenEnActualidade: false
@@ -13,7 +14,7 @@ As Asembleas Abertas do Ensino Público queren solidarizarse con varios centros,
 
 No IES Ribeira do Louro (O Porriño), o profesorado recibiu a presión e censura da Inspección. Desde o noso espazo asembleario, facemos público un [**comunicado en solidariedade coas nosas compañeiras e denunciando o sucedido**](https://drive.google.com/file/d/1m9cTlCg3kCZ_X5E5R0gQ7nMzWlfs3Q09/view?usp=sharing). Podedes consultar tamén a **[testemuña](https://asembleasensino.gal/actualidade/2026-11-14-o-profesorado-do-ies-ribeira-do-louro-chama-%C3%A1-unidade-e-ao-di%C3%A1logo-na-defensa-do-ensino-p%C3%BAblico/) da propia asemblea do IES Ribeira do Louro** que xa foi publicada na nosa web, e que está a recibir o apoio de moitos centros galegos, como o IES de Mos.
 
-![Foto Mos](https://drive.google.com/file/d/1SDVh2ja_JMYx-rvAw7LpttUsl_HjjjjG/view?usp=drive_link)
+![Foto Mos](https://drive.google.com/uc?export=view&id=1SDVh2ja_JMYx-rvAw7LpttUsl_HjjjjG)
 
 Respecto ao emprego de Abalar, un compañeiro da asemblea territorial de Compostela, contactou coa Inspección Educativa para obter explicacións do sucedido no IES Ribeira do Louro e para coñecer cales son os nosos dereitos no uso de dita plataforma. A resposta reafirma que os apercibimentos recibidos non son xustificados. Podedes [**consultar a información neste documento**](https://drive.google.com/file/d/1q1Fa_G7F8Vq6hhfsN8YF8epZL9A6WbLS/view).
 
