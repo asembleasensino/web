@@ -1,7 +1,7 @@
 ---
 title: "Nós decidimos o seguinte paso: consulta ao profesorado do 16 ao 20 de
   novembro"
-date: 2026-11-05T20:00:00.000+01:00
+date: 2026-11-16T17:59:00.000+01:00
 type: Convocatoria
 summary: Pero nada diso vai chegar só. Por iso, do 16 ao 20 de novembro imos
   facer unha consulta a todo o profesorado para decidir xuntas como mobilizarnos
@@ -15,9 +15,15 @@ eventDateEnd: 2026-11-20T23:55:00.000+01:00
 territorio: Nacional
 draft: false
 ---
+### A votación está dispoñíbel en [enquisa.asembleasensino.gal](https://enquisa.asembleasensino.gal/helios/elections/3c1ff05d-8b3a-4c23-8f60-f0cc421f4c5e/view)
+
 Levamos meses recollendo nos centros os mesmos problemas: ratios que non baixan, persoal que non chega, burocracia que nos come o tempo, centros sen manter e alumnado sen os profesionais que precisa. Con todo iso elaboramos o decálogo das Asembleas Abertas do Ensino Público, que podes consultar en [DECÁLOGO](https://asembleasensino.gal/materiais/decalogo-10-medidas-ensino-publico/).
 
 Pero nada diso vai chegar só. Por iso, **do 16 ao 20 de novembro** imos facer unha consulta a todo o profesorado para decidir xuntas como nos mobilizamos este curso.
+
+
+> ### Descarga os materiais de información e axitación para os centros [AQUÍ](https://drive.google.com/drive/folders/1uuoX6UU7sVIr5u4-Kun5jqOrrGWAdqKQ?usp=drive_link).
+
 
 ## Que se pregunta?
 
@@ -45,6 +51,6 @@ As opcións son:
 
 Ningunha mobilización funciona sen apoio maioritario. Antes de decidir, queremos saber con quen contamos. Tamén se non pensas mobilizarte: a túa resposta conta igual, porque sen ela non saberiamos as forzas reais.
 
-Publicaremos aquí a ligazón para votar o 16 de novembro e, despois, os resultados.
+Fai click [aquí](https://enquisa.asembleasensino.gal/) para votar o 16 de novembro!
 
 **Nós decidimos o seguinte paso.**
