@@ -6,30 +6,202 @@ import { site } from "../../config/site";
 const title = `Decálogo · 10 medidas para mellorar o ensino público · Materiais · ${site.shortName}`;
 const description = "As dez medidas que reivindican as Asembleas Abertas do Ensino Público para mellorar o ensino público.";
 
-const medidas = [
-  "Persoal docente suficiente e horarios que recollan o tempo de coordinación e xestión.",
-  "Incorporación de novos perfís profesionais necesarios nos centros educativos.",
-  "Mellora das condicións laborais e dignificación da profesión docente.",
-  "Infraestruturas dignas e mantemento preventivo.",
-  "Servizos de benestar do alumnado.",
-  "Ratios dignas e inclusión real.",
-  "FP digna e itinerarios formativos de calidade.",
-  "Gratuidade real e igualdade de oportunidades.",
-  "Autonomía pedagóxica e redución da burocracia.",
-  "Compromisos verificables da administración.",
+// Contido completo do documento "O ensino que o alumnado galego merece: 10
+// medidas para mellorar o ensino público" (novembro de 2026). Para
+// actualizar calquera texto, só hai que editar este array -- as tarxetas,
+// a xanela emerxente de cada medida e a orde de "anterior/seguinte" sáense
+// automaticamente del.
+type Medida = { numero: number; titulo: string; puntos: string[] };
+type Categoria = { eyebrow: string; titulo: string; accent: "red" | "green"; medidas: Medida[] };
+
+const CATEGORIAS: Categoria[] = [
+  {
+    eyebrow: "Recursos humanos",
+    titulo: "Persoas que sosteñen a escola",
+    accent: "red",
+    medidas: [
+      {
+        numero: 1,
+        titulo: "Máis persoal, máis apoios",
+        puntos: [
+          "Dotar de profesorado os centros para que teñan a capacidade lectiva previa á redución e recuperación horaria.",
+          "Aumentar o profesorado de PT e AL en base ás necesidades do alumnado e non polo número de unidades.",
+          "Establecer unha ratio de orientación que garanta unha atención efectiva ao alumnado, que pode ser 1 persoa por cada 250 estudantes seguindo a recomendación da UNESCO, así como recoñecemento institucional.",
+          "Cubrir as baixas de todas as especialidades, reducindo o período mínimo de baixa para que se envíe persoal substituto desde unha semana e iniciando accións que permitan aumentar docentes nas listas que o precisen.",
+          "Dotar con docentes de apoio as aulas que o precisen, sobre todo nos centros de contornas con vulnerabilidade.",
+          "Implantar un catálogo de postos docentes de mínimos, non máximos, e ampliables segundo demanda do centro.",
+          "Mellorar as condicións dos equipos directivos: maior redución horaria, 2ª xefatura de estudos segundo ratio etc.",
+        ],
+      },
+      {
+        numero: 2,
+        titulo: "Novos perfís profesionais",
+        puntos: [
+          "Dotar todos os centros, como mínimo e ampliable segundo a ratio, dunha persoa psicopedagoga e dunha educadora social.",
+          "Contar con persoal e recursos sanitarios mínimos para atender tanto situacións cotiás como as do Programa Alerta Escolar.",
+          "Garantir a coordinación profesional estreita e real entre os centros educativos e os servizos de saúde mental ante risco suicida, TCA e trastornos graves de conduta.",
+          "Contratar persoal non docente para a realización de tarefas que non corresponden ao profesorado, como o mantemento informático, xestión e gardas de comedor, gardas de transporte escolar, tarefas administrativas etc.",
+        ],
+      },
+    ],
+  },
+  {
+    eyebrow: "Modelo educativo",
+    titulo: "Aprender con igualdade",
+    accent: "green",
+    medidas: [
+      {
+        numero: 3,
+        titulo: "Ratios dignas e inclusión real",
+        puntos: [
+          "Baixar as ratios en todas as etapas desde o curso 2027-28 do seguinte xeito (por aula): 13 en infantil, 15 en primaria e FPB, 20 na ESO e FP e 23 en bach. O alumnado repetidor contabilice 1 e en caso de NEAE conte o dobre.",
+          "Redución de ratios en laboratorios e aulas-taller.",
+          "Dotar de persoal de atención á diversidade en todas as etapas educativas (profesorado especialista, PT, AL, intérpretes de lingua de signos, persoal coidador etc.) atendendo as necesidades do centro e non só a ratio.",
+          "Implantar un catálogo de postos docentes de mínimos, non de máximos, e ampliables segundo demanda do centro.",
+          "Recuperar e ampliar as prazas de atención preferente.",
+          "Implantar medidas e recursos estruturais para a inclusión e con estabilidade económica, non dependentes de programas extraordinarios ou plans financiados por Europa.",
+          "Aumentar o profesorado acompañante nas actividades complementarias e extraescolares, e garantir a súa cobertura legal.",
+          "Garantir persoal especialista, polo menos por ámbitos, nas aulas hospitalarias.",
+          "Deseñar programas de integración real para o alumnado que se incorpora de xeito tardío ao noso sistema educativo.",
+        ],
+      },
+      {
+        numero: 4,
+        titulo: "Gratuidade, igualdade, lingua e público",
+        puntos: [
+          "Gratuidade real do ensino, incluíndo na gratuidade dos libros os materiais específicos das materias.",
+          "Desenvolver programas de acompañamento ás familias con maior vulnerabilidade con financiamento estable e cobertura real, garantindo o acceso universal ao ensino, a equidade e a igualdade de oportunidades.",
+          "Revisar os límites superiores das axudas para adaptalos á realidade económica actual.",
+          "Eliminar o financiamento público a entidades privadas para a obtención de certificacións de idiomas.",
+          "Aumentar o número de horas que se imparten en lingua galega nas diferentes materias.",
+          "Aplicar políticas lingüísticas reais e efectivas en favor do mantemento e recuperación de falantes da nosa lingua.",
+        ],
+      },
+    ],
+  },
+  {
+    eyebrow: "Organización e xestión",
+    titulo: "Tempo para ensinar",
+    accent: "red",
+    medidas: [
+      {
+        numero: 5,
+        titulo: "Condicións laborais dignas",
+        puntos: [
+          "Recuperar o cobro do verán para o persoal substituto.",
+          "Eliminar o abuso da temporalidade de longa duración.",
+          "Asignar ás persoas titoras unha maior redución lectiva.",
+          "Dotar ás coordinacións de redución de horas lectivas.",
+          "Recoñecer toda a participación en plans, programas e proxectos con redución horaria para o profesorado.",
+          "Estender a xubilación aos 60 anos ao persoal do réxime xeral.",
+          "Reducir a carga lectiva a partir dos 55 anos.",
+          "Crear o corpo único docente (mesmas funcións, mesmo salario e mesmo horario).",
+          "Recuperación do poder adquisitivo, implantar subas acordes ao IPC e ligar o salario ás subas do IPC.",
+          "Aumentar o complemento salarial para equipos directivos e coordinacións en todas as etapas e centros educativos.",
+          "Favorecer a formación docente aumentando a oferta horaria e os permisos e licenzas.",
+          "Solicitar asesoramento e protección para o profesorado implicado en protocolos.",
+        ],
+      },
+      {
+        numero: 6,
+        titulo: "FP digna e con futuro",
+        puntos: [
+          "Investir nunha FP básica como itinerario educativo real para o alumnado e cos recursos que se precisen.",
+          "Aumentar as prazas presenciais de FP en todos os seus niveis, para que sexan acordes coa demanda do alumnado, evitando que teñan que optar pola privada ou deixar os estudos por falta de oferta.",
+          "Garantir a oferta de itinerarios de cada familia profesional atendendo a cuestión xeográfica.",
+          "Actualizar os currículos obsoletos e ampliar os itinerarios formativos.",
+          "Aumentar a colaboración da administración cos centros na procura de empresas para as prácticas dos ciclos de FP.",
+          "Garantir que as empresas impartan os contidos necesarios para acadar os RA.",
+          "Elección democrática das direccións en CIFP.",
+          "Igualar a duracións das sesións dos CIFPs aos IES.",
+        ],
+      },
+      {
+        numero: 7,
+        titulo: "Máis autonomía e menos burocracia",
+        puntos: [
+          "Rebaixar de forma real e efectiva a burocracia nos centros, eliminando toda a documentación cuxo único propósito é a fiscalización. Aumentar a autonomía pedagóxica e posta en valor do labor docente.",
+          "Garantir que as materias sexan impartidas por profesorado especialista e sen posibilidade de impartir materias afíns.",
+          "Garantir tempo para a coordinación docente e sociopedagóxica que permita unha mellor atención educativa e desenvolver proxectos de centro con capacidade de decisión e autonomía, coa dotación axeitada de persoal docente e non docente.",
+        ],
+      },
+    ],
+  },
+  {
+    eyebrow: "Infraestruturas e servizos",
+    titulo: "Centros abertos a todas as persoas",
+    accent: "green",
+    medidas: [
+      {
+        numero: 8,
+        titulo: "Centros dignos e seguros",
+        puntos: [
+          "Cumprir a lexislación sobre condicións mínimas sanitarias (contaminación, gases e radiación), de benestar no traballo (temperatura, humidade, ruídos e luminosidade) e de espazos mínimos por alumnado.",
+          "Actuar de inmediato nos centros con pragas, axentes contaminantes…",
+          "Investir en rehabilitación, ampliación e modernización dos centros educativos.",
+          "Desenvolver plans de mantemento preventivo, non só actuacións de emerxencia.",
+          "Eliminar as barreiras arquitectónicas nos centros para toda a comunidade educativa.",
+          "Programar revisións periódicas de cubertas, chans, fontanería, calefacción, electricidade e baños por parte de entidades competentes e xestionadas pola unidade técnica.",
+          "Dotar os centros de equipos de protección individual para todo o alumnado.",
+          "Mellorar os espazos exteriores e de lecer nos centros educativos.",
+        ],
+      },
+      {
+        numero: 9,
+        titulo: "Servizos para todo o alumnado",
+        puntos: [
+          "Dignificar o traballo do persoal non docente e cubrir as baixas de xeito inmediato.",
+          "Xestionar os servizos de conciliación con persoal específico (non depender das AFAS e ANPAS, nin de persoal docente nin non docente), incluído o servizo de comedor.",
+          "Implantar o transporte escolar en todas as etapas educativas, tamén en Bacharelato e Ciclos Formativos.",
+          "Reforzar o transporte escolar especialmente no rural ou nas zonas semiurbanas.",
+          "Planificar liñas de transporte adaptadas aos horarios dos centros, sen excluír ao alumnado do rural ou ofrecer alternativas ao alumnado que se vexa obrigado a quedar no centro por unha cuestión de tempos.",
+          "Servizos de balde para todo o alumnado, como o comedor e o transporte.",
+        ],
+      },
+      {
+        numero: 10,
+        titulo: "Compromisos, transparencia e orzamentos",
+        puntos: [
+          "Dotar os centros de financiamento estrutural, sen depender de participación en plans, proxectos ou programas.",
+          "Incrementar o investimento efectivo por parte da Xunta de Galicia no ensino público co obxectivo de garantir a calidade educativa.",
+          "Implantar medidas para a rendición de contas por parte da administración e así garantir o cumprimento dos seus compromisos.",
+          "Informar con transparencia sobre os criterios de asignación de financiamento e recursos.",
+          "Establecer un portal público que recolla con transparencia os compromisos da Consellería cos centros públicos.",
+          "Apostar polo ensino público e gratuíto como piar fundamental para garantir a igualdade de oportunidades.",
+        ],
+      },
+    ],
+  },
 ];
+
+// Lista plana (na orde 1-10) para a xanela emerxente das medidas: así o
+// "anterior/seguinte" pode saltar dunha categoría a outra sen complicarse.
+const MEDIDAS_FLAT = CATEGORIAS.flatMap((categoria) =>
+  categoria.medidas.map((medida) => ({
+    categoria: categoria.eyebrow,
+    accent: categoria.accent,
+    ...medida,
+  })),
+);
+
+// As 7 páxinas do documento orixinal, xa convertidas a imaxe para a
+// galería/preview. O PDF completo está en /uploads/decalogo-10-medidas-ensino-publico.pdf.
+const PAXINAS_DOCUMENTO = Array.from({ length: 7 }, (_, i) => ({
+  src: `/uploads/decalogo/pagina-${i + 1}.webp`,
+  alt: `Páxina ${i + 1} de 7 do documento "10 medidas para mellorar o ensino público"`,
+}));
 ---
 
 <BaseLayout title={title} description={description}>
-  <article>
+  <article class="decalogo">
     <header class="mx-auto grid max-w-[1500px] gap-10 px-4 pb-16 pt-16 md:px-8 md:pb-24 md:pt-24 lg:grid-cols-12">
       <div class="lg:col-span-3">
-        <span class="eyebrow text-green">Infografía</span>
-        <p class="mt-4 text-sm text-ink/50">9 de outubro de 2026</p>
+        <span class="eyebrow text-green">Documento</span>
+        <p class="mt-4 text-sm text-ink/50">Novembro de 2026</p>
         <a
           href="/uploads/decalogo-10-medidas-ensino-publico.pdf"
           download="decalogo-10-medidas-ensino-publico.pdf"
-          class="mt-6 inline-flex items-center gap-1.5 text-xs font-bold text-ink/55 underline decoration-ink/25 underline-offset-4 hover:text-red hover:decoration-red"
+          class="focus-ring mt-6 inline-flex items-center gap-1.5 text-xs font-bold text-ink/55 underline decoration-ink/25 underline-offset-4 hover:text-red hover:decoration-red"
         >
           Descargar en PDF <ArrowIcon direction="up-right" />
         </a>
@@ -39,24 +211,317 @@ const medidas = [
           <span class="text-red">10</span> medidas para mellorar o ensino público
         </h1>
         <p class="mt-8 max-w-3xl text-xl leading-relaxed text-ink/65">{description}</p>
+        <p class="mt-4 max-w-3xl text-sm text-ink/50">Toca cada medida para ver en detalle o que pedimos.</p>
       </div>
     </header>
 
     <section class="border-t border-ink/20">
       <div class="mx-auto max-w-[1500px] px-4 py-16 md:px-8 md:py-20">
-        <ol class="grid border-b border-ink/20 sm:grid-cols-2">
-          {medidas.map((medida, index) => (
-            <li class="border-t border-ink/20 py-8 pr-6 sm:border-l sm:pl-8 sm:[&:nth-child(2n+1)]:border-l-0 sm:[&:nth-child(2n+1)]:pl-0">
-              <span class="display type-step-number text-red/35">{String(index + 1).padStart(2, "0")}</span>
-              <p class="type-card-title mt-3 max-w-md font-extrabold leading-tight">{medida}</p>
-            </li>
+        {CATEGORIAS.map((categoria, categoriaIndex) => (
+          <div class:list={["categoria", categoriaIndex > 0 && "mt-14"]} style={`--accent: var(--color-${categoria.accent})`}>
+            <span class="eyebrow" style="color:var(--accent)">{categoria.eyebrow}</span>
+            <h2 class="categoria-titulo display mt-3 max-w-2xl font-extrabold leading-[.95]">{categoria.titulo}</h2>
+            <div class:list={["mt-6 grid gap-4", categoria.medidas.length > 1 ? "sm:grid-cols-2" : ""]}>
+              {categoria.medidas.map((medida) => (
+                <button
+                  type="button"
+                  class="medida-card focus-ring"
+                  data-medida-indice={medida.numero - 1}
+                  aria-haspopup="dialog"
+                >
+                  <span class="medida-numero display">{String(medida.numero).padStart(2, "0")}</span>
+                  <span class="medida-titulo">{medida.titulo}</span>
+                  <span class="medida-ver" aria-hidden="true">Ver medida +</span>
+                </button>
+              ))}
+            </div>
+          </div>
+        ))}
+      </div>
+    </section>
+
+    <section class="border-t border-ink/20 bg-ink/[.025]">
+      <div class="mx-auto max-w-[1500px] px-4 py-16 md:px-8 md:py-20">
+        <div class="flex flex-wrap items-end justify-between gap-4">
+          <div>
+            <span class="eyebrow text-red">Documento completo</span>
+            <h2 class="display type-list-title-lg mt-3 max-w-xl">Le o decálogo enteiro</h2>
+          </div>
+          <a
+            href="/uploads/decalogo-10-medidas-ensino-publico.pdf"
+            download="decalogo-10-medidas-ensino-publico.pdf"
+            class="focus-ring inline-flex items-center gap-1.5 rounded-[4px] border border-ink px-4 py-2 text-xs font-black uppercase tracking-wider hover:bg-ink hover:text-paper"
+          >
+            Descargar en PDF <ArrowIcon direction="up-right" />
+          </a>
+        </div>
+        <div class="galeria-scroll mt-8 flex gap-4 overflow-x-auto pb-4">
+          {PAXINAS_DOCUMENTO.map((paxina, indice) => (
+            <button type="button" class="galeria-miniatura focus-ring shrink-0" data-galeria-indice={indice} aria-haspopup="dialog">
+              <img src={paxina.src} alt={paxina.alt} loading="lazy" />
+              <span class="galeria-numero">{indice + 1}</span>
+            </button>
           ))}
-        </ol>
+        </div>
       </div>
     </section>
 
     <div class="mx-auto max-w-[1500px] px-4 py-16 md:px-8 md:py-24">
-      <a href="/materiais/" class="text-xs font-black uppercase tracking-wider underline decoration-green decoration-2 underline-offset-4">← Materiais</a>
+      <a href="/materiais/" class="focus-ring text-xs font-black uppercase tracking-wider underline decoration-green decoration-2 underline-offset-4">← Materiais</a>
     </div>
   </article>
+
+  <!-- Xanela emerxente dunha medida -->
+  <div id="medida-lightbox" class="lightbox fixed inset-0 z-[150] hidden">
+    <div class="lightbox-backdrop absolute inset-0 bg-ink/80" data-lightbox-close></div>
+    <div class="relative mx-auto flex h-full max-w-2xl items-center p-4">
+      <div role="dialog" aria-modal="true" aria-label="Detalle da medida" class="max-h-[85vh] w-full overflow-y-auto rounded-[4px] border border-ink bg-paper shadow-hard">
+        <div class="flex items-start justify-between gap-4 border-b border-ink/15 px-6 py-5">
+          <div>
+            <span id="medida-lightbox-categoria" class="eyebrow text-red"></span>
+            <h3 id="medida-lightbox-titulo" class="type-card-title mt-2 max-w-md font-extrabold leading-tight"></h3>
+          </div>
+          <button type="button" class="focus-ring shrink-0 rounded-[4px] p-1 text-ink/50 hover:text-ink" data-lightbox-close aria-label="Pechar">
+            <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" class="h-6 w-6">
+              <line x1="5" y1="5" x2="19" y2="19"></line>
+              <line x1="19" y1="5" x2="5" y2="19"></line>
+            </svg>
+          </button>
+        </div>
+        <ul id="medida-lightbox-puntos" class="space-y-3 px-6 py-6 text-sm leading-relaxed text-ink/75"></ul>
+        <div class="flex items-center justify-between gap-4 border-t border-ink/15 px-6 py-4">
+          <button type="button" id="medida-lightbox-anterior" class="focus-ring text-xs font-black uppercase tracking-wider text-ink/60 hover:text-ink">← Anterior</button>
+          <span id="medida-lightbox-contador" class="text-xs font-bold text-ink/40"></span>
+          <button type="button" id="medida-lightbox-seguinte" class="focus-ring text-xs font-black uppercase tracking-wider text-ink/60 hover:text-ink">Seguinte →</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script type="application/json" id="decalogo-data" is:inline set:html={JSON.stringify(MEDIDAS_FLAT).replace(/</g, "\\u003c")} />
+
+  <!-- Xanela emerxente da galería de páxinas -->
+  <div id="galeria-lightbox" class="lightbox fixed inset-0 z-[150] hidden">
+    <div class="lightbox-backdrop absolute inset-0 bg-ink/90" data-lightbox-close></div>
+    <div class="relative flex h-full flex-col items-center justify-center gap-4 p-4">
+      <button type="button" class="focus-ring absolute right-4 top-4 rounded-[4px] p-2 text-paper/80 hover:text-paper" data-lightbox-close aria-label="Pechar">
+        <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" class="h-7 w-7">
+          <line x1="5" y1="5" x2="19" y2="19"></line>
+          <line x1="19" y1="5" x2="5" y2="19"></line>
+        </svg>
+      </button>
+      <div class="flex max-h-[80vh] w-full max-w-3xl items-center justify-center gap-3">
+        <button type="button" id="galeria-lightbox-anterior" class="focus-ring shrink-0 rounded-[4px] p-2 text-paper/70 hover:text-paper" aria-label="Páxina anterior">
+          <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="h-8 w-8 rotate-180"><line x1="4" y1="12" x2="20" y2="12"></line><polyline points="14 6 20 12 14 18"></polyline></svg>
+        </button>
+        <img id="galeria-lightbox-imaxe" src="" alt="" class="max-h-[80vh] w-auto max-w-full rounded-[4px] border border-paper/20 shadow-hard" />
+        <button type="button" id="galeria-lightbox-seguinte" class="focus-ring shrink-0 rounded-[4px] p-2 text-paper/70 hover:text-paper" aria-label="Páxina seguinte">
+          <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="h-8 w-8"><line x1="4" y1="12" x2="20" y2="12"></line><polyline points="14 6 20 12 14 18"></polyline></svg>
+        </button>
+      </div>
+      <p id="galeria-lightbox-contador" class="text-xs font-bold uppercase tracking-wider text-paper/60"></p>
+    </div>
+  </div>
+
+  <style>
+    .categoria-titulo { font-size: clamp(1.6rem, 1.2rem + 1.6vw, 2.4rem); }
+
+    .medida-card {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      border: 1px solid color-mix(in srgb, var(--color-ink) 20%, transparent);
+      background: var(--color-paper);
+      padding: 1.1rem 1.3rem;
+      text-align: left;
+      cursor: pointer;
+      transition: transform .15s ease, box-shadow .15s ease, border-color .15s ease;
+    }
+    .medida-card:hover, .medida-card:focus-visible {
+      border-color: var(--color-ink);
+      box-shadow: var(--shadow-hard-sm);
+      transform: translateY(-2px);
+    }
+    .medida-numero { font-size: 1.5rem; font-weight: 900; color: var(--accent); flex-shrink: 0; }
+    .medida-titulo { flex: 1; font-weight: 800; line-height: 1.25; }
+    .medida-ver {
+      flex-shrink: 0;
+      font-size: .65rem;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: .06em;
+      color: color-mix(in srgb, var(--color-ink) 40%, transparent);
+      white-space: nowrap;
+    }
+    .medida-card:hover .medida-ver, .medida-card:focus-visible .medida-ver { color: var(--accent); }
+
+    .galeria-scroll { scrollbar-width: thin; }
+    .galeria-miniatura {
+      position: relative;
+      width: 150px;
+      border: 1px solid color-mix(in srgb, var(--color-ink) 20%, transparent);
+      background: var(--color-paper);
+      padding: .4rem;
+      cursor: pointer;
+      transition: transform .15s ease, box-shadow .15s ease, border-color .15s ease;
+    }
+    .galeria-miniatura:hover, .galeria-miniatura:focus-visible {
+      border-color: var(--color-ink);
+      box-shadow: var(--shadow-hard-sm);
+      transform: translateY(-2px);
+    }
+    .galeria-miniatura img { display: block; width: 100%; aspect-ratio: 4 / 5; object-fit: cover; }
+    .galeria-numero {
+      position: absolute;
+      bottom: .6rem;
+      right: .6rem;
+      background: var(--color-ink);
+      color: var(--color-paper);
+      font-size: .65rem;
+      font-weight: 800;
+      padding: .1rem .4rem;
+      border-radius: 3px;
+    }
+
+    #medida-lightbox-puntos li { position: relative; padding-left: 1.1rem; }
+    #medida-lightbox-puntos li::before {
+      content: "";
+      position: absolute;
+      left: 0;
+      top: .55em;
+      width: .4rem;
+      height: .4rem;
+      background: var(--color-red);
+      border-radius: 1px;
+    }
+  </style>
+
+  <script>
+    type MedidaFlat = { categoria: string; accent: "red" | "green"; numero: number; titulo: string; puntos: string[] };
+
+    const dataEl = document.querySelector<HTMLScriptElement>("#decalogo-data");
+    const MEDIDAS: MedidaFlat[] = dataEl ? JSON.parse(dataEl.textContent || "[]") : [];
+
+    // --- Xanela das medidas -------------------------------------------------
+    const medidaLightbox = document.querySelector<HTMLElement>("#medida-lightbox");
+    const medidaCategoria = document.querySelector<HTMLElement>("#medida-lightbox-categoria");
+    const medidaTitulo = document.querySelector<HTMLElement>("#medida-lightbox-titulo");
+    const medidaPuntos = document.querySelector<HTMLElement>("#medida-lightbox-puntos");
+    const medidaContador = document.querySelector<HTMLElement>("#medida-lightbox-contador");
+    const medidaAnterior = document.querySelector<HTMLButtonElement>("#medida-lightbox-anterior");
+    const medidaSeguinte = document.querySelector<HTMLButtonElement>("#medida-lightbox-seguinte");
+
+    let medidaActual = 0;
+    let ultimoFoco: HTMLElement | null = null;
+
+    function pintarMedida(indice: number) {
+      const medida = MEDIDAS[indice];
+      if (!medida || !medidaCategoria || !medidaTitulo || !medidaPuntos || !medidaContador) return;
+      medidaCategoria.textContent = medida.categoria;
+      medidaCategoria.style.color = `var(--color-${medida.accent})`;
+      medidaTitulo.textContent = `${String(medida.numero).padStart(2, "0")} · ${medida.titulo}`;
+      medidaPuntos.innerHTML = medida.puntos.map((punto) => `<li>${punto}</li>`).join("");
+      medidaContador.textContent = `${medida.numero} / ${MEDIDAS.length}`;
+    }
+
+    function abrirMedida(indice: number, disparador: HTMLElement | null) {
+      if (!medidaLightbox) return;
+      medidaActual = indice;
+      ultimoFoco = disparador;
+      pintarMedida(medidaActual);
+      medidaLightbox.classList.remove("hidden");
+      document.body.classList.add("overflow-hidden");
+    }
+
+    function pecharMedida() {
+      if (!medidaLightbox) return;
+      medidaLightbox.classList.add("hidden");
+      document.body.classList.remove("overflow-hidden");
+      ultimoFoco?.focus();
+    }
+
+    document.querySelectorAll<HTMLButtonElement>("[data-medida-indice]").forEach((boton) => {
+      boton.addEventListener("click", () => abrirMedida(Number(boton.dataset.medidaIndice), boton));
+    });
+
+    medidaAnterior?.addEventListener("click", () => {
+      medidaActual = (medidaActual - 1 + MEDIDAS.length) % MEDIDAS.length;
+      pintarMedida(medidaActual);
+    });
+    medidaSeguinte?.addEventListener("click", () => {
+      medidaActual = (medidaActual + 1) % MEDIDAS.length;
+      pintarMedida(medidaActual);
+    });
+
+    medidaLightbox?.querySelectorAll<HTMLElement>("[data-lightbox-close]").forEach((el) => el.addEventListener("click", pecharMedida));
+
+    // --- Xanela da galería de páxinas ---------------------------------------
+    const galeriaLightbox = document.querySelector<HTMLElement>("#galeria-lightbox");
+    const galeriaImaxe = document.querySelector<HTMLImageElement>("#galeria-lightbox-imaxe");
+    const galeriaContador = document.querySelector<HTMLElement>("#galeria-lightbox-contador");
+    const galeriaAnterior = document.querySelector<HTMLButtonElement>("#galeria-lightbox-anterior");
+    const galeriaSeguinte = document.querySelector<HTMLButtonElement>("#galeria-lightbox-seguinte");
+    const miniaturas = document.querySelectorAll<HTMLButtonElement>("[data-galeria-indice]");
+
+    let galeriaActual = 0;
+    let ultimoFocoGaleria: HTMLElement | null = null;
+
+    function pintarGaleria(indice: number) {
+      const miniatura = miniaturas[indice];
+      const img = miniatura?.querySelector("img");
+      if (!img || !galeriaImaxe || !galeriaContador) return;
+      galeriaImaxe.src = img.src;
+      galeriaImaxe.alt = img.alt;
+      galeriaContador.textContent = `Páxina ${indice + 1} / ${miniaturas.length}`;
+    }
+
+    function abrirGaleria(indice: number, disparador: HTMLElement | null) {
+      if (!galeriaLightbox) return;
+      galeriaActual = indice;
+      ultimoFocoGaleria = disparador;
+      pintarGaleria(galeriaActual);
+      galeriaLightbox.classList.remove("hidden");
+      document.body.classList.add("overflow-hidden");
+    }
+
+    function pecharGaleria() {
+      if (!galeriaLightbox) return;
+      galeriaLightbox.classList.add("hidden");
+      document.body.classList.remove("overflow-hidden");
+      ultimoFocoGaleria?.focus();
+    }
+
+    miniaturas.forEach((boton) => {
+      boton.addEventListener("click", () => abrirGaleria(Number(boton.dataset.galeriaIndice), boton));
+    });
+
+    galeriaAnterior?.addEventListener("click", () => {
+      galeriaActual = (galeriaActual - 1 + miniaturas.length) % miniaturas.length;
+      pintarGaleria(galeriaActual);
+    });
+    galeriaSeguinte?.addEventListener("click", () => {
+      galeriaActual = (galeriaActual + 1) % miniaturas.length;
+      pintarGaleria(galeriaActual);
+    });
+
+    galeriaLightbox?.querySelectorAll<HTMLElement>("[data-lightbox-close]").forEach((el) => el.addEventListener("click", pecharGaleria));
+
+    // --- Teclado (común ás dúas xanelas) ------------------------------------
+    document.addEventListener("keydown", (event) => {
+      const medidaAberta = medidaLightbox && !medidaLightbox.classList.contains("hidden");
+      const galeriaAberta = galeriaLightbox && !galeriaLightbox.classList.contains("hidden");
+      if (!medidaAberta && !galeriaAberta) return;
+
+      if (event.key === "Escape") {
+        if (medidaAberta) pecharMedida();
+        if (galeriaAberta) pecharGaleria();
+      } else if (event.key === "ArrowLeft") {
+        if (medidaAberta) medidaAnterior?.click();
+        if (galeriaAberta) galeriaAnterior?.click();
+      } else if (event.key === "ArrowRight") {
+        if (medidaAberta) medidaSeguinte?.click();
+        if (galeriaAberta) galeriaSeguinte?.click();
+      }
+    });
+  </script>
 </BaseLayout>
