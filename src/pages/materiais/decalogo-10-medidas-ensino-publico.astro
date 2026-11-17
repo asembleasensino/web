@@ -419,7 +419,7 @@ const PAXINAS_DOCUMENTO = Array.from({ length: 7 }, (_, i) => ({
       if (!medida || !medidaCategoria || !medidaTitulo || !medidaPuntos || !medidaContador) return;
       medidaCategoria.textContent = medida.categoria;
       medidaCategoria.style.color = `var(--color-${medida.accent})`;
-      medidaTitulo.textContent = `${String(medida.numero).padStart(2, "0")} · ${medida.titulo}`;
+      medidaTitulo.textContent = `${String(medida.numero).padStart(2, "0")} \\ ${medida.titulo}`;
       medidaPuntos.innerHTML = medida.puntos.map((punto) => `<li>${punto}</li>`).join("");
       medidaContador.textContent = `${medida.numero} / ${MEDIDAS.length}`;
     }
