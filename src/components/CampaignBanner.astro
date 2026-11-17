@@ -1,0 +1,80 @@
+---
+// Aviso flotante en toda a web, coma un banner de cookies, pero para
+// avisar dunha votación/convocatoria con prazo. Desaparece soa despois
+// da data límite (comprobación en JS no navegador, non depende de que se
+// volva despregar a web despois dese día) e, se alguén a pecha coa X, non
+// molesta máis NESA visita (sessionStorage) pero volve aparecer noutra
+// visita posterior, até que pase o prazo.
+//
+// Para reutilizar isto noutra convocatoria/campaña no futuro, só hai que
+// cambiar as catro constantes de aquí embaixo (ou poñer PRAZO nunha data
+// xa pasada / eliminar <CampaignBanner /> de BaseLayout.astro para
+// quitalo sen máis).
+const PRAZO = "2026-11-20T23:59:00+01:00"; // venres 20 de novembro, 23:59 (hora de Galiza)
+const TEXTO = "A consulta ao profesorado sobre o seguinte paso está aberta até o venres 20 de novembro ás 23:59.";
+const URL_VOTAR = "https://enquisa.asembleasensino.gal/helios/elections/3c1ff05d-8b3a-4c23-8f60-f0cc421f4c5e/view";
+const URL_NOVA = "/actualidade/2026-11-05-nós-decidimos-o-seguinte-paso-consulta-ao-profesorado-do-16-ao-20-de-novembro/";
+---
+
+<div
+  id="campaign-banner"
+  data-deadline={PRAZO}
+  class="fixed inset-x-0 bottom-0 z-40 hidden border-t border-ink bg-red text-paper"
+  role="region"
+  aria-label="Aviso"
+>
+  <div class="mx-auto flex max-w-[1500px] flex-col gap-3 px-4 py-4 sm:flex-row sm:items-center sm:gap-5 md:px-8">
+    <p class="flex-1 text-sm font-bold leading-snug sm:text-base">{TEXTO}</p>
+    <div class="flex shrink-0 flex-wrap items-center gap-4">
+      <a
+        href={URL_VOTAR}
+        target="_blank"
+        rel="noopener noreferrer"
+        class="focus-ring rounded-[4px] border-2 border-paper bg-paper px-4 py-2 text-xs font-black uppercase tracking-wider text-ink no-underline hover:bg-ink hover:text-paper"
+      >
+        Vota agora
+      </a>
+      <a href={URL_NOVA} class="focus-ring whitespace-nowrap text-xs font-bold uppercase tracking-wider text-paper underline decoration-paper/50 underline-offset-4 hover:decoration-paper">
+        Le a nova
+      </a>
+      <button
+        id="campaign-banner-close"
+        type="button"
+        class="focus-ring ml-1 shrink-0 rounded-[4px] p-1 text-paper/80 hover:text-paper"
+        aria-label="Pechar aviso"
+      >
+        <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" class="h-5 w-5">
+          <line x1="5" y1="5" x2="19" y2="19"></line>
+          <line x1="19" y1="5" x2="5" y2="19"></line>
+        </svg>
+      </button>
+    </div>
+  </div>
+</div>
+
+<script>
+  const banner = document.querySelector<HTMLElement>("#campaign-banner");
+  const closeButton = document.querySelector<HTMLButtonElement>("#campaign-banner-close");
+
+  if (banner && closeButton) {
+    const STORAGE_KEY = "campaign-banner-pechado";
+    const prazo = new Date(banner.dataset.deadline ?? "");
+    const dentroDePrazo = !Number.isNaN(prazo.getTime()) && Date.now() < prazo.getTime();
+    const xaPechado = sessionStorage.getItem(STORAGE_KEY) === "true";
+
+    if (dentroDePrazo && !xaPechado) {
+      banner.classList.remove("hidden");
+    }
+
+    closeButton.addEventListener("click", () => {
+      banner.classList.add("hidden");
+      try {
+        sessionStorage.setItem(STORAGE_KEY, "true");
+      } catch {
+        // Se sessionStorage non está dispoñible (navegación privada moi
+        // restritiva), simplemente non se lembra -- non pasa nada, só
+        // volverá aparecer na seguinte páxina.
+      }
+    });
+  }
+</script>

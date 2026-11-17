@@ -2,6 +2,7 @@
 import "../styles/global.css";
 import SiteNavigation from "../components/SiteNavigation.astro";
 import SiteSearch from "../components/SiteSearch.astro";
+import CampaignBanner from "../components/CampaignBanner.astro";
 import BrandMark from "../components/BrandMark.astro";
 import { currentYear, site } from "../config/site";
 
@@ -95,6 +96,7 @@ const {
         </div>
       </div>
     </footer>
+    <CampaignBanner />
     <script>
       const button = document.querySelector<HTMLButtonElement>("#menu-button");
       const menu = document.querySelector<HTMLElement>("#mobile-menu");
