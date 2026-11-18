@@ -1,7 +1,7 @@
 ---
 title: "Nós decidimos o seguinte paso: consulta ao profesorado do 16 ao 20 de
   novembro"
-date: 2026-11-16T17:59:00.000+01:00
+date: 2026-11-18T20:02:00.000+01:00
 type: Convocatoria
 summary: Pero nada diso vai chegar só. Por iso, do 16 ao 20 de novembro imos
   facer unha consulta a todo o profesorado para decidir xuntas como mobilizarnos
