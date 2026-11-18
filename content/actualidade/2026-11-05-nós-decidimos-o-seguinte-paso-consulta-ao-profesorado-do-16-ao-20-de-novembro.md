@@ -13,6 +13,7 @@ tamenEnActualidade: true
 eventDate: 2026-11-16T00:00:00.000+01:00
 eventDateEnd: 2026-11-20T23:55:00.000+01:00
 territorio: Nacional
+draft: false
 galeria:
   - /uploads/consulta/opcion-1.webp
   - /uploads/consulta/opcion-2.webp
@@ -21,7 +22,6 @@ galeria:
   - /uploads/consulta/opcion-5.webp
 galeriaTitulo: As cinco opcións, en detalle
 galeriaDescarga: /uploads/opcions-consulta.pdf
-draft: false
 ---
 ### A votación está dispoñíbel en [enquisa.asembleasensino.gal](https://enquisa.asembleasensino.gal/helios/elections/3c1ff05d-8b3a-4c23-8f60-f0cc421f4c5e/view)
 
@@ -59,6 +59,6 @@ As opcións son:
 
 Ningunha mobilización funciona sen apoio maioritario. Antes de decidir, queremos saber con quen contamos. Tamén se non pensas mobilizarte: a túa resposta conta igual, porque sen ela non saberiamos as forzas reais.
 
-Fai click [aquí](https://enquisa.asembleasensino.gal/) para votar o 16 de novembro!
+> ## Fai click [aquí](https://enquisa.asembleasensino.gal/helios/elections/3c1ff05d-8b3a-4c23-8f60-f0cc421f4c5e/view) para votar até o 20 de novembro!
 
 **Nós decidimos o seguinte paso.**
