@@ -52,6 +52,16 @@ const actualidade = defineCollection({
     // "type"), así que non debería chegar escrito distinto -- pero
     // tratamos "" coma ausencia de valor polo mesmo motivo que eventDate.
     territorio: z.preprocess((value) => (value === "" ? undefined : value), z.string().optional()),
+    // Galería opcional de imaxes (ex. infografías, opcións dunha votación)
+    // que se amosa como tarxetas cun visor a pantalla completa, debaixo do
+    // corpo da noticia. Decap garda un "list" de imaxes coma un array de
+    // rutas; se non se engade ningunha, queda como array baleiro.
+    galeria: z.array(z.string()).optional().default([]),
+    // Título da sección da galería (opcional). Se se deixa baleiro,
+    // amósase "Galería".
+    galeriaTitulo: z.preprocess((value) => (value === "" ? undefined : value), z.string().optional()),
+    // PDF descargable coa galería completa (opcional).
+    galeriaDescarga: z.preprocess((value) => (value === "" ? undefined : value), z.string().optional()),
     draft: z.boolean().default(false),
   }),
 });

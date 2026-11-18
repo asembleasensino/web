@@ -58,6 +58,14 @@ collections:
           - "Outro"
       - { label: Borrador técnico, name: draft, widget: boolean, default: false, required: false, hint: "Oculta o contido incluso se chega á rama principal." }
       - { label: Corpo, name: body, widget: markdown }
+      - label: "Galería de imaxes (opcional)"
+        name: galeria
+        widget: list
+        required: false
+        field: { label: Imaxe, name: image, widget: image }
+        hint: "Engade aquí imaxes (ex. infografías, opcións dunha votación) para que aparezan como tarxetas cliclábeis debaixo da noticia, cun visor a pantalla completa. Déixao baleiro se a noticia non precisa galería."
+      - { label: "Título da galería (opcional)", name: galeriaTitulo, widget: string, required: false, hint: "Se o deixas baleiro, amósase \"Galería\"." }
+      - { label: "PDF para descargar (opcional)", name: galeriaDescarga, widget: file, required: false, hint: "Engádeo se queres un botón de \"Descargar en PDF\" xunto á galería." }
 
   - name: hemeroteca
     label: Hemeroteca

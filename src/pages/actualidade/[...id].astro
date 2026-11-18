@@ -1,6 +1,7 @@
 ---
 import { getCollection, render, type CollectionEntry } from "astro:content";
 import BaseLayout from "../../layouts/BaseLayout.astro";
+import ArrowIcon from "../../components/ArrowIcon.astro";
 import { actualidadeUrl, formatDate, formatRangoEvento } from "../../lib/content";
 import { site } from "../../config/site";
 
@@ -19,6 +20,7 @@ interface Props {
 const { entry } = Astro.props;
 const { Content } = await render(entry);
 const canonical = new URL(actualidadeUrl(entry), Astro.site);
+const galeria = entry.data.galeria ?? [];
 ---
 
 <BaseLayout title={`${entry.data.title} · ${site.shortName}`} description={entry.data.summary} canonical={canonical}>
@@ -51,5 +53,148 @@ const canonical = new URL(actualidadeUrl(entry), Astro.site);
         <Content />
       </div>
     </div>
+
+    {galeria.length > 0 && (
+      <section class="border-t border-ink/20 bg-ink/[.025]">
+        <div class="mx-auto max-w-[1500px] px-4 py-16 md:px-8 md:py-20">
+          <div class="flex flex-wrap items-end justify-between gap-4">
+            <div>
+              <span class="eyebrow text-red">Galería</span>
+              <h2 class="display type-list-title-lg mt-3 max-w-xl">{entry.data.galeriaTitulo || "Galería"}</h2>
+            </div>
+            {entry.data.galeriaDescarga && (
+              <a
+                href={entry.data.galeriaDescarga}
+                download
+                class="focus-ring inline-flex items-center gap-1.5 rounded-[4px] border border-ink px-4 py-2 text-xs font-black uppercase tracking-wider hover:bg-ink hover:text-paper"
+              >
+                Descargar en PDF <ArrowIcon direction="up-right" />
+              </a>
+            )}
+          </div>
+          <div class="article-galeria-scroll mt-8 flex gap-4 overflow-x-auto pb-4">
+            {galeria.map((src, indice) => (
+              <button type="button" class="article-galeria-miniatura focus-ring shrink-0" data-article-galeria-indice={indice} aria-haspopup="dialog">
+                <img src={src} alt={`Imaxe ${indice + 1} de ${galeria.length}`} loading="lazy" />
+                <span class="article-galeria-numero">{indice + 1}</span>
+              </button>
+            ))}
+          </div>
+        </div>
+      </section>
+    )}
   </article>
+
+  {galeria.length > 0 && (
+    <div id="article-galeria-lightbox" class="lightbox fixed inset-0 z-[150] hidden">
+      <div class="lightbox-backdrop absolute inset-0 bg-ink/90" data-lightbox-close></div>
+      <div class="relative flex h-full flex-col items-center justify-center gap-4 p-4">
+        <button type="button" class="focus-ring absolute right-4 top-4 rounded-[4px] p-2 text-paper/80 hover:text-paper" data-lightbox-close aria-label="Pechar">
+          <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" class="h-7 w-7">
+            <line x1="5" y1="5" x2="19" y2="19"></line>
+            <line x1="19" y1="5" x2="5" y2="19"></line>
+          </svg>
+        </button>
+        <div class="flex max-h-[80vh] w-full max-w-3xl items-center justify-center gap-3">
+          <button type="button" id="article-galeria-anterior" class="focus-ring shrink-0 rounded-[4px] p-2 text-paper/70 hover:text-paper" aria-label="Imaxe anterior">
+            <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="h-8 w-8 rotate-180"><line x1="4" y1="12" x2="20" y2="12"></line><polyline points="14 6 20 12 14 18"></polyline></svg>
+          </button>
+          <img id="article-galeria-imaxe" src="" alt="" class="max-h-[80vh] w-auto max-w-full rounded-[4px] border border-paper/20 shadow-hard" />
+          <button type="button" id="article-galeria-seguinte" class="focus-ring shrink-0 rounded-[4px] p-2 text-paper/70 hover:text-paper" aria-label="Imaxe seguinte">
+            <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="h-8 w-8"><line x1="4" y1="12" x2="20" y2="12"></line><polyline points="14 6 20 12 14 18"></polyline></svg>
+          </button>
+        </div>
+        <p id="article-galeria-contador" class="text-xs font-bold uppercase tracking-wider text-paper/60"></p>
+      </div>
+    </div>
+  )}
+
+  <style>
+    .article-galeria-scroll { scrollbar-width: thin; }
+    .article-galeria-miniatura {
+      position: relative;
+      width: 150px;
+      border: 1px solid color-mix(in srgb, var(--color-ink) 20%, transparent);
+      background: var(--color-paper);
+      padding: .4rem;
+      cursor: pointer;
+      transition: transform .15s ease, box-shadow .15s ease, border-color .15s ease;
+    }
+    .article-galeria-miniatura:hover, .article-galeria-miniatura:focus-visible {
+      border-color: var(--color-ink);
+      box-shadow: var(--shadow-hard-sm);
+      transform: translateY(-2px);
+    }
+    .article-galeria-miniatura img { display: block; width: 100%; aspect-ratio: 4 / 5; object-fit: cover; }
+    .article-galeria-numero {
+      position: absolute;
+      bottom: .6rem;
+      right: .6rem;
+      background: var(--color-ink);
+      color: var(--color-paper);
+      font-size: .65rem;
+      font-weight: 800;
+      padding: .1rem .4rem;
+      border-radius: 3px;
+    }
+  </style>
+
+  <script>
+    const galeriaLightbox = document.querySelector<HTMLElement>("#article-galeria-lightbox");
+    const galeriaImaxe = document.querySelector<HTMLImageElement>("#article-galeria-imaxe");
+    const galeriaContador = document.querySelector<HTMLElement>("#article-galeria-contador");
+    const galeriaAnterior = document.querySelector<HTMLButtonElement>("#article-galeria-anterior");
+    const galeriaSeguinte = document.querySelector<HTMLButtonElement>("#article-galeria-seguinte");
+    const miniaturas = document.querySelectorAll<HTMLButtonElement>("[data-article-galeria-indice]");
+
+    let galeriaActual = 0;
+    let ultimoFoco: HTMLElement | null = null;
+
+    function pintarGaleria(indice: number) {
+      const miniatura = miniaturas[indice];
+      const img = miniatura?.querySelector("img");
+      if (!img || !galeriaImaxe || !galeriaContador) return;
+      galeriaImaxe.src = img.src;
+      galeriaImaxe.alt = img.alt;
+      galeriaContador.textContent = `Imaxe ${indice + 1} / ${miniaturas.length}`;
+    }
+
+    function abrirGaleria(indice: number, disparador: HTMLElement | null) {
+      if (!galeriaLightbox) return;
+      galeriaActual = indice;
+      ultimoFoco = disparador;
+      pintarGaleria(galeriaActual);
+      galeriaLightbox.classList.remove("hidden");
+      document.body.classList.add("overflow-hidden");
+    }
+
+    function pecharGaleria() {
+      if (!galeriaLightbox) return;
+      galeriaLightbox.classList.add("hidden");
+      document.body.classList.remove("overflow-hidden");
+      ultimoFoco?.focus();
+    }
+
+    miniaturas.forEach((boton) => {
+      boton.addEventListener("click", () => abrirGaleria(Number(boton.dataset.articleGaleriaIndice), boton));
+    });
+
+    galeriaAnterior?.addEventListener("click", () => {
+      galeriaActual = (galeriaActual - 1 + miniaturas.length) % miniaturas.length;
+      pintarGaleria(galeriaActual);
+    });
+    galeriaSeguinte?.addEventListener("click", () => {
+      galeriaActual = (galeriaActual + 1) % miniaturas.length;
+      pintarGaleria(galeriaActual);
+    });
+
+    galeriaLightbox?.querySelectorAll<HTMLElement>("[data-lightbox-close]").forEach((el) => el.addEventListener("click", pecharGaleria));
+
+    document.addEventListener("keydown", (event) => {
+      if (!galeriaLightbox || galeriaLightbox.classList.contains("hidden")) return;
+      if (event.key === "Escape") pecharGaleria();
+      else if (event.key === "ArrowLeft") galeriaAnterior?.click();
+      else if (event.key === "ArrowRight") galeriaSeguinte?.click();
+    });
+  </script>
 </BaseLayout>

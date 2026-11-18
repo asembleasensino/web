@@ -13,6 +13,14 @@ tamenEnActualidade: true
 eventDate: 2026-11-16T00:00:00.000+01:00
 eventDateEnd: 2026-11-20T23:55:00.000+01:00
 territorio: Nacional
+galeria:
+  - /uploads/consulta/opcion-1.webp
+  - /uploads/consulta/opcion-2.webp
+  - /uploads/consulta/opcion-3.webp
+  - /uploads/consulta/opcion-4.webp
+  - /uploads/consulta/opcion-5.webp
+galeriaTitulo: As cinco opcións, en detalle
+galeriaDescarga: /uploads/opcions-consulta.pdf
 draft: false
 ---
 ### A votación está dispoñíbel en [enquisa.asembleasensino.gal](https://enquisa.asembleasensino.gal/helios/elections/3c1ff05d-8b3a-4c23-8f60-f0cc421f4c5e/view)
